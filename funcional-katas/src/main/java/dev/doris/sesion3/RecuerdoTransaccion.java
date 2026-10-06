@@ -1,0 +1,12 @@
+package dev.doris.sesion3;
+
+import dev.doris.diagnostico.Transaccion;
+
+public class RecuerdoTransaccion {
+
+    public boolean equals(Object o){
+        if (o == null || getClass() != o.getClass()) return  false;
+        Transaccion otra = (Transaccion) o;
+        return id.equals(otra.getId()) && tipo.equals(otra.getTipo());
+    }
+}

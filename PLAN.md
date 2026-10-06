@@ -25,11 +25,36 @@ Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. E
 
 ---
 
+## Distribución de la Fase 0 (propuesta, ajustable)
+
+| Semana | Foco | Kata de cierre |
+|---|---|---|
+| 1 | Modelo de datos: tipos, `String` y `equals`, clases, `record`, `enum`, `List`/`ArrayList`, for-each, primer test JUnit | `Transaccion` como `record` con `enum` de tipo, lista de transacciones, filtro y suma con tests |
+| 2 | Colecciones (`List`, `Map`, `Set`), `BigDecimal` para dinero, excepciones propias y `try`/`catch` | Agrupar por tipo y por cuenta, con validaciones que lanzan excepciones |
+| 3 | `java.time`, lectura de archivos (`Files`, `BufferedReader`), parseo de CSV | Cargar el CSV real y manejar líneas inválidas |
+| 4 | Integración: app de consola completa, reporte, tests | Criterio de salida de la fase |
+
+### Semana 1: un chat por sesión
+
+Título de cada chat: `Semana 1 - Tema: <tema>`. Cada cierre incluye el mensaje de apertura de la sesión siguiente.
+
+| Sesión | Tema | Entregable al cierre |
+|---|---|---|
+| 1 | Diagnóstico ampliado (listas, `equals`, string pool) | `Main` del diagnóstico corregido |
+| 2 | Tipos, String y equals (primitivos vs referencia, inmutabilidad de `String`, encapsulación) | `Transaccion` con encapsulación correcta |
+| 3 | List, ArrayList y for-each | Filtro y suma con `ArrayList` |
+| 4 | Enum y record | `Transaccion` como `record` con `enum` |
+| 5 | Primer test con JUnit y kata de cierre | Tests en verde + commit `kata-01` |
+
+> La Sesión 1 se consumió en el diagnóstico, por eso el resto de la semana se corre un día y la kata de cierre queda con menos pistas.
+
+---
+
 ## Sesión de 2 h
 
 | Bloque | Duración | Qué se hace |
 |---|---|---|
-| Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior |
+| Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en IntelliJ, sin mirar; no aplica en la primera sesión) |
 | Tema nuevo | 30 min | Por qué existe → ejemplo guiado línea por línea → variación propia |
 | Kata | 50 min | Escribir desde cero, con pistas por niveles |
 | Revisión + teach-back | 25 min | Revisión del código y explicación de las decisiones |
@@ -60,6 +85,8 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 - Cada kata se cierra con tests en verde.
 - Un commit por kata: `kata-NN: descripción`.
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
+- Antes de ejecutar, se escribe en un comentario `//` la salida literal esperada, línea por línea.
+- Ante un error: leer el tipo de excepción y la línea del stack trace, y formular una hipótesis antes de probar cosas.
 
 ---
 
@@ -74,6 +101,8 @@ Sin IA y sin internet. Se entrega lo logrado, aunque esté incompleto o no compi
 5. *(Opcional)* El punto 4 con streams. Se omite si no se sabe.
 
 El resultado define en qué semana de la Fase 0 se arranca.
+
+**Resultado (2026-10-06):** más de 1 h; bloqueos en `Arrays.asList()` + `add` (`UnsupportedOperationException`), `==` vs `equals` y sintaxis del for-each. Lógica correcta. Arranque: **Semana 1, sin comprimir**.
 
 ---
 
@@ -118,4 +147,6 @@ Tras el diagnóstico se agrega un módulo `fundamentos` para la Fase 0.
 
 | Fecha | Sesión | Tema | Estado |
 |---|---|---|---|
-| | Diagnóstico | | Pendiente |
+| 2026-10-06 | Diagnóstico | Clase, List, for, suma | Hecho (>1 h; fallos: `Arrays.asList`, `==` vs `equals`, for-each) |
+| 2026-10-06 | 1 | Diagnóstico ampliado (listas, `equals`, string pool) | Hecha |
+| | 2 | Tipos, String y equals | Pendiente |
