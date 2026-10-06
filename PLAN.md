@@ -147,6 +147,8 @@ Tras el diagnóstico se agrega un módulo `fundamentos` para la Fase 0.
 
 | Fecha | Sesión | Tema | Estado |
 |---|---|---|---|
-| 2026-10-06 | Diagnóstico | Clase, List, for, suma | Hecho (>1 h; fallos: `Arrays.asList`, `==` vs `equals`, for-each) |
+| 2026-10-06 | 0 |Diagnóstico | Clase, List, for, suma | Hecho (>1 h; fallos: `Arrays.asList`, `==` vs `equals`, for-each) |
 | 2026-10-06 | 1 | Diagnóstico ampliado (listas, `equals`, string pool) | Hecha |
-| | 2 | Tipos, String y equals | Pendiente |
+| 2026-10-06 | 2 | Tipos, String y equals | Hecha (`equals` en `Transaccion`; `hashCode` pendiente) |
+| 2026-10-06 | 3 | List, ArrayList y for-each | Hecha (filtro y suma con `ArrayList`, for-each y `for` clásico) |
+| | 4 | Enum y record | Pendiente (arrastra `hashCode` con `HashSet`) |
