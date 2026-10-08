@@ -1,0 +1,17 @@
+//Para el recuerdo solo se pidió transcribir de memoria el for-each
+//Se asume que listaTransacciones ya está correctamente creada y tiene 4 elementos
+//tipo Transaccion
+{
+.
+.
+.
+    double sumaCreditos = 0;
+    for(Transaccion trx : listaTransacciones){
+        if("CREDITO".equals(trx.getTipo())){
+            sumaCreditos += trx.getMonto();
+            System.out.println("Transacción de Crédito: [" +
+                                trx.getId() + ", " + trx.getMonto + ", " + trx.getTipo() + "]");
+        }
+    }
+    System.out.printl("Total de los créditos: " + sumaCreditos);
+}
