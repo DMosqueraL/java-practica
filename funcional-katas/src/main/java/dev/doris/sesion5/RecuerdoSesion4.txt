@@ -1,0 +1,32 @@
+package dev.doris.sesion5;
+import java.util.List;
+
+*****enum TipoTransaccion*****
+
+public enum TipoTransaccion{
+    DEBITO,
+    CREDITO
+}
+
+***************record Transaccion***************
+
+public record Transaccion(String id, double monto, TipoTransaccion tipo){
+}
+
+***************Main****************
+
+public class Main{
+    public static void main(String[] args){
+        List<Transaccion> lista = List.of(
+                                new Transaccion("1", 200, TipoTransaccion.DEBITO),
+                                new Transaccion("2", 2500, TipoTransaccion.DEBITO),
+                                new Transaccion("3", 770, TipoTransaccion.CREDITO),
+                                new Transaccion("4", 250, TipoTransaccion.CREDITO));
+
+        for(Transaccion trx : lista){
+            if(trx.tipo() == TipoTransaccion.DEBITO){
+                System.out.println("Transaccion de Débito: [" + trx.id() + ", " + trx.monto() + ", " + trx.tipo() + "]");
+            }
+        }
+    }
+}
