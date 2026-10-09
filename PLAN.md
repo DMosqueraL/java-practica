@@ -54,7 +54,7 @@ Título de cada chat: `Semana 1 - Tema: <tema>`. Cada cierre incluye el mensaje 
 
 | Bloque | Duración | Qué se hace |
 |---|---|---|
-| Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en un `.txt` en blanco, sin IDE y sin mirar; no aplica en la primera sesión). La primera sesión de cada semana, desde la Semana 2, lo reemplaza el ejercicio de cierre semanal (ver abajo) |
+| Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en un `.txt` en blanco dentro de `recuerdos/sesionN/`, sin IDE y sin mirar; no aplica en la primera sesión). La primera sesión de cada semana, desde la Semana 2, lo reemplaza el ejercicio de cierre semanal (ver abajo) |
 | Tema nuevo | 30 min | Por qué existe → ejemplo guiado línea por línea → variación propia |
 | Kata | 50 min | Escribir desde cero, con pistas por niveles |
 | Revisión + teach-back | 25 min | Revisión del código y explicación de las decisiones |
@@ -81,7 +81,7 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza el bloque de Recuerdo por un mini ejercicio que integra lo visto en la semana que acaba de cerrarse. Las otras 4 sesiones de la semana mantienen el Recuerdo de 15 min. Esta regla es obligatoria.
 
 - **Qué es:** un problema nuevo (no la kata repetida) con los mismos ingredientes de la semana anterior, en el dominio de transacciones. Lo prepara Claude y se resuelve sin pistas.
-- **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `sesionN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra).
+- **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra).
 - **Duración:** 30–40 min. Esa sesión se extiende 30 min (2 h 30 en total).
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo. Los espacios en blanco y el formato no cuentan, y no se adelantan temas que aún no se han visto.
 - **Registro:** en la tabla de Progreso se anota qué ingredientes de la semana fallaron, para reforzarlos.
@@ -143,13 +143,15 @@ git push -u origin main
 ```
 java-practica/
 ├── pom.xml                  (padre: Java 21, JUnit 5, AssertJ)
-├── funcional-katas/         (activo)
+├── fundamentos/             (activo: Fase 0, semanas 1-4)
+├── funcional-katas/         (Fase 2, semanas 8-11; por ahora solo la prueba de humo Saludo)
 ├── procesador-extractos/    (se agrega en su fase)
 ├── reactor-fundamentos/     (se agrega en su fase)
-└── webflux-api/             (se agrega en su fase)
+├── webflux-api/             (se agrega en su fase)
+└── recuerdos/               (recuerdos y ejercicios semanales en .txt, por sesión)
 ```
 
-Tras el diagnóstico se agrega un módulo `fundamentos` para la Fase 0.
+El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesiones 0 a 5; `funcional-katas` queda para la Fase 2. Los `.txt` de recuerdo viven en `recuerdos/sesionN/`, fuera de `src/`.
 
 ---
 

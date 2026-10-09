@@ -12,10 +12,11 @@
 
     <!-- Se agrega cada módulo cuando llegues a su fase -->
     <modules>
-        <module>funcional-katas</module>
-        <!-- <module>procesador-extractos</module>  semanas 4-5 -->
-        <!-- <module>reactor-fundamentos</module>   semanas 6-8 -->
-        <!-- <module>webflux-api</module>           semanas 9-11 -->
+        <module>fundamentos</module>      <!-- Fase 0: semanas 1-4 -->
+        <module>funcional-katas</module>  <!-- Fase 2: semanas 8-11 (por ahora solo la prueba de humo Saludo) -->
+        <!-- <module>procesador-extractos</module>  semanas 12-13 -->
+        <!-- <module>reactor-fundamentos</module>   semanas 16-18 -->
+        <!-- <module>webflux-api</module>           semanas 22-24 -->
     </modules>
 
     <properties>
