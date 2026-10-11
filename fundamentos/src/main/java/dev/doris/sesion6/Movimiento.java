@@ -1,4 +1,3 @@
 package dev.doris.sesion6;
 
-public class Movimiento {
-}
+public record Movimiento (String id, Cuenta cuenta, double monto) {}
