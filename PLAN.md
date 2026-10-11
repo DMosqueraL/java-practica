@@ -8,6 +8,21 @@ Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. E
 
 ---
 
+## Organización de los chats
+
+| Chat | Responsabilidad | Qué no hace |
+|---|---|---|
+| **Planeación** (único) | Cambios de fases, temario, ritmo o alcance; reglas de sesión; retrospectiva semanal; toda edición de las secciones de plan y reglas de este archivo | No da temas ni revisa katas |
+| **Tema** (`Semana N - Tema: X`, uno por sesión) | Recuerdo o ejercicio de cierre semanal, tema nuevo, kata, revisión, registro en Progreso y mensaje de apertura de la sesión siguiente | No cambia el plan ni las reglas |
+| **Sprint** (`Sprint N - <incremento>`, uno por sprint, desde la Fase 8) | Desarrollo del incremento, revisión, registro en Progreso | No define el sprint siguiente: eso se hace en Planeación |
+
+- Si en un chat de tema surge algo de estrategia (el ritmo no alcanza, un tema necesita otro día, una regla no funciona), se anota en una línea en la columna Estado de Progreso como `Para planeación: ...` y la sesión sigue con el plan vigente.
+- Cada cambio acordado en Planeación se registra en el **Changelog** (al final) con fecha y versión. El mensaje de apertura de cada sesión incluye `Plan: vX.Y` para detectar desfases.
+- Las instrucciones del Proyecto en claude.ai solo dicen que se lea este archivo al iniciar. Todo lo demás (rol, pistas, revisión, fases, temario) vive aquí, así que no hay que mantener dos lugares.
+- Ningún chat usa otra copia de este archivo (GitHub, docs del Proyecto, memoria) si contradice la del repo local.
+
+---
+
 ## Fases
 
 | Semanas | Fase | Criterio de salida (lo que debes escribir sin ayuda) |
@@ -20,8 +35,9 @@ Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. E
 | 16–18 | **5. Reactor puro** | `Mono`/`Flux`, operadores, manejo de errores, backpressure, `StepVerifier` |
 | 19–21 | **6. Spring Boot MVC** | API REST + JPA + PostgreSQL con tests |
 | 22–24 | **7. WebFlux** | La misma API en reactivo con R2DBC, comparada con MVC + virtual threads |
+| 25+ | **8. Práctica continua (sprints)** | Sin fin fijo: un sprint semanal sobre un ledger de doble partida (ver Fase 8) |
 
-> Al terminar: nivel profesional sólido escribiendo Java. Lo que viene después se construye con proyectos reales sobre esta base.
+> Al terminar la Fase 7: nivel profesional sólido escribiendo Java. Lo que viene después se construye en la Fase 8, con un proyecto real que crece por sprints.
 
 ---
 
@@ -90,6 +106,31 @@ Título de cada chat: `Semana 4 - Tema: <tema>`. La sesión 16 reemplaza el recu
 
 ---
 
+## Fase 8: Práctica continua por sprints (semana 25 en adelante)
+
+Objetivo: no perder la costumbre de escribir código. Un proyecto que crece semana a semana, como en un trabajo real: mantener y extender código existente, no solo empezar de cero.
+
+- **Dedicación:** la misma, 10 h/semana (lunes a viernes, 2 h).
+- **Proyecto:** **ledger de doble partida** en Java, núcleo de pagos inspirado en PasaLu (no un port de PasaLu). Cada movimiento genera un débito y un crédito que siempre cuadran; los saldos se derivan de los asientos y no se editan; las transferencias son idempotentes y resisten concurrencia.
+- **Sprint = 1 semana**, con su propio chat `Sprint N - <incremento>`. El sprint se define en el chat de Planeación al cierre del anterior: enunciado, criterios de aceptación y tests mínimos.
+- **Mezcla de fases:** cada sprint combina temas de fases distintas para mantener vivo todo lo aprendido.
+- **Ejercicio a ciegas:** la primera sesión de cada sprint abre con 30 min en `.txt` sin IDE. Alterna entre el incremento anterior y katas cortas de **otro dominio** (inventario, reservas, colas…) para no aprender solo a resolver problemas bancarios.
+- **Mismas reglas:** código desde cero, tests en verde, revisión con Error / Riesgo / Estilo. Commit por sprint: `sprint-NN: descripción`.
+- **Riesgo a vigilar:** escribir "NestJS con sintaxis de Java" (decoradores como anotaciones, DI de Nest copiada a Spring, `Promise` donde va `Mono`). La revisión lo marca cada vez que aparezca.
+- **Conexión con la certificación Claude Developer (CCDV-F):** se espera para fechas cercanas al fin de la Fase 7, por eso los sprints de MCP y Claude API van temprano.
+
+### Backlog tentativo (el orden se ajusta en Planeación)
+
+| Sprint | Incremento |
+|---|---|
+| 1 | Dominio del ledger en Java puro: cuentas, asientos, invariante débito = crédito, saldo derivado, tests |
+| 2 | API REST con Spring Boot MVC + PostgreSQL |
+| 3 | Servidor MCP en Java que expone herramientas de consulta del ledger (`consultar_saldo`, `listar_movimientos`) |
+| 4 | Tool use con la Claude API desde Java: asistente que responde preguntas sobre los movimientos |
+| 5+ | Idempotencia y concurrencia en transferencias, Spring Security, versión reactiva, observabilidad, etc. |
+
+---
+
 ## Sesión de 2 h
 
 | Bloque | Duración | Qué se hace |
@@ -136,6 +177,13 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 - **Registro:** en la tabla de Progreso se anota qué ingredientes de la semana fallaron, para reforzarlos.
 
 ---
+
+## Rol de Claude y revisión
+
+- **Revisor y entrenador, no autor.** No escribe la solución de una kata salvo que Doris la pida explícitamente; si hay bloqueo, usa las pistas por niveles.
+- **Revisión:** se lee el código directo de la carpeta vinculada (no capturas ni pegados). Cada punto lleva la etiqueta **Error** (falla o resultado incorrecto), **Riesgo** (funciona pero puede fallar en otro caso) o **Estilo** (funciona igual, mejor práctica senior), sin suavizar. Incluye uso idiomático de Java 21 y la alternativa que usaría un senior, con el porqué.
+- **No asumir conocimiento:** no se da por sabido nada que no se haya visto en las sesiones.
+- Analogías con JS/TS, RxJS y NestJS cuando ayuden. Español neutro/latinoamericano.
 
 ## Reglas
 
@@ -216,3 +264,15 @@ El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesi
 | 2026-10-08 | 5 | Primer test con JUnit y kata de cierre | Hecha. Kata: `Transacciones.filtrarPorTipo` y `sumarMontos` con 5 tests (JUnit 5 + AssertJ). Aprendido: `@Test`, `assertThat`, `isEqualTo` (equals) vs `isSameAs` (referencia), `containsExactly`, `isEmpty`; un `println` no se puede testear, un método que devuelve un valor sí |
 | 2026-10-09 | 6 (cierre Semana 1) | Ejercicio de cierre semanal (a ciegas, 36 min) | Hecho. Bien: `enum`, `record`, `ArrayList` + for-each, `==` en enum, `==` vs `equals` en records, predicciones de `a == b`, `a.equals(b)` y 250.5. Fallaron: `String` comparado con `==` en vez de `equals` (se repite el fallo del diagnóstico), `.size()` sobre el resultado de un método (predijo la lista en vez de un `int`), sintaxis de `assertThat(...)` (paréntesis mal cerrado, argumento de tipo equivocado y valor esperado incorrecto), typo en nombre de variable, guion en el `package`. Reforzar: `equals` en `String`, leer qué devuelve cada llamada encadenada. Los errores se corrigieron en la misma sesión tras la revisión |
 | 2026-10-09 y 2026-10-11 | 6 | Set, HashSet y hashCode | Hecha. Tema con predicción de cierre 7/7. Kata-02: `Cuentas.cuentasDistintas` y `hayCuentasRepetidas` (con `Set` y el booleano de `add`) más 5 tests (JUnit 5 + AssertJ). Aprendido: `Set` sin duplicados ni orden, `add` devuelve `boolean`, `HashSet` calcula `hashCode` y luego compara con `equals`; si `a.equals(b)` entonces mismo `hashCode`; `record` lo genera solo, en clase normal se sobrescriben ambos (`Objects.hash` con los mismos campos que `equals`). Fallaron: modelo inicial de los cajones, leer `p1 == p2` como `equals`, `contains` que siempre daba `true` en `hayCuentasRepetidas`, test sin `hasSize` (verificaba qué pero no cuántos), test de lista vacía que no llamaba al método, datos copiados sin ajustar. Pendiente: cómo plantear un test (datos, qué comprobar) |
+
+---
+
+## Changelog
+
+Versiones anteriores a v1.0: ver el historial de git.
+
+| Versión | Fecha | Cambio |
+|---|---|---|
+| v1.0 | 2026-10-11 | Se separa el chat de Planeación de los chats de tema (sección Organización de los chats). Se agregan el Changelog y la referencia `Plan: vX.Y` en el mensaje de apertura |
+| v1.1 | 2026-10-11 | Se agrega la Fase 8 (práctica continua por sprints sobre un ledger de doble partida, con chat propio por sprint) y la fila Sprint en Organización de los chats |
+| v1.2 | 2026-10-11 | Las instrucciones del Proyecto se reducen a leer PLAN.md al iniciar; se agrega la sección Rol de Claude y revisión; la copia local del repo prevalece sobre cualquier otra |
