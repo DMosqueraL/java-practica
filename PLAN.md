@@ -48,6 +48,20 @@ Título de cada chat: `Semana 1 - Tema: <tema>`. Cada cierre incluye el mensaje 
 
 > La Sesión 1 se consumió en el diagnóstico, por eso el resto de la semana se corre un día y la kata de cierre queda con menos pistas.
 
+### Semana 2: un chat por sesión
+
+Título de cada chat: `Semana 2 - Tema: <tema>`. Como en la Semana 1, la última sesión combina un tema nuevo con la kata de cierre de la semana.
+
+| Sesión | Tema | Entregable al cierre |
+|---|---|---|
+| 6 | Set, HashSet y hashCode (incluye el ejercicio de cierre de la Semana 1) | Kata-02 en verde + commit |
+| 7 | Cómo plantear un test (datos, qué comprobar) + Map y HashMap | Agrupar movimientos por cuenta con `Map`, con tests |
+| 8 | `BigDecimal` para dinero | Suma de montos con `BigDecimal` en lugar de `double`, con tests |
+| 9 | Excepciones: `throw`, `try`/`catch` y excepciones estándar | Validación con excepción estándar (`IllegalArgumentException`), con tests |
+| 10 | Excepciones propias + kata de cierre de la Semana 2 | Agrupar por tipo y por cuenta, con validaciones que lanzan excepciones propias, tests en verde + commit |
+
+> La Sesión 6 se extendió 30 min por el ejercicio de cierre de la Semana 1 (regla del ejercicio de cierre semanal) y terminó el domingo 11 de octubre.
+
 ---
 
 ## Sesión de 2 h
@@ -68,6 +82,15 @@ Título de cada chat: `Semana 1 - Tema: <tema>`. Cada cierre incluye el mensaje 
 5. **Revisión + teach-back.**
 
 A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
+
+#### Reglas de presentación de cada tema (aprobadas el 2026-10-09)
+
+1. **Un solo mensaje por tema**, con código nuevo, completo y a la vista. No depende de código de sesiones anteriores.
+2. **Orden fijo:** el problema que resuelve → ejemplo completo con las salidas reales (ejecutadas, no supuestas) → explicación línea por línea → el mecanismo.
+3. **Pausa de comprensión:** una pregunta sin código nuevo. Solo se avanza cuando esa parte quedó clara.
+4. **La variación usa únicamente lo ya mostrado.** No introduce una API o un concepto nuevo dentro del ejercicio.
+5. **Las predicciones se piden solo sobre lo ya visto.** Si falla, se explica con el mismo ejemplo; si vuelve a fallar, se usa un ejemplo nuevo.
+6. **Cierre del tema:** un ejercicio de predicción que abarca todo el tema de la sesión. Si lo acierta, el tema quedó interiorizado.
 
 ### Pistas por niveles (cuando hay bloqueo en una kata)
 
@@ -165,4 +188,5 @@ El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesi
 | 2026-10-06 | 3 | List, ArrayList y for-each | Hecha (filtro y suma con `ArrayList`, for-each y `for` clásico) |
 | 2026-10-07 | 4 | Enum y record | Hecha. Kata: `record Transaccion` + `enum TipoTransaccion`, filtro con `==`, `sumaMontos` en `Main2`. Aprendido: `equals` compara contenido, `==` referencias; `valueOf` inexistente lanza `IllegalArgumentException` |
 | 2026-10-08 | 5 | Primer test con JUnit y kata de cierre | Hecha. Kata: `Transacciones.filtrarPorTipo` y `sumarMontos` con 5 tests (JUnit 5 + AssertJ). Aprendido: `@Test`, `assertThat`, `isEqualTo` (equals) vs `isSameAs` (referencia), `containsExactly`, `isEmpty`; un `println` no se puede testear, un método que devuelve un valor sí |
-| | 6 | Set, HashSet y hashCode | Pendiente |
+| 2026-10-09 | 6 (cierre Semana 1) | Ejercicio de cierre semanal (a ciegas, 36 min) | Hecho. Bien: `enum`, `record`, `ArrayList` + for-each, `==` en enum, `==` vs `equals` en records, predicciones de `a == b`, `a.equals(b)` y 250.5. Fallaron: `String` comparado con `==` en vez de `equals` (se repite el fallo del diagnóstico), `.size()` sobre el resultado de un método (predijo la lista en vez de un `int`), sintaxis de `assertThat(...)` (paréntesis mal cerrado, argumento de tipo equivocado y valor esperado incorrecto), typo en nombre de variable, guion en el `package`. Reforzar: `equals` en `String`, leer qué devuelve cada llamada encadenada. Los errores se corrigieron en la misma sesión tras la revisión |
+| 2026-10-09 a 2026-10-11 | 6 | Set, HashSet y hashCode | Hecha. Tema con predicción de cierre 7/7. Kata-02: `Cuentas.cuentasDistintas` y `hayCuentasRepetidas` (con `Set` y el booleano de `add`) más 5 tests (JUnit 5 + AssertJ). Aprendido: `Set` sin duplicados ni orden, `add` devuelve `boolean`, `HashSet` calcula `hashCode` y luego compara con `equals`; si `a.equals(b)` entonces mismo `hashCode`; `record` lo genera solo, en clase normal se sobrescriben ambos (`Objects.hash` con los mismos campos que `equals`). Fallaron: modelo inicial de los cajones, leer `p1 == p2` como `equals`, `contains` que siempre daba `true` en `hayCuentasRepetidas`, test sin `hasSize` (verificaba qué pero no cuántos), test de lista vacía que no llamaba al método, datos copiados sin ajustar. Pendiente: cómo plantear un test (datos, qué comprobar) |
