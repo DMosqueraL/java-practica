@@ -1,0 +1,72 @@
+package dev.doris.sesion6;
+
+import java.util.ArrayList;
+import java.util.List;
+import assertTaht //Aquí quería poner la ruta de la importación pero no me acuerdo
+
+// --- enum Canal ---
+public enum Canal{
+    ATM,
+    WEB,
+    SUCURSAL
+}
+
+// --- record Movimiento ---
+public record Movimiento(String id, String cuenta, double monto, Canal canal){}
+
+// --- clase Movimientos ---
+public class Movimientos{
+    static List<Movimiento> filtrarPorCuenta(List<Movimiento> lista, String cuenta){
+        List<Movimiento> listaResultado = new ArrayList<>();
+        for(Movimiento mov: lista){
+            if(cuenta.equals(mov.cuenta())){
+                listaResultado.add(mov);
+            }
+        }
+        return listaResultado;
+    }
+
+    static double sumarPorCanal(List<Movimiento> lista, Canal canal){
+        double total = 0;
+        for(Movimiento mov: lista){
+            if(mov.canal() == canal){
+                total += mov.monto();
+            }
+        }
+        return total;
+    }
+}
+
+// --- clase Main ---
+public class Main{
+    public static void main(String[] args){
+
+        Movimiento a = new Movimiento("1", "A-1", 100.0, Canal.WEB);
+        Movimiento b = new Movimiento("1", "A-1", 100.0, Canal.WEB);
+        Movimiento c = new Movimiento("2", "B-2", 50.5, Canal.WEB);
+        List<Movimiento> lista = List.of(a, b, c);
+
+        System.out.println(a == b); //Salida: false
+        System.out.println(a.equals(b)); //Salida: true
+        System.out.println(sumarPorCanal(lista, Canal.WEB)); //Salida: 250.5
+        //Salida: 2 (los elementos que corresponden de la lista a la cuenta "A-1")
+        System.out.println(filtrarPorCuenta(lista, new String("A-1")).size());
+    }
+}
+
+// --- Tests ---
+
+class MovimientosTest{
+
+    @Test
+    public void filtrarPorCuentaQueCoincida(){
+        Movimiento a = new Movimiento("1", "A-1", 100.0, Canal.WEB);
+        Movimiento b = new Movimiento("1", "A-1", 100.0, Canal.WEB);
+        Movimiento c = new Movimiento("2", "B-2", 50.5, Canal.WEB);
+        List<Movimiento> lista = List.of(a, b, c);
+
+        List<Movimiento> resultadoFiltrado = filtrarPorCuenta(lista, "A-1");
+
+        assertThat(resultadoFiltrado).containsExactly(a, b);
+    }
+}

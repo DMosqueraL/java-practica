@@ -1,0 +1,22 @@
+// --- Predicción ---
+Ticket t1 = new Ticket("T-1");
+Ticket t2 = new Ticket("T-1");
+Recibo r1 = new Recibo("R-1");
+Recibo r2 = new Recibo("R-1");
+Cobro c1 = new Cobro("C-1", 10.0);
+Cobro c2 = new Cobro("C-1", 10.0);
+
+Set<Ticket> tickets = new HashSet<>();
+System.out.println(tickets.add(t1));                      // 1 true ---> t1 no existe en el Set tickets por eso lo agrega
+System.out.println(tickets.add(t2));                      // 2 true ---> t2 es un objeto nuevo y tiene un hasCode() diferente a t1 a pesar que son exactamente iguales en valores, Set lo agrega
+
+Set<Recibo> recibos = new HashSet<>();
+System.out.println(recibos.add(r1));                      // 3 true ---> r1 no existe en el Set recibos, lo agrega
+System.out.println(recibos.add(r2));                      // 4 false ---> r1.hashCode() == r2.hashCode(), no lo agrega, sería duplicado. r1 y r2 son iguales
+System.out.println(recibos.contains(new Recibo("R-1")));  // 5 true ---> valida si existe un elemento dentro de Set recibos busca un Recibo igual a "R-1"
+
+Set<Cobro> cobros = new HashSet<>();
+cobros.add(c1);
+cobros.add(c2);
+System.out.println(cobros.size());                        // 6 1 ---> el record genera equals y hashCode automáticamente con sus campos. c2 sería el duplicado pq es igual a c1. Set no lo agrega
+System.out.println(c1 == c2);                             // 7 false ---> es comparación por referencia y ambos son objetos creados con new

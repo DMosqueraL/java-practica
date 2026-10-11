@@ -1,0 +1,29 @@
+public class Pago {
+    private String id;
+    private String tipo;
+
+    public Pago(String id, String tipo){
+        this.id = id;
+        this.tipo = tipo;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == null || getClass() != o.getClass()) return false;
+        Pago otro = (Pago) o;
+        return id.equals(otro.id) && tipo.equals(otro.tipo);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(id, tipo);
+    }
+}
+
+// --- Predicción ---
+Pago p1 = new Pago("1", "DEBITO");
+Pago p2 = new Pago("1", "DEBITO");
+
+System.out.println(p1.hashCode() == p2.hashCode()); // true
+System.out.println(p1.equals(p2)); // true
+System.out.println(set.size());   // después de set.add(p1); set.add(p2); Salida: 1
