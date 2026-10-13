@@ -105,7 +105,7 @@ Título de cada chat: `Semana 4 - Tema: <tema>`. La sesión 16 reemplaza el recu
 | 19 | Tests con archivos: `@TempDir` y probar la carga de punta a punta | Test que crea un CSV temporal y comprueba el reporte completo |
 | 20 | Empaquetar y ejecutar con Maven (`mvn package`, jar ejecutable) + kata de cierre de la Fase 0 | App completa: lee el CSV real, valida, calcula y reporta; tests en verde + commit |
 
-> Si una semana queda corta, el ajuste se hace en la primera sesión de la semana siguiente y el resto se corre un día.
+> Si una semana queda corta, el ajuste se hace en la primera sesión de la semana siguiente y el resto se corre un día. Se puede recuperar en fin de semana o hacer dos sesiones el mismo día si no hay cansancio; en Progreso va la fecha real de cada parte.
 
 ---
 
@@ -192,6 +192,15 @@ Objetivo: ver de un vistazo dónde se falla y si ya se reforzó. No es un puntaj
 - **Quién y cuándo:** el chat de Tema o de Sprint lo actualiza al cierre de la sesión, en el mismo commit que la fila de Progreso.
 - **Uso:** los conceptos en `pendiente` alimentan el recuerdo, el ejercicio de cierre semanal y las variaciones.
 
+### Taller de planteamiento de tests (temporal)
+
+Mientras "Plantear un test" esté en `pendiente` en `seguimiento/fallos.md`:
+
+- Los primeros 10 min del bloque de kata: Claude muestra un método correcto y dos versiones con un error cada una; Doris escribe el planteamiento (Caso / Entrada / Comprueba / Por qué) del test que atrapa cada versión, sin escribir el test.
+- Progresión: sesión 8, los errores los da Claude; sesión 9, Doris propone el error y su planteamiento; sesión 10, sin taller.
+- La kata pide mínimo 3 tests (caso normal, caso de borde y el que atrapa un error), cada uno con su planteamiento.
+- Termina cuando Doris escribe los planteamientos sin ayuda en dos katas seguidas; el concepto pasa a `reforzado`.
+
 ## Rol de Claude y revisión
 
 - **Revisor y entrenador, no autor.** No escribe la solución de una kata salvo que Doris la pida explícitamente; si hay bloqueo, usa las pistas por niveles.
@@ -207,13 +216,13 @@ Objetivo: ver de un vistazo dónde se falla y si ya se reforzó. No es un puntaj
 - Un commit por kata: `kata-NN: descripción`.
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
 - Antes de ejecutar, se escribe en un comentario `//` la salida literal esperada, línea por línea.
-- Antes de escribir un test, se escribe en un comentario `//` su planteamiento, con estas cuatro líneas: **Caso** (qué situación se prueba), **Entrada** (los datos concretos), **Comprueba** (qué valor, cuántos elementos u orden se verifica) y **Por qué** (qué error atraparía este caso). Debajo va la predicción de siempre. Ejemplo con un test de la kata-02:
+- Antes de escribir un test, se escribe en un comentario `//` su planteamiento, con estas cuatro líneas: **Caso** (qué situación se prueba), **Entrada** (los datos concretos), **Comprueba** (qué valor, cuántos elementos u orden se verifica) y **Por qué** (qué error del método haría fallar este test; se escribe como «Atrapa un método que…»). Debajo va la predicción de siempre. Ejemplo con un test de la kata-02:
 
 ```java
 // Caso: 4 movimientos con solo 2 números de cuenta distintos.
 // Entrada: m1 y m2 con la cuenta "0001" (titulares distintos); m3 y m4 con la cuenta "0002".
 // Comprueba: qué cuentas salen (las de m1 y m3) y cuántas (2).
-// Por qué: atrapa un Set que no descarte las cuentas repetidas por número.
+// Por qué: Atrapa un método que no descarte las cuentas repetidas por número.
 // Predicción: verde
 @Test
 public void cuentasDistintasAgrupaPorNumero() {
@@ -235,7 +244,7 @@ public void cuentasDistintasAgrupaPorNumero() {
 // Caso: lista vacía.
 // Entrada: List.of().
 // Comprueba: el Set resultante está vacío.
-// Por qué: atrapa un método que falle o invente cuentas cuando no hay movimientos.
+// Por qué: Atrapa un método que falle o invente cuentas cuando no hay movimientos.
 ```
 - Ante un error: leer el tipo de excepción y la línea del stack trace, y formular una hipótesis antes de probar cosas.
 
@@ -326,3 +335,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.2 | 2026-10-11 | Las instrucciones del Proyecto se reducen a leer PLAN.md al iniciar; se agrega la sección Rol de Claude y revisión; la copia local del repo prevalece sobre cualquier otra |
 | v1.3 | 2026-10-12 | Se registra qué modelo usar por tipo de chat (Sonnet 5.5 en Tema y Sprint; Opus 5.5 en Planeación, cierres de fase y temas difíciles) |
 | v1.4 | 2026-10-13 | Registro de fallos en `seguimiento/fallos.md` (índice por concepto con estado, detalle del cierre de tema; los pendientes alimentan recuerdos y cierre semanal); Progreso deja de listar fallos desde la sesión 7. Nueva regla: plantear cada test en un comentario (Caso, Entrada, Comprueba, Por qué) antes de escribirlo, con ejemplo |
+| v1.5 | 2026-10-13 | Taller temporal de planteamiento de tests (sesiones 8 a 10, kata con mínimo 3 tests); el "Por qué" se escribe como «Atrapa un método que…»; se permite recuperar sesiones en fin de semana o el mismo día, con fecha real en Progreso |
