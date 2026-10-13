@@ -20,6 +20,9 @@ Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. E
 - Cada cambio acordado en Planeación se registra en el **Changelog** (al final) con fecha y versión. El mensaje de apertura de cada sesión incluye `Plan: vX.Y` para detectar desfases.
 - Las instrucciones del Proyecto en claude.ai solo dicen que se lea este archivo al iniciar. Todo lo demás (rol, pistas, revisión, fases, temario) vive aquí, así que no hay que mantener dos lugares.
 - Ningún chat usa otra copia de este archivo (GitHub, docs del Proyecto, memoria) si contradice la del repo local.
+- **Modelo por tipo de chat:**
+  - Tema y Sprint: Sonnet 5.5.
+  - Opus 5.5: chat de Planeación, revisiones de cierre de fase y temas difíciles (sobre todo el diseño de concurrencia y Reactor, Fases 4 y 5).
 
 ---
 
@@ -264,6 +267,7 @@ El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesi
 | 2026-10-08 | 5 | Primer test con JUnit y kata de cierre | Hecha. Kata: `Transacciones.filtrarPorTipo` y `sumarMontos` con 5 tests (JUnit 5 + AssertJ). Aprendido: `@Test`, `assertThat`, `isEqualTo` (equals) vs `isSameAs` (referencia), `containsExactly`, `isEmpty`; un `println` no se puede testear, un método que devuelve un valor sí |
 | 2026-10-09 | 6 (cierre Semana 1) | Ejercicio de cierre semanal (a ciegas, 36 min) | Hecho. Bien: `enum`, `record`, `ArrayList` + for-each, `==` en enum, `==` vs `equals` en records, predicciones de `a == b`, `a.equals(b)` y 250.5. Fallaron: `String` comparado con `==` en vez de `equals` (se repite el fallo del diagnóstico), `.size()` sobre el resultado de un método (predijo la lista en vez de un `int`), sintaxis de `assertThat(...)` (paréntesis mal cerrado, argumento de tipo equivocado y valor esperado incorrecto), typo en nombre de variable, guion en el `package`. Reforzar: `equals` en `String`, leer qué devuelve cada llamada encadenada. Los errores se corrigieron en la misma sesión tras la revisión |
 | 2026-10-09 y 2026-10-11 | 6 | Set, HashSet y hashCode | Hecha. Tema con predicción de cierre 7/7. Kata-02: `Cuentas.cuentasDistintas` y `hayCuentasRepetidas` (con `Set` y el booleano de `add`) más 5 tests (JUnit 5 + AssertJ). Aprendido: `Set` sin duplicados ni orden, `add` devuelve `boolean`, `HashSet` calcula `hashCode` y luego compara con `equals`; si `a.equals(b)` entonces mismo `hashCode`; `record` lo genera solo, en clase normal se sobrescriben ambos (`Objects.hash` con los mismos campos que `equals`). Fallaron: modelo inicial de los cajones, leer `p1 == p2` como `equals`, `contains` que siempre daba `true` en `hayCuentasRepetidas`, test sin `hasSize` (verificaba qué pero no cuántos), test de lista vacía que no llamaba al método, datos copiados sin ajustar. Pendiente: cómo plantear un test (datos, qué comprobar) |
+| 2026-10-12 | 7 (parcial) | Cómo plantear un test + Map y HashMap | En curso: falta la kata (agrupar movimientos por cuenta con `Map`, con tests). Recuerdo de `Pago`: `hashCode` bien; fallaron `equals` (sin comparar los `String`, usó `id()`/`tipo()` de record), `@override` en minúscula y constructor `private`. Map/HashMap: variación `ConteoColores` correcta; predicción de cierre 8/10 (fallaron: `getOrDefault` devuelve el valor por defecto y no `null`; asignar a un `int` el `get` de una clave inexistente lanza `NullPointerException`). Cómo plantear un test: se explicó (datos, qué comprobar, matriz de errores) pero no quedó afianzado; se retoma dentro de la kata. Para planeación: el planteamiento de tests no se interiorizó con una sola explicación; evaluar si la kata de Map lo trabaja paso a paso |
 
 ---
 
@@ -276,3 +280,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.0 | 2026-10-11 | Se separa el chat de Planeación de los chats de tema (sección Organización de los chats). Se agregan el Changelog y la referencia `Plan: vX.Y` en el mensaje de apertura |
 | v1.1 | 2026-10-11 | Se agrega la Fase 8 (práctica continua por sprints sobre un ledger de doble partida, con chat propio por sprint) y la fila Sprint en Organización de los chats |
 | v1.2 | 2026-10-11 | Las instrucciones del Proyecto se reducen a leer PLAN.md al iniciar; se agrega la sección Rol de Claude y revisión; la copia local del repo prevalece sobre cualquier otra |
+| v1.3 | 2026-10-12 | Se registra qué modelo usar por tipo de chat (Sonnet 5.5 en Tema y Sprint; Opus 5.5 en Planeación, cierres de fase y temas difíciles) |

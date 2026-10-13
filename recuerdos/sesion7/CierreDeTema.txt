@@ -1,0 +1,46 @@
+record Ciudad(String nombre) {}
+
+class Sede {
+    private final String codigo;
+    Sede(String codigo) { this.codigo = codigo; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Sede otra = (Sede) o;
+        return codigo.equals(otra.codigo);
+    }
+
+    @Override
+    public int hashCode() { return Objects.hash(codigo); }
+}
+
+class Bodega {
+    private final String codigo;
+    Bodega(String codigo) { this.codigo = codigo; }
+}
+
+Map<String, Integer> ventas = new HashMap<>();
+ventas.put("lunes", 5);
+ventas.put("martes", 8);
+System.out.println(ventas.put("lunes", 6));                // 1 ---> 5, Encontró la clave "lunes" y trae el valor que tenía antes (5) y reemplaza con este nuevo valor (6)
+ventas.put("miercoles", 2);
+System.out.println(ventas.size());                         // 2 ---> 3, Son los 3 elementos que existen en el map ventas
+System.out.println(ventas.get("lunes"));                   // 3 ---> 6, Devuelve el valor reemplazado en 1
+System.out.println(ventas.get("jueves"));                  // 4 ---> null, la clave "jueves" no existe en el map ventas
+System.out.println(ventas.getOrDefault("jueves", -1));     // 5 ---> null, la clave "jueves" no existe en el map ventas
+System.out.println(ventas.containsKey("martes"));          // 6 ---> true, La clave "martes" existe en el map ventas
+
+Map<Ciudad, String> alcaldes = new HashMap<>();
+alcaldes.put(new Ciudad("Cali"), "A");
+System.out.println(alcaldes.get(new Ciudad("Cali")));      // 7 ---> A, el record genera equals y hashCode automáticamente con sus campos. La clave "cali" existe en el map alcaldes, trae su valor
+
+Map<Sede, Integer> empleados = new HashMap<>();
+empleados.put(new Sede("S-1"), 40);
+System.out.println(empleados.get(new Sede("S-1")));        // 8 ---> 40, están sobreescritos hashCode y equals. La clave "S-1" existe en el map empleados, trae su valor
+
+Map<Bodega, Integer> cajas = new HashMap<>();
+cajas.put(new Bodega("B-1"), 100);
+System.out.println(cajas.get(new Bodega("B-1")));          // 9, null. No tiene hashCode y equals sobreescritos, son objetos diferentes, no existe este elemento en el map cajas
+
+int total = ventas.get("jueves");                          // 10  ¿qué pasa? ---> null, la clave "jueves" no existe en el map ventas.

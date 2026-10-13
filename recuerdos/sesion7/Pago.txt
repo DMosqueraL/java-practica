@@ -1,0 +1,29 @@
+public class Pago{
+    private String id;
+    private String tipo;
+
+    private Pago (String id, String tipo){
+        this.id = id;
+        this.tipo = tipo;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public String getTipo(){
+        return tipo;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == null || getClass() != o.getClass()) return false;
+        Pago otro = (Pago) o;
+        return otro.id() && otro.tipo();
+    }
+
+    @override
+    public int hashCode(){
+        return Objects.hash(id, tipo);
+    }
+}
