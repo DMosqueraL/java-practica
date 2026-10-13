@@ -160,7 +160,7 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 3. **Pausa de comprensión:** una pregunta sin código nuevo. Solo se avanza cuando esa parte quedó clara.
 4. **La variación usa únicamente lo ya mostrado.** No introduce una API o un concepto nuevo dentro del ejercicio.
 5. **Las predicciones se piden solo sobre lo ya visto.** Si falla, se explica con el mismo ejemplo; si vuelve a fallar, se usa un ejemplo nuevo.
-6. **Cierre del tema:** un ejercicio de predicción que abarca todo el tema de la sesión. Si lo acierta, el tema quedó interiorizado.
+6. **Cierre del tema:** un ejercicio de predicción que abarca todo el tema de la sesión. Si lo acierta, el tema quedó interiorizado. El resultado línea por línea se registra en `seguimiento/fallos.md`.
 
 ### Pistas por niveles (cuando hay bloqueo en una kata)
 
@@ -177,9 +177,20 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 - **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra).
 - **Duración:** 30–40 min. Esa sesión se extiende 30 min (2 h 30 en total).
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo. Los espacios en blanco y el formato no cuentan, y no se adelantan temas que aún no se han visto.
-- **Registro:** en la tabla de Progreso se anota qué ingredientes de la semana fallaron, para reforzarlos.
+- **Registro:** los fallos van al índice de `seguimiento/fallos.md`. El ejercicio incluye los conceptos que estén en `pendiente`.
 
 ---
+
+### Registro de fallos (`seguimiento/fallos.md`)
+
+Objetivo: ver de un vistazo dónde se falla y si ya se reforzó. No es un puntaje.
+
+- **Qué entra:** fallos del cierre de tema, del ejercicio de cierre semanal, de los recuerdos, de las katas y de los sprints. De las revisiones entran los **Error** y los **Riesgo**; los **Estilo** no. No entran errores de digitación, espaciado ni formato.
+- **Índice de fallos** (al inicio): concepto, dónde falló, por qué y estado. Una fila por concepto, no por ocurrencia: si vuelve a fallar, se agrega el lugar a la misma fila.
+- **Estados:** `pendiente` (falló y aún no ha salido bien) o `reforzado (sesión N)` (volvió a aparecer y se acertó). Si un concepto reforzado vuelve a fallar, regresa a `pendiente` con la nota "recaída (sesión N)".
+- **Detalle por sesión** (debajo): solo para el cierre de tema, con línea, respuesta de Doris, salida real ejecutada, ✅/❌ y el porqué.
+- **Quién y cuándo:** el chat de Tema o de Sprint lo actualiza al cierre de la sesión, en el mismo commit que la fila de Progreso.
+- **Uso:** los conceptos en `pendiente` alimentan el recuerdo, el ejercicio de cierre semanal y las variaciones.
 
 ## Rol de Claude y revisión
 
@@ -196,6 +207,36 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 - Un commit por kata: `kata-NN: descripción`.
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
 - Antes de ejecutar, se escribe en un comentario `//` la salida literal esperada, línea por línea.
+- Antes de escribir un test, se escribe en un comentario `//` su planteamiento, con estas cuatro líneas: **Caso** (qué situación se prueba), **Entrada** (los datos concretos), **Comprueba** (qué valor, cuántos elementos u orden se verifica) y **Por qué** (qué error atraparía este caso). Debajo va la predicción de siempre. Ejemplo con un test de la kata-02:
+
+```java
+// Caso: 4 movimientos con solo 2 números de cuenta distintos.
+// Entrada: m1 y m2 con la cuenta "0001" (titulares distintos); m3 y m4 con la cuenta "0002".
+// Comprueba: qué cuentas salen (las de m1 y m3) y cuántas (2).
+// Por qué: atrapa un Set que no descarte las cuentas repetidas por número.
+// Predicción: verde
+@Test
+public void cuentasDistintasAgrupaPorNumero() {
+    Movimiento m1 = new Movimiento("1", new Cuenta("0001", "Doris"), 1100);
+    Movimiento m2 = new Movimiento("2", new Cuenta("0001", "Carmen"), 1000);
+    Movimiento m3 = new Movimiento("3", new Cuenta("0002", "Luisa"), 100);
+    Movimiento m4 = new Movimiento("4", new Cuenta("0002", "Luisa"), 50);
+
+    Set<Cuenta> cuentas = cuentasDistintas(List.of(m1, m2, m3, m4));
+
+    assertThat(cuentas).contains(m1.cuenta(), m3.cuenta());
+    assertThat(cuentas).hasSize(2);
+}
+```
+
+  Un caso de borde lleva la misma estructura, más corta:
+
+```java
+// Caso: lista vacía.
+// Entrada: List.of().
+// Comprueba: el Set resultante está vacío.
+// Por qué: atrapa un método que falle o invente cuentas cuando no hay movimientos.
+```
 - Ante un error: leer el tipo de excepción y la línea del stack trace, y formular una hipótesis antes de probar cosas.
 
 ---
@@ -248,7 +289,8 @@ java-practica/
 ├── procesador-extractos/    (se agrega en su fase)
 ├── reactor-fundamentos/     (se agrega en su fase)
 ├── webflux-api/             (se agrega en su fase)
-└── recuerdos/               (recuerdos y ejercicios semanales en .txt, por sesión)
+├── recuerdos/               (recuerdos y ejercicios semanales en .txt, por sesión)
+└── seguimiento/             (registro de fallos: fallos.md)
 ```
 
 El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesiones 0 a 5; `funcional-katas` queda para la Fase 2. Los `.txt` de recuerdo viven en `recuerdos/sesionN/`, fuera de `src/`.
@@ -256,6 +298,8 @@ El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesi
 ---
 
 ## Progreso
+
+Cada fila resume qué se hizo, el entregable y los pendientes `Para planeación`. Desde la sesión 7, los fallos se registran en [seguimiento/fallos.md](seguimiento/fallos.md).
 
 | Fecha | Sesión | Tema | Estado |
 |---|---|---|---|
@@ -281,3 +325,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.1 | 2026-10-11 | Se agrega la Fase 8 (práctica continua por sprints sobre un ledger de doble partida, con chat propio por sprint) y la fila Sprint en Organización de los chats |
 | v1.2 | 2026-10-11 | Las instrucciones del Proyecto se reducen a leer PLAN.md al iniciar; se agrega la sección Rol de Claude y revisión; la copia local del repo prevalece sobre cualquier otra |
 | v1.3 | 2026-10-12 | Se registra qué modelo usar por tipo de chat (Sonnet 5.5 en Tema y Sprint; Opus 5.5 en Planeación, cierres de fase y temas difíciles) |
+| v1.4 | 2026-10-13 | Registro de fallos en `seguimiento/fallos.md` (índice por concepto con estado, detalle del cierre de tema; los pendientes alimentan recuerdos y cierre semanal); Progreso deja de listar fallos desde la sesión 7. Nueva regla: plantear cada test en un comentario (Caso, Entrada, Comprueba, Por qué) antes de escribirlo, con ejemplo |
