@@ -1,0 +1,52 @@
+1. // --- agruparPorCuenta ---
+package dev.doris.sesion7;
+
+// El orden de los imports lo puse de acuerdo a como escribía el código. Es posible que en el original esté en orden alfabético o en otro orden
+import dev.doris.sesion6.Cuenta;
+import dev.doris.sesion6.Movimiento;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+
+public class Movimientos{
+
+    public static Map<Cuenta, List<Movimiento>> agruparPorCuenta(List<Movimiento> movimientos){
+        Map<Cuenta, List<Movimiento>> grupoCuentas = new HashMap<>();
+
+        for(Movimiento mov : movimientos){
+            if(!grupoCuentas.containsKey(mov.cuenta())){
+                grupoCuentas.put(mov.cuenta(), new ArrayList<>());
+            }
+            List<Movimiento> lista = grupoCuentas.get(mov.cuenta());
+            lista.add(mov);
+        }
+        return grupoCuentas;
+    }
+}
+
+2. // --- ConteoColores ---
+package dev.doris.sesion7;
+
+// El orden de los imports lo puse de acuerdo a como escribía el código. Es posible que en el original esté en orden alfabético o en otro orden
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+
+public class ConteoColores{
+    public static void main(String[] args){
+        List<String> colores = List.of("rojo", "azul", "rojo", "verde", "azul", "rojo"); //Es posible que el orden en la versión original sea diferente a este
+
+        Map<String, Integer> conteo = new HashMap<>();
+
+        for(String color : colores){
+            conteo.put(color, conteo.getOrDefault(color, 0) + 1);
+        }
+
+        for(String color : conteo.keySet()){
+            if(conteo.get(color) > 1){
+                System.out.println(color + " -> " + conteo.get(color));
+            }
+        }
+    }
+}

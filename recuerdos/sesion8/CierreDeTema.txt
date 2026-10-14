@@ -1,0 +1,40 @@
+import java.math.BigDecimal;
+
+double total = 0.0;
+for (int i = 0; i < 10; i++) {
+    total += 0.10;
+}
+System.out.println(total == 1.0);                                              // 1
+
+BigDecimal a = new BigDecimal("1.5");
+BigDecimal b = new BigDecimal("2.25");
+BigDecimal c = a.add(b);
+System.out.println(c);                                                         // 2
+
+a.add(new BigDecimal("10"));
+System.out.println(a);                                                         // 3
+
+System.out.println(c.equals(new BigDecimal("3.750")));                         // 4
+System.out.println(c.compareTo(new BigDecimal("3.750")));                      // 5
+System.out.println(new BigDecimal("3.00").compareTo(c));                       // 6
+
+BigDecimal suma = BigDecimal.ZERO;
+suma = suma.add(new BigDecimal("0.5"));
+suma = suma.add(new BigDecimal("0.50"));
+System.out.println(suma);                                                      // 7
+
+System.out.println(new BigDecimal("0.00").compareTo(BigDecimal.ZERO) == 0);    // 8
+System.out.println(new BigDecimal("0.00").equals(BigDecimal.ZERO));            // 9
+System.out.println(new BigDecimal("0.1").equals(new BigDecimal(0.1)));         // 10
+
+//--- Predicciones ---
+[1] 0.9999999999999999 ---> El error que arrastra double, se ganan o se pierden cifras. En este caso perdió y eso en dinero es peligroso
+[2] 3.75 ---> BigDecimal la suma es exacta y la escala del resultado depende del operando con mayor escala
+[3] 1.5 ---> BigDecimal es inmutable, add genera un nuevo objeto con ese valor que debe guardarse, no sobreescribe a "a" a no ser que se reasigne -> a = a.add(new BigDecimal("10"));
+[4] false ---> equals evalúa/compara valor numérico y escala. Y las escalas no son iguales: (2) - (3)
+[5] 0 ---> compareTo evalúa/compara solo el valor numérico y en el ejercicio son iguales en valor, por lo tanto compareTo retorna un cero (igualdad)
+[6]-1 ---> compareTo retorna un valor negativo cuando el primer operando es menor al segundo
+[7] 1.00 ---> Se reasigna el valor a la variable suma y el resultado final conserva la escala del operando con mayor escala (0.50 --> escala 2)
+[8] true ---> new BigDecimal("0.00").compareTo(BigDecimal.ZERO) es igual a cero y luego lo compara (==) con 0 y es verdadero
+[9] false ---> No estoy segura, pero no sé como es la escala de BigDecimal.ZERO pq envalor si son iguales: 0 pero desconozco la escala de BigDecimal.ZERO para la comparación
+[10] true ---> equals evalúa/compara valor numérico y escala. El valor es el mismo: 0.1 y la escala es la misma: 1

@@ -1,4 +1,5 @@
 package dev.doris.sesion8;
 
-public class Abono {
-}
+import java.math.BigDecimal;
+
+public record Abono(String cuenta, BigDecimal monto) {}
