@@ -3,7 +3,7 @@
 Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. Es independiente de la teoría de la certificación 1Z0-830: esa entrena a leer código; esta, a producirlo.
 
 - **Dedicación:** 2 h diarias, lunes a viernes (10 h/semana).
-- **Duración estimada:** ~24 semanas.
+- **Duración estimada:** 24 semanas del plan. Una "semana del plan" son 5 sesiones, y cada sesión se planea en 2 días de 2 h (ver Formato de sesión), así que en calendario, por ahora, una semana del plan toma unas 2 semanas reales. Se recalcula con datos reales al cerrar la Fase 0.
 - **Dominio común:** transacciones bancarias. El mismo problema evoluciona de imperativo a OO, luego a funcional y luego a reactivo.
 
 ---
@@ -83,7 +83,7 @@ Título de cada chat: `Semana 2 - Tema: <tema>`. Como en la Semana 1, la última
 
 ### Semana 3: un chat por sesión
 
-Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recuerdo por el ejercicio de cierre de la Semana 2 (2 h 30). La última sesión combina un tema nuevo con la kata de cierre.
+Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recuerdo por el ejercicio de cierre de la Semana 2 (Día A de 2 h 30). La última sesión combina un tema nuevo con la kata de cierre.
 
 | Sesión | Tema | Entregable al cierre |
 |---|---|---|
@@ -95,7 +95,7 @@ Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recu
 
 ### Semana 4: un chat por sesión
 
-Título de cada chat: `Semana 4 - Tema: <tema>`. La sesión 16 reemplaza el recuerdo por el ejercicio de cierre de la Semana 3 (2 h 30). La última sesión combina un tema nuevo con la kata de cierre, que es el criterio de salida de la Fase 0. La sesión 21 (Semana 5, Fase 1) lleva el ejercicio de cierre de la Semana 4.
+Título de cada chat: `Semana 4 - Tema: <tema>`. La sesión 16 reemplaza el recuerdo por el ejercicio de cierre de la Semana 3 (Día A de 2 h 30). La última sesión combina un tema nuevo con la kata de cierre, que es el criterio de salida de la Fase 0. La sesión 21 (Semana 5, Fase 1) lleva el ejercicio de cierre de la Semana 4.
 
 | Sesión | Tema | Entregable al cierre |
 |---|---|---|
@@ -134,14 +134,21 @@ Objetivo: no perder la costumbre de escribir código. Un proyecto que crece sema
 
 ---
 
-## Sesión de 2 h
+## Formato de sesión
 
-| Bloque | Duración | Qué se hace |
-|---|---|---|
-| Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en un `.txt` en blanco dentro de `recuerdos/sesionN/`, sin IDE y sin mirar; no aplica en la primera sesión). La primera sesión de cada semana, desde la Semana 2, lo reemplaza el ejercicio de cierre semanal (ver abajo) |
-| Tema nuevo | 30 min | Por qué existe → ejemplo guiado línea por línea → variación propia |
-| Kata | 50 min | Escribir desde cero, con pistas por niveles |
-| Revisión + teach-back | 25 min | Revisión del código y explicación de las decisiones |
+Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 h**. Si el Día A termina antes, el Día B empieza ese mismo día. En Progreso va la fecha real de cada parte.
+
+| Día | Bloque | Duración | Qué se hace |
+|---|---|---|---|
+| A | Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en un `.txt` en blanco dentro de `recuerdos/sesionN/`, sin IDE y sin mirar; no aplica en la primera sesión). En la primera sesión de cada semana del plan, desde la Semana 2, lo reemplaza el ejercicio de cierre semanal (ver abajo) |
+| A | Tema nuevo | 60 min | Por qué existe → ejemplo guiado → pausa de comprensión → variación propia |
+| A | Cierre de tema | 30 min | Predicción de 6 a 8 líneas con salidas ejecutadas, y su registro en `seguimiento/fallos.md` |
+| A | Margen | 15 min | Dudas, pausas y commit |
+| B | Taller de planteamiento | 10 min | Solo mientras esté activo (ver abajo) |
+| B | Kata | 70 min | Escribir desde cero, con pistas por niveles |
+| B | Revisión + teach-back | 20 min | Revisión del código y explicación de las decisiones |
+| B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
+| B | Cierre | 15 min | Registro de fallos, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
 
 ### Ciclo de cada tema nuevo
 
@@ -160,7 +167,7 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 3. **Pausa de comprensión:** una pregunta sin código nuevo. Solo se avanza cuando esa parte quedó clara.
 4. **La variación usa únicamente lo ya mostrado.** No introduce una API o un concepto nuevo dentro del ejercicio.
 5. **Las predicciones se piden solo sobre lo ya visto.** Si falla, se explica con el mismo ejemplo; si vuelve a fallar, se usa un ejemplo nuevo.
-6. **Cierre del tema:** un ejercicio de predicción que abarca todo el tema de la sesión. Si lo acierta, el tema quedó interiorizado. El resultado línea por línea se registra en `seguimiento/fallos.md`.
+6. **Cierre del tema:** un ejercicio de predicción de 6 a 8 líneas que abarca todo el tema de la sesión. Si lo acierta, el tema quedó interiorizado. El resultado línea por línea se registra en `seguimiento/fallos.md`.
 
 ### Pistas por niveles (cuando hay bloqueo en una kata)
 
@@ -175,7 +182,7 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 
 - **Qué es:** un problema nuevo (no la kata repetida) con los mismos ingredientes de la semana anterior, en el dominio de transacciones. Lo prepara Claude y se resuelve sin pistas.
 - **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra).
-- **Duración:** 30–40 min. Esa sesión se extiende 30 min (2 h 30 en total).
+- **Duración:** 30–40 min. El Día A de esa sesión se extiende 30 min (2 h 30).
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo. Los espacios en blanco y el formato no cuentan, y no se adelantan temas que aún no se han visto.
 - **Registro:** los fallos van al índice de `seguimiento/fallos.md`. El ejercicio incluye los conceptos que estén en `pendiente`.
 
@@ -207,6 +214,7 @@ Mientras "Plantear un test" esté en `pendiente` en `seguimiento/fallos.md`:
 - **Revisión:** se lee el código directo de la carpeta vinculada (no capturas ni pegados). Cada punto lleva la etiqueta **Error** (falla o resultado incorrecto), **Riesgo** (funciona pero puede fallar en otro caso) o **Estilo** (funciona igual, mejor práctica senior), sin suavizar. Incluye uso idiomático de Java 21 y la alternativa que usaría un senior, con el porqué.
 - **No asumir conocimiento:** no se da por sabido nada que no se haya visto en las sesiones.
 - Analogías con JS/TS, RxJS y NestJS cuando ayuden. Español neutro/latinoamericano.
+- La práctica de inglés va solo en su bloque de 5 min del Día B (ver Formato de sesión); durante la sesión se anotan las frases candidatas sin detenerse.
 
 ## Reglas
 
@@ -321,6 +329,7 @@ Cada fila resume qué se hizo, el entregable y los pendientes `Para planeación`
 | 2026-10-09 | 6 (cierre Semana 1) | Ejercicio de cierre semanal (a ciegas, 36 min) | Hecho. Bien: `enum`, `record`, `ArrayList` + for-each, `==` en enum, `==` vs `equals` en records, predicciones de `a == b`, `a.equals(b)` y 250.5. Fallaron: `String` comparado con `==` en vez de `equals` (se repite el fallo del diagnóstico), `.size()` sobre el resultado de un método (predijo la lista en vez de un `int`), sintaxis de `assertThat(...)` (paréntesis mal cerrado, argumento de tipo equivocado y valor esperado incorrecto), typo en nombre de variable, guion en el `package`. Reforzar: `equals` en `String`, leer qué devuelve cada llamada encadenada. Los errores se corrigieron en la misma sesión tras la revisión |
 | 2026-10-09 y 2026-10-11 | 6 | Set, HashSet y hashCode | Hecha. Tema con predicción de cierre 7/7. Kata-02: `Cuentas.cuentasDistintas` y `hayCuentasRepetidas` (con `Set` y el booleano de `add`) más 5 tests (JUnit 5 + AssertJ). Aprendido: `Set` sin duplicados ni orden, `add` devuelve `boolean`, `HashSet` calcula `hashCode` y luego compara con `equals`; si `a.equals(b)` entonces mismo `hashCode`; `record` lo genera solo, en clase normal se sobrescriben ambos (`Objects.hash` con los mismos campos que `equals`). Fallaron: modelo inicial de los cajones, leer `p1 == p2` como `equals`, `contains` que siempre daba `true` en `hayCuentasRepetidas`, test sin `hasSize` (verificaba qué pero no cuántos), test de lista vacía que no llamaba al método, datos copiados sin ajustar. Pendiente: cómo plantear un test (datos, qué comprobar) |
 | 2026-10-12 y 2026-10-13 | 7 | Cómo plantear un test + Map y HashMap | Hecha. Tema con predicción de cierre 8/10 y variación `ConteoColores` correcta. Kata-03: `Movimientos.agruparPorCuenta` (`Map<Cuenta, List<Movimiento>>`) más 5 tests (JUnit 5 + AssertJ), todos en verde. Aprendido: `put`, `get`, `getOrDefault` y `containsKey`; las claves del `Map` usan `equals`/`hashCode`; patrón de agrupar (si la clave no está, `put` de una lista nueva; luego `get` y `add`); planteamiento de un test (Caso / Entrada / Comprueba / Por qué) y predecir verde o rojo antes de correrlo; leer un error en el stack trace (`NullPointerException` frente a `AssertionError`). Fallos en [seguimiento/fallos.md](seguimiento/fallos.md). Para planeación: el planteamiento de tests (sobre todo el "Por qué") tomó mucho más de lo previsto y se hizo paso a paso con ayuda en cada caso; evaluar cuánta práctica de planteamiento se agrega a las katas siguientes. La Sesión 8 podría hacerse la noche del 13 de oct si no hay cansancio y el día pendiente recuperarse el fin de semana (como el 11 de oct); lo decide Planeación |
+| 2026-10-13 (parte 1) | 8 | `BigDecimal` para dinero | En curso. Hecho el 13 de oct: recuerdo, tema con predicción de cierre 8/10 y variación `TotalesPorCuenta` (`Map<String, BigDecimal>`) correcta. Faltan el taller de planteamiento y la kata-04 (`Abonos.sumarMontos` con `BigDecimal`, mínimo 3 tests), que siguen el 14 de oct. Aprendido: `double` falla con montos (binario; los errores se acumulan); `BigDecimal` se crea con `String` y no con `double`; es inmutable (`add` devuelve un objeto nuevo); la escala son los decimales, por eso `equals` compara valor y escala y `compareTo` solo el valor; `BigDecimal.ZERO` con `getOrDefault`; `get` de una cuenta ausente devuelve `null` y llamar `add` sobre él lanza `NullPointerException`. Fallos en [seguimiento/fallos.md](seguimiento/fallos.md). Para planeación: la Sesión 8 se partió en dos días porque la parte 1 pasó de las 2 h; evaluar si el taller de planteamiento cabe dentro de las 2 h |
 
 ---
 
@@ -336,3 +345,5 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.3 | 2026-10-12 | Se registra qué modelo usar por tipo de chat (Sonnet 5.5 en Tema y Sprint; Opus 5.5 en Planeación, cierres de fase y temas difíciles) |
 | v1.4 | 2026-10-13 | Registro de fallos en `seguimiento/fallos.md` (índice por concepto con estado, detalle del cierre de tema; los pendientes alimentan recuerdos y cierre semanal); Progreso deja de listar fallos desde la sesión 7. Nueva regla: plantear cada test en un comentario (Caso, Entrada, Comprueba, Por qué) antes de escribirlo, con ejemplo |
 | v1.5 | 2026-10-13 | Taller temporal de planteamiento de tests (sesiones 8 a 10, kata con mínimo 3 tests); el "Por qué" se escribe como «Atrapa un método que…»; se permite recuperar sesiones en fin de semana o el mismo día, con fecha real en Progreso |
+| v1.6 | 2026-10-13 | Formato de sesión: cada sesión se planea en 2 días de 2 h (Día A: recuerdo, tema de 60 min, cierre de tema; Día B: taller, kata de 70 min, revisión y cierre). El cierre de tema baja a 6–8 líneas. Una semana del plan son 5 sesiones (≈2 semanas reales por ahora); la duración se recalcula al cerrar la Fase 0 |
+| v1.7 | 2026-10-13 | La práctica de inglés pasa a un bloque fijo de 5 min en el Día B (la revisión baja a 20 min); no se intercala en el tema ni en la kata |
