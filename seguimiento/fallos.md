@@ -30,9 +30,9 @@ Objetivo: ver de un vistazo **dónde se falla** y si ya se reforzó. No es un pu
 
 ## Testing por kata
 
-Una fila por kata, desde la kata-04 (ver "Taller de testing" en `PLAN.md`). Pista máxima: 0 = sin pistas; 1 a 4 = el nivel más alto que hizo falta (4 = solución dada). La progresión esperada es que baje hasta 0 o 1.
+Una fila por kata, desde la kata-04 (ver "Busca el error" y la regla "Error real → test" en `PLAN.md`). Pista máxima: 0 = sin pistas; 1 a 4 = el nivel más alto que hizo falta (4 = solución dada). La progresión esperada es que baje hasta 0 o 1.
 
-| Kata | Tests | Familias usadas | Pista máxima | Rojo verificado |
+| Kata | Tests | Pista máxima | Busca el error (familia; ¿lo encontró?) | Errores reales convertidos en test |
 |---|---|---|---|---|
 | 04 (s8) | 3, todos en verde: varios abonos, lista vacía y suma exacta de decimales | 1 (no acumula), 2 (valor inicial equivocado) y 5 (tipo o precisión) | 4: el planteamiento del Test 1 se dio como referencia y el del Test 3 se dio completo a su pedido (pista 4); el Test 2 lo escribió casi sola y solo faltó el "Atrapa" (pista 2). Fuera del taller del PLAN: la tabla de pensamiento (correcto frente a erróneo) no le sirvió y no la usó | Parcial: lo verificó Claude con Java simple (el método con `double` da `0.30000000000000004`, no `0.30`); Doris no pegó el método con `double` ni corrió el test en rojo |
 

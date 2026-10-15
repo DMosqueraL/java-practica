@@ -144,8 +144,8 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Tema nuevo | 60 min | Por qué existe → ejemplo guiado → pausa de comprensión → variación propia |
 | A | Cierre de tema | 30 min | Predicción de 6 a 8 líneas con salidas ejecutadas, y su registro en `seguimiento/fallos.md` |
 | A | Margen | 15 min | Dudas, pausas y commit |
-| B | Taller de testing | 15 min | Solo mientras esté activo (ver abajo) |
-| B | Kata | 65 min | Escribir desde cero, con pistas por niveles |
+| B | Busca el error | 5 min | Encontrar el error en un método dado (ver abajo) |
+| B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
 | B | Revisión + teach-back | 20 min | Revisión del código y explicación de las decisiones |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
 | B | Cierre | 15 min | Registro de fallos, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
@@ -213,18 +213,15 @@ Para el "Atrapa" de cada test se elige una familia y se aplica al método. Es pe
 | 6 | Reemplaza en vez de agregar | `put` sobre una clave existente; lista nueva en cada vuelta | Dos elementos con la misma clave |
 | 7 | Se salta un elemento | `i = 1`, `i < size() - 1` | Inactiva: se activa cuando se use el `for` con índice |
 
-### Taller de testing (temporal)
+### Busca el error (5 min)
 
-Mientras "Plantear un test" esté en `pendiente` en `seguimiento/fallos.md`:
+Al inicio del Día B, antes de la kata:
 
-- **Dónde:** los primeros 15 min del Día B, antes de la kata.
-- **Progresión:**
-  - Sesión 9: Claude da 2 mutantes de un método (un error de una familia del catálogo cada uno), sin decir dónde está el error. Doris lo encuentra, escribe el planteamiento y el test, y lo corre contra el mutante (debe dar rojo) y contra el método correcto (verde).
-  - Sesión 10 en adelante: Doris toma una familia del catálogo, la aplica con un solo cambio pequeño a su método de la kata, escribe el test, verifica el rojo y deshace el cambio. El mutante nunca se commitea.
-- **Sin test de referencia:** Claude no da un test resuelto. Si hay bloqueo, se usan las pistas por niveles.
-- **Kata:** mínimo 3 tests, cada uno con una familia distinta. El que atrapa un error se verifica en rojo contra su mutante.
-- **Medición:** tabla "Testing por kata" en `seguimiento/fallos.md`. Pista máxima: 0 = sin pistas; 1 a 4 = el nivel de pista más alto que hizo falta en esa kata (4 = solución dada).
-- **Termina** cuando, en 2 katas seguidas, todos los tests salen con pista máxima 0 o 1 y el de error tiene el rojo verificado. El concepto pasa a `reforzado`. El formato de 3 líneas y el catálogo siguen siempre.
+- Claude muestra un método corto con **un** error de una familia del catálogo, escrito solo con lo ya visto en las sesiones, sin decir dónde está.
+- Doris dice en qué línea está, qué devolvería con una entrada concreta y a qué familia pertenece. No se escribe test.
+- El resultado se anota en la tabla "Testing por kata" de `seguimiento/fallos.md`.
+
+**Suspendido hasta el inicio de la Fase 1** (se decide en Planeación con los datos de "Testing por kata"): el taller con mutantes y rojo verificado, y el "Atrapa" obligatorio. Las reglas de testing no se vuelven a cambiar antes del cierre de la Fase 0, salvo un bloqueo real.
 
 ## Rol de Claude y revisión
 
@@ -242,12 +239,12 @@ Mientras "Plantear un test" esté en `pendiente` en `seguimiento/fallos.md`:
 - Un commit por kata: `kata-NN: descripción`.
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
 - Antes de ejecutar, se escribe en un comentario `//` la salida literal esperada, línea por línea.
-- Antes de escribir un test, se escribe en un comentario `//` su planteamiento en tres líneas con valores concretos: **Entrada** (los datos exactos), **Esperado** (el valor que devuelve el método correcto) y **Atrapa** (la familia del catálogo de errores y qué daría el método con ese error). El caso lo dice el nombre del test. Debajo va la predicción de siempre. Ejemplos con la kata-04:
+- Antes de escribir un test, se escribe en un comentario `//` su planteamiento con valores concretos: **Entrada** (los datos exactos) y **Esperado** (el valor que devuelve el método correcto). El caso lo dice el nombre del test. **Atrapa** (familia del catálogo y qué daría el método con ese error) es opcional hasta la Fase 1: se anota si se ve, no se fuerza. Debajo va la predicción de siempre. Ejemplos con la kata-04:
 
 ```java
 // Entrada: abonos de 10.50, 0.10 y 0.20 de la cuenta "0001".
 // Esperado: 10.80
-// Atrapa: familia 1 (no acumula). Con total.add(abono.monto()) sin reasignar, daría 0.
+// Atrapa (opcional): familia 1 (no acumula). Con total.add(abono.monto()) sin reasignar, daría 0.
 // Predicción: verde
 @Test
 public void sumarMontosSumaTodosLosAbonos() {
@@ -266,9 +263,9 @@ public void sumarMontosSumaTodosLosAbonos() {
 ```java
 // Entrada: List.of()
 // Esperado: 0
-// Atrapa: familia 2 (valor inicial equivocado). Si total arranca en null, daría null.
 // Predicción: verde
 ```
+- **Error real → test:** cuando en una kata se comete un error de verdad (un `put` que reemplaza, un `add` sin reasignar), se escribe el test que lo habría atrapado y se anota su familia del catálogo. Así el repertorio de errores crece con la experiencia.
 - Ante un error: leer el tipo de excepción y la línea del stack trace, y formular una hipótesis antes de probar cosas.
 
 ---
@@ -363,3 +360,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.6 | 2026-10-13 | Formato de sesión: cada sesión se planea en 2 días de 2 h (Día A: recuerdo, tema de 60 min, cierre de tema; Día B: taller, kata de 70 min, revisión y cierre). El cierre de tema baja a 6–8 líneas. Una semana del plan son 5 sesiones (≈2 semanas reales por ahora); la duración se recalcula al cerrar la Fase 0 |
 | v1.7 | 2026-10-13 | La práctica de inglés pasa a un bloque fijo de 5 min en el Día B (la revisión baja a 20 min); no se intercala en el tema ni en la kata |
 | v1.8 | 2026-10-14 | Testing: planteamiento de 3 líneas (Entrada / Esperado / Atrapa), catálogo de familias de error, taller de testing con mutantes y rojo verificado (15 min; kata 65), sin test de referencia; progreso medido por pista máxima en fallos.md. Mini-tema de setScale/RoundingMode/divide en la sesión 14 |
+| v1.9 | 2026-10-14 | Testing según el volumen de código: planteamiento obligatorio de 2 líneas (Entrada / Esperado), "Atrapa" opcional; taller con mutantes suspendido hasta la Fase 1; nuevo bloque "Busca el error" (5 min) y regla "error real → test"; kata de 75 min. Reglas de testing congeladas hasta el cierre de la Fase 0 salvo bloqueo real |
