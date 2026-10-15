@@ -1,0 +1,52 @@
+// Versión A (correcta)
+public static boolean contieneMonto(List<BigDecimal> montos, BigDecimal buscado) {
+    for (BigDecimal monto : montos) {
+        if (monto.compareTo(buscado) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Versión B
+// Caso: validar si un monto dado se encuentra entre la lista de montos (BigDecimal)
+// Entrada: una lista List<BigDecimal> (montos) y el valor BigDecimal a consultar (buscado)
+// Comprueba: Recorriendo la lista dada (montos) encontrar el monto BigDecimal buscado. De encontrarlo retorna true, de lo contrario false
+// Por qué: Atrapa un método que siempre va a retornar false, así encuentre el valor buscado
+public static boolean contieneMonto(List<BigDecimal> montos, BigDecimal buscado) {
+    for (BigDecimal monto : montos) {
+        if (monto.compareTo(buscado) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
+// Versión C
+// Caso: validar si un monto dado se encuentra entre la lista de montos (BigDecimal)
+// Entrada: una lista List<BigDecimal> (montos) y el valor BigDecimal a consultar (buscado)
+// Comprueba: Recorriendo la lista dada (montos) encontrar el monto BigDecimal buscado. De encontrarlo retorna true, de lo contrario false
+// Por qué: Atrapa un método que compara valor numérico y la escala del monto buscado con cada elemento de la lista dada (monto) de cumplirse retorna true, de lo contrario false
+public static boolean contieneMonto(List<BigDecimal> montos, BigDecimal buscado) {
+    for (BigDecimal monto : montos) {
+        if (monto.equals(buscado)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// --- Corrección
+// Versión B
+// Caso: el monto buscado está en la lista, pero no es el primer elemento.
+// Entrada: montos = [1.00, 2.00, 3.00]; buscado = 3.00.
+// Comprueba: el resultado es true.
+// Por qué: Atrapa un método que decide con el primer elemento: como 1.00 no coincide con 3.00, devuelve false sin revisar el resto.
+
+// Versión C
+// Caso: el monto buscado está en la lista con el mismo valor, pero con distinta escala.
+// Entrada: montos = [2.00]; buscado = 2.0.
+// Comprueba: el resultado es true.
+// Por qué: Atrapa un método que compara con equals: 2.00 y 2.0 tienen el mismo valor pero distinta escala, así que devuelve false.
