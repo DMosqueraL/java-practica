@@ -28,6 +28,13 @@ Objetivo: ver de un vistazo **dónde se falla** y si ya se reforzó. No es un pu
 | `==` leído como `equals` | Tema Set y `hashCode` (s6) | Dos objetos con `new` son referencias distintas | reforzado (sesión 6): cierre 7/7, línea 7 |
 | Sintaxis del for-each: `for (Tipo x : lista)` | Diagnóstico (2026-10-06) | No recordaba la forma del for-each | reforzado (sesión 6): escrito bien en el ejercicio de cierre de la Semana 1 |
 
+## Testing por kata
+
+Una fila por kata, desde la kata-04 (ver "Taller de testing" en `PLAN.md`). Pista máxima: 0 = sin pistas; 1 a 4 = el nivel más alto que hizo falta (4 = solución dada). La progresión esperada es que baje hasta 0 o 1.
+
+| Kata | Tests | Familias usadas | Pista máxima | Rojo verificado |
+|---|---|---|---|---|
+
 ## Detalle por sesión
 
 ### Sesión 8 · `BigDecimal` para dinero (2026-10-13; el taller y la kata-04 siguen el 2026-10-14)

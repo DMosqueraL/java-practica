@@ -90,7 +90,7 @@ Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recu
 | 11 | `java.time`: `LocalDate`, `LocalDateTime`, comparar fechas | Fecha en `Transaccion` y filtro por rango de fechas, con tests |
 | 12 | Convertir texto a fecha: `DateTimeFormatter` y `DateTimeParseException` | Parsear fechas de texto, con el caso de fecha inválida y tests |
 | 13 | Leer archivos: `Path`, `Files.readAllLines`, `BufferedReader` y `try` con recursos | Leer un archivo de texto línea por línea |
-| 14 | Parseo de CSV: `split` y convertir cada línea en `Transaccion` | Una línea CSV a `Transaccion`, con tests |
+| 14 | Parseo de CSV: `split` y convertir cada línea en `Transaccion` + mini-tema `BigDecimal`: `setScale`, `RoundingMode` y `divide` (20 min) | Una línea CSV a `Transaccion` con el monto normalizado a 2 decimales, con tests |
 | 15 | Escribir archivos (`Files.write`) y reporte de líneas inválidas + kata de cierre de la Semana 3 | Cargar el CSV real, saltar y reportar las líneas inválidas, tests en verde + commit |
 
 ### Semana 4: un chat por sesión
@@ -144,8 +144,8 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Tema nuevo | 60 min | Por qué existe → ejemplo guiado → pausa de comprensión → variación propia |
 | A | Cierre de tema | 30 min | Predicción de 6 a 8 líneas con salidas ejecutadas, y su registro en `seguimiento/fallos.md` |
 | A | Margen | 15 min | Dudas, pausas y commit |
-| B | Taller de planteamiento | 10 min | Solo mientras esté activo (ver abajo) |
-| B | Kata | 70 min | Escribir desde cero, con pistas por niveles |
+| B | Taller de testing | 15 min | Solo mientras esté activo (ver abajo) |
+| B | Kata | 65 min | Escribir desde cero, con pistas por niveles |
 | B | Revisión + teach-back | 20 min | Revisión del código y explicación de las decisiones |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
 | B | Cierre | 15 min | Registro de fallos, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
@@ -199,14 +199,32 @@ Objetivo: ver de un vistazo dónde se falla y si ya se reforzó. No es un puntaj
 - **Quién y cuándo:** el chat de Tema o de Sprint lo actualiza al cierre de la sesión, en el mismo commit que la fila de Progreso.
 - **Uso:** los conceptos en `pendiente` alimentan el recuerdo, el ejercicio de cierre semanal y las variaciones.
 
-### Taller de planteamiento de tests (temporal)
+### Catálogo de familias de error
+
+Para el "Atrapa" de cada test se elige una familia y se aplica al método. Es permanente: cuando aparece un fallo nuevo en `seguimiento/fallos.md` que no encaja, se agrega una familia.
+
+| # | Familia | Cómo se ve en el código | Datos que la atrapan |
+|---|---|---|---|
+| 1 | No acumula | `total.add(x)` sin reasignar; `total = x` en vez de sumar | Varios elementos con valores distintos |
+| 2 | Valor inicial equivocado | Arranca en `null`, en el primer elemento o en 1 | Lista vacía; un solo elemento |
+| 3 | Condición invertida o de más | `else` sobrante, `>` en vez de `>=`, `!` olvidado | Elementos que cumplen, que no cumplen y uno justo en el límite |
+| 4 | Comparación equivocada | `==` en vez de `equals`; `equals` en vez de `compareTo` | Iguales en valor pero distintos en referencia o escala (`1.0` y `1.00`) |
+| 5 | Tipo o precisión | `double` en vez de `BigDecimal` | Montos como `0.10 + 0.20` |
+| 6 | Reemplaza en vez de agregar | `put` sobre una clave existente; lista nueva en cada vuelta | Dos elementos con la misma clave |
+| 7 | Se salta un elemento | `i = 1`, `i < size() - 1` | Inactiva: se activa cuando se use el `for` con índice |
+
+### Taller de testing (temporal)
 
 Mientras "Plantear un test" esté en `pendiente` en `seguimiento/fallos.md`:
 
-- Los primeros 10 min del bloque de kata: Claude muestra un método correcto y dos versiones con un error cada una; Doris escribe el planteamiento (Caso / Entrada / Comprueba / Por qué) del test que atrapa cada versión, sin escribir el test.
-- Progresión: sesión 8, los errores los da Claude; sesión 9, Doris propone el error y su planteamiento; sesión 10, sin taller.
-- La kata pide mínimo 3 tests (caso normal, caso de borde y el que atrapa un error), cada uno con su planteamiento.
-- Termina cuando Doris escribe los planteamientos sin ayuda en dos katas seguidas; el concepto pasa a `reforzado`.
+- **Dónde:** los primeros 15 min del Día B, antes de la kata.
+- **Progresión:**
+  - Sesión 9: Claude da 2 mutantes de un método (un error de una familia del catálogo cada uno), sin decir dónde está el error. Doris lo encuentra, escribe el planteamiento y el test, y lo corre contra el mutante (debe dar rojo) y contra el método correcto (verde).
+  - Sesión 10 en adelante: Doris toma una familia del catálogo, la aplica con un solo cambio pequeño a su método de la kata, escribe el test, verifica el rojo y deshace el cambio. El mutante nunca se commitea.
+- **Sin test de referencia:** Claude no da un test resuelto. Si hay bloqueo, se usan las pistas por niveles.
+- **Kata:** mínimo 3 tests, cada uno con una familia distinta. El que atrapa un error se verifica en rojo contra su mutante.
+- **Medición:** tabla "Testing por kata" en `seguimiento/fallos.md`. Pista máxima: 0 = sin pistas; 1 a 4 = el nivel de pista más alto que hizo falta en esa kata (4 = solución dada).
+- **Termina** cuando, en 2 katas seguidas, todos los tests salen con pista máxima 0 o 1 y el de error tiene el rojo verificado. El concepto pasa a `reforzado`. El formato de 3 líneas y el catálogo siguen siempre.
 
 ## Rol de Claude y revisión
 
@@ -224,35 +242,32 @@ Mientras "Plantear un test" esté en `pendiente` en `seguimiento/fallos.md`:
 - Un commit por kata: `kata-NN: descripción`.
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
 - Antes de ejecutar, se escribe en un comentario `//` la salida literal esperada, línea por línea.
-- Antes de escribir un test, se escribe en un comentario `//` su planteamiento, con estas cuatro líneas: **Caso** (qué situación se prueba), **Entrada** (los datos concretos), **Comprueba** (qué valor, cuántos elementos u orden se verifica) y **Por qué** (qué error del método haría fallar este test; se escribe como «Atrapa un método que…»). Debajo va la predicción de siempre. Ejemplo con un test de la kata-02:
+- Antes de escribir un test, se escribe en un comentario `//` su planteamiento en tres líneas con valores concretos: **Entrada** (los datos exactos), **Esperado** (el valor que devuelve el método correcto) y **Atrapa** (la familia del catálogo de errores y qué daría el método con ese error). El caso lo dice el nombre del test. Debajo va la predicción de siempre. Ejemplos con la kata-04:
 
 ```java
-// Caso: 4 movimientos con solo 2 números de cuenta distintos.
-// Entrada: m1 y m2 con la cuenta "0001" (titulares distintos); m3 y m4 con la cuenta "0002".
-// Comprueba: qué cuentas salen (las de m1 y m3) y cuántas (2).
-// Por qué: Atrapa un método que no descarte las cuentas repetidas por número.
+// Entrada: abonos de 10.50, 0.10 y 0.20 de la cuenta "0001".
+// Esperado: 10.80
+// Atrapa: familia 1 (no acumula). Con total.add(abono.monto()) sin reasignar, daría 0.
 // Predicción: verde
 @Test
-public void cuentasDistintasAgrupaPorNumero() {
-    Movimiento m1 = new Movimiento("1", new Cuenta("0001", "Doris"), 1100);
-    Movimiento m2 = new Movimiento("2", new Cuenta("0001", "Carmen"), 1000);
-    Movimiento m3 = new Movimiento("3", new Cuenta("0002", "Luisa"), 100);
-    Movimiento m4 = new Movimiento("4", new Cuenta("0002", "Luisa"), 50);
+public void sumarMontosSumaTodosLosAbonos() {
+    Abono a1 = new Abono("0001", new BigDecimal("10.50"));
+    Abono a2 = new Abono("0001", new BigDecimal("0.10"));
+    Abono a3 = new Abono("0001", new BigDecimal("0.20"));
 
-    Set<Cuenta> cuentas = cuentasDistintas(List.of(m1, m2, m3, m4));
+    BigDecimal total = Abonos.sumarMontos(List.of(a1, a2, a3));
 
-    assertThat(cuentas).contains(m1.cuenta(), m3.cuenta());
-    assertThat(cuentas).hasSize(2);
+    assertThat(total).isEqualByComparingTo(new BigDecimal("10.80"));
 }
 ```
 
-  Un caso de borde lleva la misma estructura, más corta:
+  Un caso de borde lleva la misma estructura:
 
 ```java
-// Caso: lista vacía.
-// Entrada: List.of().
-// Comprueba: el Set resultante está vacío.
-// Por qué: Atrapa un método que falle o invente cuentas cuando no hay movimientos.
+// Entrada: List.of()
+// Esperado: 0
+// Atrapa: familia 2 (valor inicial equivocado). Si total arranca en null, daría null.
+// Predicción: verde
 ```
 - Ante un error: leer el tipo de excepción y la línea del stack trace, y formular una hipótesis antes de probar cosas.
 
@@ -347,3 +362,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.5 | 2026-10-13 | Taller temporal de planteamiento de tests (sesiones 8 a 10, kata con mínimo 3 tests); el "Por qué" se escribe como «Atrapa un método que…»; se permite recuperar sesiones en fin de semana o el mismo día, con fecha real en Progreso |
 | v1.6 | 2026-10-13 | Formato de sesión: cada sesión se planea en 2 días de 2 h (Día A: recuerdo, tema de 60 min, cierre de tema; Día B: taller, kata de 70 min, revisión y cierre). El cierre de tema baja a 6–8 líneas. Una semana del plan son 5 sesiones (≈2 semanas reales por ahora); la duración se recalcula al cerrar la Fase 0 |
 | v1.7 | 2026-10-13 | La práctica de inglés pasa a un bloque fijo de 5 min en el Día B (la revisión baja a 20 min); no se intercala en el tema ni en la kata |
+| v1.8 | 2026-10-14 | Testing: planteamiento de 3 líneas (Entrada / Esperado / Atrapa), catálogo de familias de error, taller de testing con mutantes y rojo verificado (15 min; kata 65), sin test de referencia; progreso medido por pista máxima en fallos.md. Mini-tema de setScale/RoundingMode/divide en la sesión 14 |
