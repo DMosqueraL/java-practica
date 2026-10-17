@@ -143,12 +143,14 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en un `.txt` en blanco dentro de `recuerdos/sesionN/`, sin IDE y sin mirar; no aplica en la primera sesión). En la primera sesión de cada semana del plan, desde la Semana 2, lo reemplaza el ejercicio de cierre semanal (ver abajo) |
 | A | Tema nuevo | 60 min | Por qué existe → ejemplo guiado → pausa de comprensión → variación propia |
 | A | Cierre de tema | 30 min | Predicción de 6 a 8 líneas con salidas ejecutadas, y su registro en `seguimiento/fallos.md` |
-| A | Margen | 15 min | Dudas, pausas y commit |
+| A | Margen | 15 min | Dudas, pausas, trampa del 1Z0-830 (si aplica) y commit |
 | B | Busca el error | 5 min | Encontrar el error en un método dado (ver abajo) |
 | B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
 | B | Revisión + teach-back | 20 min | Revisión del código y explicación de las decisiones |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
 | B | Cierre | 15 min | Registro de fallos, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
+
+**Trampa del 1Z0-830 (opcional, solo informativa):** al final del Día A, después del cierre de tema, si existe una trampa de examen ligada al tema de la sesión, Claude la muestra: código corto, si compila o no, la salida, y por qué. Una sola, de 2 a 3 min, usando solo lo visto en la sesión y marcada como "código de examen, no de producción". No se pide predicción, no se evalúa y no entra a `seguimiento/fallos.md`. Si el tema no tiene una trampa clara, se omite. En Progreso se anota en una línea (`Trampa: ...`).
 
 ### Ciclo de cada tema nuevo
 
@@ -362,3 +364,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.7 | 2026-10-13 | La práctica de inglés pasa a un bloque fijo de 5 min en el Día B (la revisión baja a 20 min); no se intercala en el tema ni en la kata |
 | v1.8 | 2026-10-14 | Testing: planteamiento de 3 líneas (Entrada / Esperado / Atrapa), catálogo de familias de error, taller de testing con mutantes y rojo verificado (15 min; kata 65), sin test de referencia; progreso medido por pista máxima en fallos.md. Mini-tema de setScale/RoundingMode/divide en la sesión 14 |
 | v1.9 | 2026-10-14 | Testing según el volumen de código: planteamiento obligatorio de 2 líneas (Entrada / Esperado), "Atrapa" opcional; taller con mutantes suspendido hasta la Fase 1; nuevo bloque "Busca el error" (5 min) y regla "error real → test"; kata de 75 min. Reglas de testing congeladas hasta el cierre de la Fase 0 salvo bloqueo real |
+| v1.10 | 2026-10-17 | Trampa del 1Z0-830 opcional y solo informativa al final del Día A (una, de 2 a 3 min, dentro del margen; sin predicción ni registro en fallos.md; una línea en Progreso) |
