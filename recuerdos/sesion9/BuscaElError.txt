@@ -1,0 +1,18 @@
+// Debe: aplicar un descuento de 0 a 100 por ciento (ambos incluidos) y devolver el precio final.
+// Si el porcentaje está fuera de ese rango, lanza IllegalArgumentException.
+public static int precioConDescuento(int precio, int porcentaje) {
+    if (porcentaje < 0 || porcentaje >= 100) {
+        throw new IllegalArgumentException("El porcentaje debe estar entre 0 y 100 y llegó " + porcentaje);
+    }
+    return precio - precio * porcentaje / 100;
+}
+
+1. ¿En qué línea está el error? ---> Dentro del condicional se está incluyendo el 100 y debe ser solo mayor
+   ((porcentaje < 0 || porcentaje > 100))
+2. Elige una entrada concreta (un precio y un porcentaje) y di qué devolvería o lanzaría este método con ella.
+    Systema.out.println(precioConDescuento(100, 25)); ---> Salida: 75
+    Proceso:
+    100 - 100*25/100
+    Systema.out.println(precioConDescuento(100, 100)); ---> Salida: Salta la excepción
+    El porcentaje debe estar entre 0 y 100 y llegó 100 ---> El mismo mensaje se lee y entiende raro
+3. ¿A qué familia del catálogo pertenece? ---> Familia 3 Condición invertida o de más

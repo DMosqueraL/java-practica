@@ -36,7 +36,7 @@ public class AbonosTest {
 
     // Entrada: abonos de "0.10" y "0.20" de la cuenta "0001" (montos creados con String).
     // Esperado: 0.30
-    // Atrapa: familia 5 (tipo o precisión). Si el método suma con double, daría 0.30000000000000004.
+    // Atrapa (opcional): familia 5 (tipo o precisión). Si el método suma con double, daría 0.30000000000000004.
     // Predicción: verde
     @Test
     public void sumarMontosDevuelveTotalExactoConDecimales() {
