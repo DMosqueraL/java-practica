@@ -1,0 +1,83 @@
+import java.math.BigDecimal;
+
+class TopeDiarioException extends RuntimeException {
+    private final BigDecimal sobrante;
+
+    public TopeDiarioException(BigDecimal sobrante) {
+        super("Tope diario superado por " + sobrante);
+        this.sobrante = sobrante;
+    }
+
+    public BigDecimal sobrante() {
+        return sobrante;
+    }
+}
+
+class CuentaCerradaException extends RuntimeException {
+    public CuentaCerradaException(String cuenta) {
+        super("Cuenta cerrada: " + cuenta);
+    }
+}
+
+public class CierreTema {
+
+    static BigDecimal transferir(String cuenta, BigDecimal monto, BigDecimal usadoHoy) {
+        if (monto == null || monto.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Monto invalido: " + monto);
+        }
+        if (cuenta.equals("0000")) {
+            throw new CuentaCerradaException(cuenta);
+        }
+        BigDecimal total = usadoHoy.add(monto);
+        BigDecimal tope = new BigDecimal("500.00");
+        if (total.compareTo(tope) > 0) {
+            throw new TopeDiarioException(total.subtract(tope));
+        }
+        return total;
+    }
+
+    public static void main(String[] args) {
+        BigDecimal cero = new BigDecimal("0.00");
+        BigDecimal cien = new BigDecimal("100.00");
+
+        System.out.println("[1] " + transferir("0001", cien, new BigDecimal("50.00")));
+
+        try {
+            transferir("0001", new BigDecimal("300.00"), new BigDecimal("250.00"));
+            System.out.println("[2] hecho");
+        } catch (TopeDiarioException e) {
+            System.out.println("[3] " + e.getMessage());
+            System.out.println("[4] " + e.sobrante());
+        }
+
+        try {
+            transferir("0000", cien, cero);
+        } catch (TopeDiarioException e) {
+            System.out.println("[5] tope");
+        } catch (CuentaCerradaException e) {
+            System.out.println("[6] " + e.getMessage());
+        }
+
+        try {
+            transferir("0001", cero, cero);
+        } catch (IllegalArgumentException e) {
+            System.out.println("[7] " + e.getMessage());
+        }
+
+        try {
+            transferir(null, cien, cero);
+        } catch (IllegalArgumentException e) {
+            System.out.println("[8] " + e.getMessage());
+        }
+    }
+}
+
+// --- Predicciones ---
+[1] 150.00 ---> Camino feliz, total es menor a tope (150 < 500 ===> compare entrega -1, es true el condicional).
+[2] No se imprime. Se cumple la condición para lanzar la excepción total.compareTo(tope) > 0 ==> 250.00 + 300.00 = 550.00 > 500.00 --> compare entrega 1 que es mayor a 0
+[3] Tope diario superado por 50.00 ---> El programa lanza la excepción TopeDiarioException que coincide con la excepción del catch en main para ese caso y muestra el mensaje de la excepción
+[4] sobrante: 50.00 ---> Se continúa con la siguiente línea del catch que coincidió con TopeDiarioException y muestra el sobrante, la operación total.subtract(tope) == 550.00 - 500.00 = 50.00
+[5] Se imprime la stack trace de la JVM dado que en el main al entrar al caso, transferir evalúa el monto, está Ok, pasa a la cuenta y encuentra coincidencia y
+    lanza la excepción CuentaCerradaException, el programa al no encontrar el primer catch que coincida con la excepcion lanzada, pq el declarado es de otro tipo,
+    el main sube sin que la excepción sea atrapada y se termina.
+[6], [7] y [8] No se imprimen pq el main ya terminó y el programa no siguió con la ejecución de las demás líneas

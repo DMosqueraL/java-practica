@@ -23,3 +23,9 @@ Plan completo, reglas, formato de sesión y progreso: [PLAN.md](PLAN.md)
 
 Desde IntelliJ: panel Maven → `java-practica` → Lifecycle → `test`,
 o clic derecho sobre una clase de test → Run.
+
+## Sesiones
+
+| Sesión | Tema | Package | Kata |
+|---|---|---|---|
+| 10 | Excepciones propias + kata de cierre de la Semana 2 | `dev.doris.sesion10` | kata-06: `Movimientos` (excepciones propias, `totalesPorTipo`, `agruparPorCuenta`) |

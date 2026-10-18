@@ -1,0 +1,29 @@
+// --- record Abono ---
+package dev.doris.sesion9;
+
+import java.math.BigDecimal;
+
+public record Abono(String cuenta, BigDecimal monto) {}
+
+// --- clase Abonos
+package dev.doris.sesion9;
+
+import java.math.BigDecimal;
+
+public class Abonos{
+    public static Abono crear(String cuenta, BigDecimal monto) {
+        if(cuenta == null) {
+            throw new IllegalArgumentException("La cuenta no puede ser nula.");
+        }
+        if(cuenta.length() != 4) {
+            throw new IllegalArgumentException("La cuenta no tiene exactamente 4 caracteres. La cuenta ingresada: " + cuenta + ", tiene: " + cuenta.length() + " caracteres.");
+        }
+        if(monto == null) {
+            throw new IllegalArgumentException("El monto no puede ser nulo.");
+        }
+        if(monto.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("El valor del monto no puede ser cero o negativo. El monto ingresado fue: $" + monto);
+        }
+        return new Abono(cuenta, monto);
+    }
+}

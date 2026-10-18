@@ -1,0 +1,28 @@
+// Debe: contar cuántos abonos pertenecen a la cuenta dada.
+// Si la cuenta es nula, lanza IllegalArgumentException.
+public static int contarPorCuenta(List<Abono> abonos, String cuenta) {
+    if (cuenta == null) {
+        throw new IllegalArgumentException("La cuenta no puede ser nula.");
+    }
+    int cantidad = 0;
+    for (Abono abono : abonos) {
+        if (abono.cuenta() == cuenta) {
+            cantidad++;
+        }
+    }
+    return cantidad;
+}
+
+1. ¿En qué línea está el error? ---> El operador ==, el condicional está comparando si abono.cuenta() y cuenta son el mismo objeto, si apuntan a la misma referencia.
+                                     Y debe es evaluar contenido, debe reemplazar el == por equals, abono.cuenta().equals(cuenta)
+2. Elige una entrada concreta y di qué devolvería o lanzaría este método con ella, tal cual está. ---> No se incluyen imports
+   Abono a1 = new Abono("0001", new BigDecimal("100.10"));
+   Abono a2 = new Abono("0001", new BigDecimal("20.5"));
+   Abono a3 = new Abono("0002", new BigDecimal("300.00"));
+   Abono a4 = new Abono("0001", new BigDecimal("200.00"));
+
+   List<Abono> abonos = List.of(a1, a2, a3, a4);
+
+   System.out.println("Cantidad de abonos para la cuenta "+ cuenta + " es: " + contarPorCuenta(abonos, new String("0001")); // Salida: Cantidad de abonos para la cuenta 0001 es 0
+
+3. ¿A qué familia del catálogo pertenece? ---> Familia 4 Comparación equivocada
