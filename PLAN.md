@@ -146,7 +146,7 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Margen | 15 min | Dudas, pausas, trampa del 1Z0-830 (si aplica) y commit |
 | B | Busca el error | 5 min | Encontrar el error en un método dado (ver abajo) |
 | B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
-| B | Revisión + teach-back | 20 min | Revisión del código y explicación de las decisiones |
+| B | Revisión + teach-back | 20 min | Revisión del código y teach-back: exactamente 3 preguntas, cada una con una sola pregunta (no varias en el mismo número) |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
 | B | Cierre | 15 min | Registro de fallos, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
 
@@ -174,7 +174,7 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 ### Pistas por niveles (cuando hay bloqueo en una kata)
 
 1. Pregunta socrática.
-2. Concepto o API relevante.
+2. Concepto o API relevante. Debe aportar algo nuevo frente al nivel 1, no repetirlo con otras palabras.
 3. Esqueleto parcial.
 4. Solución completa, solo si se pide.
 
@@ -368,3 +368,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.9 | 2026-10-14 | Testing según el volumen de código: planteamiento obligatorio de 2 líneas (Entrada / Esperado), "Atrapa" opcional; taller con mutantes suspendido hasta la Fase 1; nuevo bloque "Busca el error" (5 min) y regla "error real → test"; kata de 75 min. Reglas de testing congeladas hasta el cierre de la Fase 0 salvo bloqueo real |
 | v1.10 | 2026-10-17 | Trampa del 1Z0-830 opcional y solo informativa al final del Día A (una, de 2 a 3 min, dentro del margen; sin predicción ni registro en fallos.md; una línea en Progreso) |
 | v1.11 | 2026-10-17 | Packages con número de dos dígitos y tema (`sesionNN_tema_corto`), recuerdos en `recuerdos/sesionNN/` e índice de sesiones en el README, que actualiza el chat de tema al cerrar cada sesión |
+| v1.12 | 2026-10-17 | Teach-back de exactamente 3 preguntas, una sola por número; la pista de nivel 2 debe aportar un concepto o API nuevo frente al nivel 1 |
