@@ -1,0 +1,51 @@
+package dev.doris.sesion11_java_time;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class CierreTema {
+
+    // Ambos extremos incluidos
+    static boolean enRango(LocalDate fecha, LocalDate desde, LocalDate hasta) {
+        return !fecha.isBefore(desde) && !fecha.isAfter(hasta);
+    }
+
+    // Ambos extremos excluidos
+    static boolean enRangoEstricto(LocalDate fecha, LocalDate desde, LocalDate hasta) {
+        return fecha.isAfter(desde) && fecha.isBefore(hasta);
+    }
+
+    public static void main(String[] args) {
+        LocalDate inicio = LocalDate.of(2026, 11, 2);
+        LocalDate fin = LocalDate.of(2026, 11, 6);
+        LocalDate copia = LocalDate.of(2026, 11, 2);
+
+        inicio.plusDays(1);
+        System.out.println("[1] " + inicio);
+        System.out.println("[2] " + (inicio == copia));
+        System.out.println("[3] " + inicio.equals(copia));
+        System.out.println("[4] " + enRango(fin, inicio, fin));
+        System.out.println("[5] " + enRangoEstricto(fin, inicio, fin));
+
+        LocalDateTime cobro = LocalDateTime.of(2026, 11, 6, 9, 5);
+        System.out.println("[6] " + cobro);
+
+        try {
+            LocalDate.of(2026, 11, 31);
+            System.out.println("[7] creada");
+        } catch (DateTimeException e) {
+            System.out.println("[8] invalida");
+        }
+    }
+}
+
+// --- Predicciones ---
+[1] 2026-11-02 ---> el plusDays devuelve otro objeto y para ver el resultado hay que asignarlo, no existe asignación, inicio queda tal cual (LocalDate es inmutable)
+[2] false ---> El operador == compara si tienen o apuntan a la misma referencia, inicio y copia son objetos diferentes
+[3] true ---> equals compara contenido, año, mes y día son iguales
+[4] true ---> Se incluyen los extremos. En la primera validación (isAfter) da true, y en la segunda (isBefore) es el valor del extremo, al estar incluido da true, true and true es true
+[5] false ---> En la primera validación (isAfter) da true, y en la segunda (isBefore) al ser la misma fecha y al ser isBefore e isAfter estrictos, para la misma fecha da false, true and false es false
+[6] 2026-11-06T09:05 ---> LocalDateTime incluye la hora, es fecha más hora
+[7] creada ---> No se imprime pq se lanza la excepción DateTimeException pq esa fecha no existe
+[8] invalida --> Se imprime el mensaje dentro del bloque del catch

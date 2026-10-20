@@ -1,0 +1,100 @@
+// --- record Cobro ---
+package dev.doris.sesion11;
+
+import java.math.BigDecimal;
+
+public record Cobro(String comercio, BigDecimal monto) {}
+
+// --- clase Comercio ---
+package dev.doris.sesion11;
+
+public class Comercio{
+    private String codigo;
+    private String nombre;
+
+    public Comercio(String codigo, String nombre) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+    }
+
+    public String codigo() {
+        return codigo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null || getClass() != o.getClass()) return false;
+        Cobro otro = (Cobro) o;
+        return otro.codigo();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(codigo);
+    }
+}
+
+// --- clase Cobros ---
+package dev.doris.sesion11;
+
+import java.math.BigDecimal;
+import jsva.util.List;
+
+class MontoExcedidoException extends RuntimeException {
+   private final BigDecimal exceso;
+
+   public MontoExcedidoException {
+        super("Monto excedido por " + exceso);
+        this.exceso = exceso;
+   }
+
+   public BigDecimal exceso() { return exceso; }
+}
+
+public class Cobros {
+    static Cobro crear(String cuenta, BigDecimal monto) {
+        if(cuenta == null || monto == null || monto.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException ("Los parámetros de entrada (cuenta o monto) no pueden ser nulos y deben ser mayores a cero.");
+        }
+
+        BigDecimal tope = new BigDecimal("1000.00");
+        if(monto.compareTo(tope) > 0) {
+            throw new MontoExcedidoException(monto.substract(tope));
+        }
+        return new Cobro(cuenta, monto);
+    }
+
+    static Map<String, BigDecimal> totalPorComercios(List<Cobro> cobros) {
+
+        Map<String, BigDecimal> totalPorComercio = new HashMap<>();
+
+        for(Cobro cobro : cobros) {
+            BigDecimal cantPorComercio = totalPorComercio.getOrDefault(cobro.cuenta(), BigDecimal.ZERO);
+            BigDecimal totalCobroPorComercio = cantPorComercio.add(cobro.monto());
+            totalPorComercio.put(cobro.cuenta, totalCobroPorComercio);
+        }
+        return totalCobroPorComercio;
+    }
+
+    static int contarDeComercio(List<Cobro>, String comercio) {
+
+        int total = 0;
+        // aquí quería hacer la lógica para hacer el conteo por comercio
+
+    }
+
+    public static void main(String[] args) {
+        Cobro c1 = crear("C-01", new BigDecimal("100.50"));
+        Cobro c2 = crear("C-02", new BigDecimal("40.00"));
+        Cobro c3 = crear("C-01", new BigDecimal("20.25"));
+
+        List<Cobro> cobros = List.of(c1, c2, c3);
+
+        Map<String, BigDecimal> map = totalPorComercio(cobros);
+
+        System.out.println("Tamaño del Map: " + map.size())); // Salida: 2
+        System.out.println("Total de C-01: " + map.get( // aquí quería traer la info de la cuenta C'01
+        // Completamente bloqueada con lo que sigue
+
+    }
+}
