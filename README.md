@@ -43,3 +43,4 @@ Código de cada sesión en `fundamentos/src/main/java/dev/doris/` (y sus tests e
 | 8 | `BigDecimal` para dinero | [`sesion08_bigdecimal`](fundamentos/src/main/java/dev/doris/sesion08_bigdecimal) | kata-04: sumar montos con `BigDecimal` |
 | 9 | Excepciones: `throw`, `try`/`catch` y excepciones estándar | [`sesion09_excepciones`](fundamentos/src/main/java/dev/doris/sesion09_excepciones) | kata-05: `Abonos.crear` con `IllegalArgumentException` |
 | 10 | Excepciones propias + kata de cierre de la Semana 2 | [`sesion10_excepciones_propias`](fundamentos/src/main/java/dev/doris/sesion10_excepciones_propias) | kata-06: `Movimientos` con excepciones propias, `totalesPorTipo` y `agruparPorCuenta` |
+| 11 | `java.time`: `LocalDate`, `LocalDateTime` y comparar fechas | [`sesion11_java_time`](fundamentos/src/main/java/dev/doris/sesion11_java_time) | kata-07: filtro de `Transacciones` por rango de fechas con `LocalDate` |

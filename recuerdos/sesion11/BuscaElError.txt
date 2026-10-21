@@ -1,0 +1,14 @@
+// Devuelve la fecha más reciente de una lista que no está vacía
+static LocalDate masReciente(List<LocalDate> fechas) {
+    LocalDate reciente = LocalDate.of(2026, 1, 1);
+    for (LocalDate fecha : fechas) {
+        if (fecha.isAfter(reciente)) {
+            reciente = fecha;
+        }
+    }
+    return reciente;
+}
+1. ¿En qué línea está el error? ---> Linea de declaración e inicialización de la variable reciente
+2. ¿Qué devuelve el método con esa entrada, tal cual está? ---> Con los datos de entrada List.of(LocalDate.of(2025, 3, 10), LocalDate.of(2025, 8, 1)),
+    nunca el if es true, nunca se actualiza reciente y va a retornar la fecha inicializada para reciente 2026-01-01
+3. ¿A qué familia del catálogo pertenece? ---> Familia 2 Valor inicial equivocado

@@ -3,6 +3,7 @@ package dev.doris.sesion11_java_time;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Vencimientos {
     static boolean estaVencida(LocalDate vencimiento, LocalDate hoy) {
@@ -24,6 +25,16 @@ public class Vencimientos {
     // Ambos extremos excluidos
     static boolean enRangoEstricto(LocalDate fecha, LocalDate desde, LocalDate hasta) {
         return fecha.isAfter(desde) && fecha.isBefore(hasta);
+    }
+
+    static LocalDate esMasReciente(List<LocalDate> fechas) {
+        LocalDate reciente = LocalDate.of(2026, 1, 1);
+        for (LocalDate fecha : fechas) {
+            if (fecha.isAfter(reciente)) {
+                reciente = fecha;
+            }
+        }
+        return reciente;
     }
 
     public static void main(String[] args) {
@@ -60,5 +71,8 @@ public class Vencimientos {
         } catch (DateTimeException e) {
             System.out.println("[8] invalida");
         }
+
+        List<LocalDate> fechas = List.of(LocalDate.of(2025, 3, 10), LocalDate.of(2025, 8, 1)); //List.of(venc, inicio, fin, copia);
+        System.out.println("[9]" + esMasReciente(fechas));
     }
 }
