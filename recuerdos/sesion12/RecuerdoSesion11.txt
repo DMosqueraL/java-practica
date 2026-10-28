@@ -1,0 +1,43 @@
+// --- record Transaccion ---
+package dev.doris.sesion11_java_time;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public record Transaccion(String cuenta, BigDecimal monto, LocalDate fecha) {}
+
+// --- clase Transacciones ---
+package dev.doris.sesion11_java_time;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
+
+public class Transacciones {
+    static List<Transaccion> filtrarPorRango(List<Transaccion> transacciones, LocalDate desde, LocalDate hasta) {
+        // Uso IllegalArgumentException porque es una excepción que se lanza ante un argumento inválido o nulo, que lanza el programador.
+        if (transacciones == null) {
+            throw new IllegalArgumentException("La lista no puede ser nula.");
+        }
+        if (desde == null || hasta == null) {
+            throw new IllegalArgumentException("Las fechas no pueden ser nulas.");
+        }
+        if (desde.isAfter(hasta)) {
+            throw new IllegalArgumentException("La fecha de inicio (desde) no puede ser mayor a la fecha final (hasta) del rango.");
+        }
+
+        List<Transaccion> lista = new ArrayList<>();
+        for (Transaccion trx : transacciones) {
+            if(!trx.fecha().isBefore(desde) && !trx.fecha().isAfter(hasta)) {
+                lista.add(trx);
+            }
+        }
+        return lista;
+    }
+
+    public static void main(String[] args) {
+        Transaccion trx1 = new Transaccion("0001", new BigDecimal("100.50"), LocalDate.of(2026, 9, 9));
+        Transaccion trx2 = new Transaccion("0001", new BigDecimal("20.25"), LocalDate.of(2026, 10, 5));
+    }
+}

@@ -1,0 +1,17 @@
+static List<LocalDate> leerValidas(List<String> textos, DateTimeFormatter formatter) {
+    List<LocalDate> validas = new ArrayList<>();
+    for (String texto : textos) {
+        try {
+            validas = new ArrayList<>();
+            validas.add(LocalDate.parse(texto, formatter));
+        } catch (DateTimeParseException error) {
+            // se salta el texto inválido
+        }
+    }
+    return validas;
+}
+1. ¿En qué línea está el error? ---> validas = new ArrayList<>(); dentro del bloque try
+    Además, no está definido el tipo de formatter y/o el patrón del formato y en caso de atrapar una excepción no se mostraría nada
+2. Con formatter = dd/MM/yyyy y textos = ["01/10/2026", "xx", "03/10/2026"], ¿qué devuelve este método, tal cual está? --> Retorna [2026-10-03]
+3. ¿A qué familia del catálogo pertenece? (1 no acumula, 2 valor inicial equivocado, 3 condición invertida o de más, 4 comparación equivocada, 5 tipo o precisión, 6 reemplaza en vez de agregar)
+    ---> Familia 6, Reemplaza en vez de agregar
