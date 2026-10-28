@@ -89,7 +89,7 @@ Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recu
 |---|---|---|
 | 11 | `java.time`: `LocalDate`, `LocalDateTime`, comparar fechas | Fecha en `Transaccion` y filtro por rango de fechas, con tests |
 | 12 | Convertir texto a fecha: `DateTimeFormatter` y `DateTimeParseException` | Parsear fechas de texto, con el caso de fecha inválida y tests |
-| 13 | Leer archivos: `Path`, `Files.readAllLines`, `BufferedReader` y `try` con recursos | Leer un archivo de texto línea por línea |
+| 13 | Leer archivos: `Path`, `Files.readAllLines`, `BufferedReader` y `try` con recursos | Leer un archivo de texto línea por línea; el método recibe un `Path`. Tests sobre archivos fijos en `fundamentos/src/test/resources/sesion13/` (uno con 3 líneas, uno vacío y uno inexistente), con `Path.of("src/test/resources/sesion13/...")`; `@TempDir` llega en la sesión 19 |
 | 14 | Parseo de CSV: `split` y convertir cada línea en `Transaccion` + mini-tema `BigDecimal`: `setScale`, `RoundingMode` y `divide` (20 min) | Una línea CSV a `Transaccion` con el monto normalizado a 2 decimales, con tests |
 | 15 | Escribir archivos (`Files.write`) y reporte de líneas inválidas + kata de cierre de la Semana 3 | Cargar el CSV real, saltar y reportar las líneas inválidas, tests en verde + commit |
 
@@ -183,8 +183,10 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza el bloque de Recuerdo por un mini ejercicio que integra lo visto en la semana que acaba de cerrarse. Las otras 4 sesiones de la semana mantienen el Recuerdo de 15 min. Esta regla es obligatoria.
 
 - **Qué es:** un problema nuevo (no la kata repetida) con los mismos ingredientes de la semana anterior, en el dominio de transacciones. Lo prepara Claude y se resuelve sin pistas.
+- **Tamaño:** máximo 4 partes, numeradas por prioridad. Las partes 1 y 2 son obligatorias; la 3 y la 4, opcionales. Lo que no se alcance se anota, no se penaliza.
 - **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionNN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra).
-- **Duración:** 30–40 min. El Día A de esa sesión se extiende 30 min (2 h 30).
+- **Duración:** 25–30 min con corte firme. El Día A de esa sesión se extiende 30 min (2 h 30), que incluyen el repaso.
+- **Repaso (fijo, 10–15 min):** después de la revisión, Claude guarda la solución en `recuerdos/sesionNN/EjercicioSemanaK-solucion.txt` y Doris reescribe en IntelliJ solo las partes que falló o no alcanzó.
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo. Los espacios en blanco y el formato no cuentan, y no se adelantan temas que aún no se han visto.
 - **Registro:** los fallos van al índice de `seguimiento/fallos.md`. El ejercicio incluye los conceptos que estén en `pendiente`.
 
@@ -228,7 +230,7 @@ Al inicio del Día B, antes de la kata:
 ## Rol de Claude y revisión
 
 - **Revisor y entrenador, no autor.** No escribe la solución de una kata salvo que Doris la pida explícitamente; si hay bloqueo, usa las pistas por niveles.
-- **Revisión:** se lee el código directo de la carpeta vinculada (no capturas ni pegados). Cada punto lleva la etiqueta **Error** (falla o resultado incorrecto), **Riesgo** (funciona pero puede fallar en otro caso) o **Estilo** (funciona igual, mejor práctica senior), sin suavizar. Incluye uso idiomático de Java 21 y la alternativa que usaría un senior, con el porqué.
+- **Revisión:** se lee el código directo de la carpeta vinculada (no capturas ni pegados). Cada punto lleva la etiqueta **Error** (falla o resultado incorrecto), **Riesgo** (funciona pero puede fallar en otro caso) o **Estilo** (funciona igual, pero hay una forma más clara o más común en Java). Error y Riesgo van sin suavizar. Estilo: como máximo 2 puntos por revisión, con el porqué y usando solo lo ya visto en las sesiones. El feedback no se enmarca como "lo que haría un senior": Doris está en nivel inicial y se compara con lo visto, no con prácticas avanzadas.
 - **No asumir conocimiento:** no se da por sabido nada que no se haya visto en las sesiones.
 - Analogías con JS/TS, RxJS y NestJS cuando ayuden. Español neutro/latinoamericano.
 - La práctica de inglés va solo en su bloque de 5 min del Día B (ver Formato de sesión); durante la sesión se anotan las frases candidatas sin detenerse.
@@ -237,7 +239,8 @@ Al inicio del Día B, antes de la kata:
 
 - Código escrito desde cero: sin copiar y pegar.
 - Autocompletado de IA apagado (el autocompletado normal de IntelliJ sí vale).
-- Cada kata se cierra con tests en verde.
+- Cada kata se cierra con tests en verde. **El verde que cuenta es el de IntelliJ**, confirmado por Doris ("N tests passed"); la verificación de Claude con Java simple es solo de apoyo, y el chat no da la kata por cerrada sin esa confirmación.
+- **Diseño de la kata (lo prepara Claude):** como máximo una pieza que no se haya practicado en la variación del tema. Cualquier otra novedad viene en el enunciado con su esqueleto (firma y estructura; por ejemplo, el `try`/`catch` vacío con el tipo de excepción) y Doris escribe el contenido.
 - Un commit por kata: `kata-NN: descripción`.
 - **Package de cada sesión:** `sesionNN_tema_corto` (número con dos dígitos, minúsculas, palabras separadas con `_`; nunca guiones ni mayúsculas), por ejemplo `dev.doris.sesion10_excepciones_propias`, igual en `main` y en `test`. Las carpetas de recuerdos solo llevan el número: `recuerdos/sesionNN/`. Al cerrar la sesión, el chat de tema agrega su fila al índice de sesiones del `README.md` (Sesión, Tema, Package, Kata).
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
@@ -371,3 +374,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.10 | 2026-10-17 | Trampa del 1Z0-830 opcional y solo informativa al final del Día A (una, de 2 a 3 min, dentro del margen; sin predicción ni registro en fallos.md; una línea en Progreso) |
 | v1.11 | 2026-10-17 | Packages con número de dos dígitos y tema (`sesionNN_tema_corto`), recuerdos en `recuerdos/sesionNN/` e índice de sesiones en el README, que actualiza el chat de tema al cerrar cada sesión |
 | v1.12 | 2026-10-17 | Teach-back de exactamente 3 preguntas, una sola por número; la pista de nivel 2 debe aportar un concepto o API nuevo frente al nivel 1 |
+| v1.13 | 2026-10-27 | Kata con una sola novedad (lo demás con esqueleto en el enunciado); feedback sin enmarcarse como "senior" y máximo 2 puntos de Estilo; el verde que cuenta es el de IntelliJ; kata-09 con archivos fijos en `src/test/resources/sesion13/`; ejercicio de cierre semanal de máximo 4 partes (2 obligatorias), 25–30 min, con repaso fijo de la solución guardada en el repo |
