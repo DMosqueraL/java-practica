@@ -1,0 +1,67 @@
+package dev.doris.sesion13_leer_archivos;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.util.List;
+
+public class CierreTema {
+
+    public static void main(String[] args) throws IOException {
+        Path ruta = Path.of("src/main/resources/sesion13/movimientos.txt");
+        Path vacio = Path.of("src/main/resources/sesion13/vacio.txt");
+
+        Path falta = Path.of("src/main/resources/sesion13/falta.txt");
+        System.out.println("[1] ruta creada");
+
+        List<String> lineas = Files.readAllLines(ruta);
+        System.out.println("[2] " + lineas.get(1));
+
+        System.out.println("[3] " + (Files.readAllLines(vacio) == null));
+
+        try {
+            System.out.println("[4] " + Files.readAllLines(vacio).size());
+        } catch (NoSuchFileException error) {
+            System.out.println("[4] no existe");
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(vacio)) {
+            System.out.println("[5] " + lector.readLine());
+        }
+
+        try (BufferedReader lector = Files.newBufferedReader(ruta)) {
+            lector.readLine();
+            String linea = lector.readLine();
+            System.out.println("[6] " + linea);
+        }
+
+        String ultima = "";
+        try (BufferedReader lector = Files.newBufferedReader(ruta)) {
+            String linea = lector.readLine();
+            while (linea != null) {
+                ultima = linea;
+                linea = lector.readLine();
+            }
+        }
+        System.out.println("[7] " + ultima);
+
+        try {
+            Files.readAllLines(falta);
+            System.out.println("[8] leido");
+        } catch (IOException error) {
+            System.out.println("[8] atrapada");
+        }
+    }
+}
+
+// --- Predicciones ---
+[1] ruta creada ---> Es un println sin variables ni llamados a métodos. Un String pra imprimir
+[2] 0002;CREDITO;80.50 ---> lineas.get(1), corresponde al segundo elemento de la lista lineas. Java inicia en la posición 0
+[3] false ---> El archivo vacio.txt existe, pero no tiene contenido
+[4] 0 ---> El archivo vacio.txt existe y no contiene elementos o líneas
+[5] null ---> Como no hay nada, readLine() viene como nulo
+[6] 0001;DEBITO;150.00 ---> readLine()
+[7] 0003;DEBITO;20.00 ---> La última línea del archivo movimientos.txt
+[8] main termina pq el catch no captura la excepción que es, la cual debe ser NoSuchFileException
