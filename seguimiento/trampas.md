@@ -14,6 +14,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T02 | 11 | `java.time` | No | `LocalDate.isBefore` recibe una fecha (`ChronoLocalDate`); un `LocalDateTime` se pasa con `toLocalDate()` |
 | T03 | 12 | `DateTimeFormatter` y `DateTimeParseException` | No | Un `catch` de la hija después del `catch` del padre no compila: el padre ya la atrapó |
 | T04 | 13 | `try` con recursos | No | La variable del `try` con recursos es implícitamente `final`: no se le puede asignar otro valor |
+| T05 | 14 | `split` y parseo de CSV | Sí (imprime `4`) | `split(",")` descarta los textos vacíos del final: `"a,b,c,d,,"` da 4 partes, no 6 |
 
 ## Detalle
 
@@ -90,3 +91,16 @@ public static void main(String[] args) throws IOException {
 - **Error:** `auto-closeable resource lector may not be assigned`
 - **Por qué:** la variable declarada en el `try` con recursos es implícitamente `final`. Si se pudiera reasignar, el `try` cerraría el segundo lector y el primero quedaría abierto.
 - **Corrección:** declarar el otro lector en el mismo `try`, separado con `;`, o en otro `try` con recursos.
+
+### T05 · Sesión 14 · `split` descarta los vacíos del final
+
+```java
+String[] partes = "5/6/2026,0001,DEBITO,10.00,,".split(",");
+System.out.println(partes.length);
+System.out.println(partes[3]);
+```
+
+- **¿Compila?** Sí.
+- **Salida:** `4` y `10.00`
+- **Por qué:** `split(",")` corta en cada coma, pero quita los textos vacíos que quedan al final del arreglo. Las dos comas finales producirían dos partes vacías (`""`), y `split` las descarta. Por eso una línea con columnas vacías de más al final pasa la validación `partes.length != 4`. Casos extremos: `",,".split(",").length` da `0`, y `"".split(",").length` da `1` (el texto vacío completo).
+- **Corrección (informativa, no se ha visto en las sesiones):** `split(",", -1)` conserva los vacíos del final. Con la misma línea, `length` da `6`.

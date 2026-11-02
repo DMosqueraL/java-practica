@@ -1,0 +1,22 @@
+package dev.doris.sesion13_leer_archivos;
+
+import java.util.List;
+import java.nio.file.Path;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.nio.file.Files;
+import java.io.BufferedReader;
+
+public class LectorMovimientos {
+    static List<String> leerLinea (Path ruta) throws IOException {
+        List<String> lista = new ArrayList<>();
+        try (BufferedReader lector = Files.newBufferedReader(ruta)) {
+            String linea = lector.readLine();
+            while (linea != null) {
+                lista.add(linea);
+                linea = lector.readLine();
+            }
+        }
+        return lista;
+    }
+}
