@@ -53,6 +53,19 @@ Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. E
 | 3 | `java.time`, lectura de archivos (`Files`, `BufferedReader`), parseo de CSV | Cargar el CSV real y manejar líneas inválidas |
 | 4 | Integración: app de consola completa, reporte, tests | Criterio de salida de la fase |
 
+### Formato del CSV (sesiones 14 a 20)
+
+Lo usan todas las sesiones desde la 14. Ningún chat de Tema lo cambia; un cambio se decide en Planeación.
+
+- **Archivo real:** `fundamentos/src/main/resources/transacciones.csv`. Lo crea Claude en la sesión 15, con unas 10 líneas válidas (al menos una con monto de 3 decimales) y una inválida de cada tipo.
+- **Encabezado:** la primera línea es `fecha,cuenta,tipo,monto` y se salta al cargar.
+- **Separador:** coma, sin comillas. El monto usa punto decimal. Puede haber espacios alrededor de cada campo (se quitan con `trim()`).
+- **fecha:** día/mes/año con `DateTimeFormatter.ofPattern("d/M/uuuu")` y `ResolverStyle.STRICT`, como en la kata-08 (acepta `5/6/2026` y `05/06/2026`; rechaza `31/6/2026`).
+- **cuenta:** texto, por ejemplo `0001`.
+- **tipo:** nombre exacto de una constante de `TipoTransaccion` (`DEBITO` o `CREDITO`), convertido con `valueOf`.
+- **monto:** se crea con `new BigDecimal(texto)`. Si tiene más de 2 decimales se redondea a 2 con `setScale(2, RoundingMode.HALF_EVEN)`; si tiene menos, `setScale(2)` completa con ceros (`10.5` → `10.50`).
+- **Línea inválida:** columnas de más o de menos (una línea vacía cuenta aquí), fecha inválida, tipo desconocido o monto no numérico. El método que convierte una línea lanza `IllegalArgumentException` en todos los casos, con un mensaje que dice qué campo falló; así la carga de la sesión 15 necesita un solo `catch`.
+
 ### Semana 1: un chat por sesión
 
 Título de cada chat: `Semana 1 - Tema: <tema>`. Cada cierre incluye el mensaje de apertura de la sesión siguiente.
@@ -90,8 +103,19 @@ Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recu
 | 11 | `java.time`: `LocalDate`, `LocalDateTime`, comparar fechas | Fecha en `Transaccion` y filtro por rango de fechas, con tests |
 | 12 | Convertir texto a fecha: `DateTimeFormatter` y `DateTimeParseException` | Parsear fechas de texto, con el caso de fecha inválida y tests |
 | 13 | Leer archivos: `Path`, `Files.readAllLines`, `BufferedReader` y `try` con recursos | Leer un archivo de texto línea por línea; el método recibe un `Path`. Tests sobre archivos fijos en `fundamentos/src/test/resources/sesion13/` (uno con 3 líneas, uno vacío y uno inexistente), con `Path.of("src/test/resources/sesion13/...")`; `@TempDir` llega en la sesión 19 |
-| 14 | Parseo de CSV: `split` y convertir cada línea en `Transaccion` + mini-tema `BigDecimal`: `setScale`, `RoundingMode` y `divide` (20 min) | Una línea CSV a `Transaccion` con el monto normalizado a 2 decimales, con tests |
-| 15 | Escribir archivos (`Files.write`) y reporte de líneas inválidas + kata de cierre de la Semana 3 | Cargar el CSV real, saltar y reportar las líneas inválidas, tests en verde + commit |
+| 14 | De una línea CSV a una `Transaccion` (un solo tema, ver abajo) | Una línea CSV a `Transaccion` con el monto redondeado a 2 decimales con `HALF_EVEN`, con tests: línea válida, monto de 3 decimales redondeado y columnas de menos |
+| 15 | Cargar el CSV completo, saltando y reportando las líneas inválidas + kata de cierre de la Semana 3 (ver abajo) | `cargar(Path)` devuelve un `record` con las transacciones válidas y el reporte de inválidas (`"línea N: " + mensaje`). Tests sobre archivos fijos en `fundamentos/src/test/resources/sesion15/`: todo válido, mezcla (cuántas y texto del reporte) y solo encabezado. Tests en verde + commit |
+
+**Sesión 14: contenido del tema.**
+- *Nuevo:* `split(",")` devuelve un `String[]` (primer arreglo del plan: índice desde 0, `length` sin paréntesis frente a `size()` de `List`, `ArrayIndexOutOfBoundsException` con un índice que no existe, por eso se valida `partes.length != 4` antes de leer); `trim()`; `new BigDecimal("abc")` lanza `NumberFormatException`, hija de `IllegalArgumentException`; escala: `scale()`, `setScale(2)` completa con ceros, `setScale(2)` con `10.555` lanza `ArithmeticException`, `setScale(2, RoundingMode.HALF_EVEN)` y su diferencia con `HALF_UP` (`10.125` → `10.12` frente a `10.13`).
+- *Repaso aplicado:* fecha con el formatter estricto de la kata-08 (s12), `TipoTransaccion.valueOf` con tipo desconocido (s4), `new BigDecimal(String)` (s8); el texto que sale de `split` no es literal y se compara con `equals` (string pool, `pendiente`).
+- La variación practica `split` y `setScale` con `RoundingMode`, para que la kata tenga como máximo una novedad.
+- `divide` queda fuera de la Fase 0: se agrega en Planeación cuando una kata necesite dividir.
+
+**Sesión 15: contenido del tema.**
+- *Nuevo:* `try`/`catch` dentro del bucle: el `catch` registra la línea inválida y la carga sigue (con el `catch` fuera del bucle, como en la s9, la carga se corta en la primera inválida); contador del número de línea (la 1 es el encabezado y se salta); un solo `catch (IllegalArgumentException)` atrapa todos los casos porque el método de la s14 lanza esa excepción (el padre atrapa a las hijas); devolver dos resultados con un `record` de dos listas.
+- *Repaso aplicado:* leer con `Path` y `BufferedReader` (s13), `getMessage()` (s10), `record` (s4) y el método de la s14.
+- En la kata, la única novedad es el `try`/`catch` dentro del bucle; el `record` de resultado viene con su esqueleto en el enunciado.
 
 ### Semana 4: un chat por sesión
 
@@ -102,7 +126,7 @@ Título de cada chat: `Semana 4 - Tema: <tema>`. La sesión 16 reemplaza el recu
 | 16 | Estructura de una app de consola: `main`, argumentos y separar lectura, cálculo y reporte | Esqueleto de la app que carga el CSV y llama a las partes |
 | 17 | Cálculos del reporte: totales por tipo y saldo por cuenta con `Map` y `BigDecimal` | Clase de cálculo con tests |
 | 18 | Dar formato al reporte: `String.format`, `printf` y alineación de columnas | Reporte en texto legible, con test sobre el texto generado |
-| 19 | Tests con archivos: `@TempDir` y probar la carga de punta a punta | Test que crea un CSV temporal y comprueba el reporte completo |
+| 19 | Tests con archivos: `@TempDir` y `Files.writeString` para que el test cree su propio CSV; probar la carga de punta a punta | Test que crea un CSV temporal y comprueba el reporte completo |
 | 20 | Empaquetar y ejecutar con Maven (`mvn package`, jar ejecutable) + kata de cierre de la Fase 0 | App completa: lee el CSV real, valida, calcula y reporta; tests en verde + commit |
 
 > Si una semana queda corta, el ajuste se hace en la primera sesión de la semana siguiente y el resto se corre un día. Se puede recuperar en fin de semana o hacer dos sesiones el mismo día si no hay cansancio; en Progreso va la fecha real de cada parte.
@@ -148,9 +172,9 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
 | B | Revisión + teach-back | 20 min | Revisión del código y teach-back: exactamente 3 preguntas, cada una con una sola pregunta (no varias en el mismo número) |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
-| B | Cierre | 15 min | Registro de fallos, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
+| B | Cierre | 15 min | Registro de fallos, `trampas.md` si hubo trampa, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
 
-**Trampa del 1Z0-830 (opcional, solo informativa):** al final del Día A, después del cierre de tema, si existe una trampa de examen ligada al tema de la sesión, Claude la muestra: código corto, si compila o no, la salida, y por qué. Una sola, de 2 a 3 min, usando solo lo visto en la sesión y marcada como "código de examen, no de producción". No se pide predicción, no se evalúa y no entra a `seguimiento/fallos.md`. Si el tema no tiene una trampa clara, se omite. En Progreso se anota en una línea (`Trampa: ...`).
+**Trampa del 1Z0-830 (opcional, solo informativa):** al final del Día A, después del cierre de tema, si existe una trampa de examen ligada al tema de la sesión, Claude la muestra: código corto, si compila o no, la salida, y por qué. Una sola, de 2 a 3 min, usando solo lo visto en la sesión y marcada como "código de examen, no de producción". No se pide predicción, no se evalúa y no entra a `seguimiento/fallos.md`. Si el tema no tiene una trampa clara, se omite. Se registra en `seguimiento/trampas.md`: una fila en el índice y su detalle (código, si compila, salida o error exacto ejecutado, por qué y corrección). Desde la sesión 14, Progreso ya no la anota.
 
 ### Ciclo de cada tema nuevo
 
@@ -309,7 +333,8 @@ El resultado define en qué semana de la Fase 0 se arranca.
 4. Abrir `funcional-katas/src/test/java/dev/doris/funcional/SaludoTest.java` y ejecutarlo con el ícono verde junto a la clase. Debe pasar.
 5. Working directory de los `main`: **Run → Edit Configurations → Edit configuration templates → Application → Working directory: `$MODULE_WORKING_DIR$`**. Así un `main` que lee archivos resuelve las rutas relativas desde el módulo (`fundamentos`), igual que los tests JUnit. Si una configuración ya existente falla con `NoSuchFileException`, se le cambia el Working directory o se borra y se vuelve a crear.
 6. Apagar el autocompletado de IA: **Settings → Editor → General → Inline Completion**. Desactivar también los plugins JetBrains AI o Copilot si están instalados.
-7. Crear en GitHub el repo vacío `java-practica` (sin README) y conectarlo:
+7. Formato e imports al guardar: **Settings → Tools → Actions on Save** → activar **Reformat code** y **Optimize imports**. Y en **Settings → Editor → Code Style → Java → Imports**: *Class count to use import with '\*'* = 99 y *Names count to use static import with '\*'* = 99, para que los imports sigan siendo uno por clase (sin `java.util.*` ni `Assertions.*`). Actions on Save vive en `.idea/workspace.xml`, que es local: si se reinstala IntelliJ o se clona el repo, hay que repetirlo. No es un paso de cada kata.
+8. Crear en GitHub el repo vacío `java-practica` (sin README) y conectarlo:
 
 ```powershell
 git remote add origin https://github.com/DMosqueraL/java-practica.git
@@ -327,7 +352,7 @@ java-practica/
 ├── reactor-fundamentos/     (se agrega en su fase)
 ├── webflux-api/             (se agrega en su fase)
 ├── recuerdos/               (recuerdos y ejercicios semanales en .txt, por sesión)
-└── seguimiento/             (registro de fallos: fallos.md)
+└── seguimiento/             (registro de fallos: fallos.md; trampas del 1Z0-830: trampas.md)
 ```
 
 El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesiones 0 a 5; `funcional-katas` queda para la Fase 2. Los `.txt` de recuerdo viven en `recuerdos/sesionNN/`, fuera de `src/`.
@@ -379,3 +404,5 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.12 | 2026-10-17 | Teach-back de exactamente 3 preguntas, una sola por número; la pista de nivel 2 debe aportar un concepto o API nuevo frente al nivel 1 |
 | v1.13 | 2026-10-27 | Kata con una sola novedad (lo demás con esqueleto en el enunciado); feedback sin enmarcarse como "senior" y máximo 2 puntos de Estilo; el verde que cuenta es el de IntelliJ; kata-09 con archivos fijos en `src/test/resources/sesion13/`; ejercicio de cierre semanal de máximo 4 partes (2 obligatorias), 25–30 min, con repaso fijo de la solución guardada en el repo |
 | v1.14 | 2026-11-02 | Criterio de evaluación del recuerdo y del ejercicio de cierre (lógica y API de Java; no cuentan nombres propios, digitación ni formato); Working directory `$MODULE_WORKING_DIR$` en la plantilla Application de IntelliJ; entorno actualizado a Temurin 21.0.13+9 |
+| v1.15 | 2026-11-02 | Formato del CSV fijo para las sesiones 14 a 20 (montos de 3 decimales se redondean con `HALF_EVEN`; toda línea inválida lanza `IllegalArgumentException`). Sesión 14 como un solo tema (CSV + `setScale`/`RoundingMode`, sin `divide`, que sale de la Fase 0). Sesión 15 sin `Files.write`: `try`/`catch` dentro del bucle, número de línea y `record` de resultado. `Files.writeString` pasa a la sesión 19. Actions on Save e imports en 99 en Configuración inicial |
+| v1.16 | 2026-11-02 | Las trampas del 1Z0-830 se registran en `seguimiento/trampas.md` (índice y detalle con código, error o salida ejecutados, por qué y corrección); Progreso deja de anotarlas desde la sesión 14. Se reconstruyen y verifican las trampas de las sesiones 10 a 13 |
