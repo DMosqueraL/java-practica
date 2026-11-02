@@ -1,0 +1,28 @@
+ 1  static List<String> marcar(Path ruta) throws IOException {
+ 2      List<String> resultado = new ArrayList<>();
+ 3      for (String linea : Files.readAllLines(ruta)) {
+ 4          resultado = new ArrayList<>();
+ 5          resultado.add("> " + linea);
+ 6      }
+ 7      return resultado;
+ 8  }
+
+ Entrada: marcar(Path.of("src/main/resources/sesion13/movimientos.txt")). Es el mismo archivo de 3 líneas del Día A:
+ 0001;DEBITO;150.00
+ 0002;CREDITO;80.50
+ 0003;DEBITO;20.00
+
+ Responde tres cosas:
+
+ 1. ¿En qué línea está el error? ---> Error en la línea 4. Asigna un lista nueva  la vriable resultado que ya existe.
+ 2. ¿Qué devuelve exactamente con esa entrada? --->
+  Vuelta 1, línea: 0001;DEBITO;150.00
+  dentro del for                 -> resultado = []
+  se ejecuta el add              -> resultado = [> 0001;DEBITO;150.00]
+  Vuelta 2, línea: 0002;CREDITO;80.50
+  dentro del for                 -> resultado = []
+  se ejecuta el add              -> resultado = [> 0002;CREDITO;80.50]
+  Vuelta 3, línea: 0003;DEBITO;20.00
+  dentro del for                 -> resultado = []
+  se ejecuta el add              -> resultado = [> 0003;DEBITO;20.00]
+ 3. ¿A qué familia del catálogo pertenece? Familia 6, Reemplaza en vez de agregar
