@@ -1,0 +1,22 @@
+ 1  static BigDecimal totalDebitos(List<String> lineas) {
+ 2      BigDecimal total = BigDecimal.ZERO;
+ 3      for (String linea : lineas) {
+ 4          String[] partes = linea.split(",");
+ 5          if (partes[2].trim().equals("DEBITO")) {
+ 6              BigDecimal monto = new BigDecimal(partes[3].trim());
+ 7              total.add(monto);
+ 8          }
+ 9      }
+10      return total;
+11  }
+
+Entrada:
+List.of("5/6/2026,0001,DEBITO,10.50",
+        "6/6/2026,0002,CREDITO,80.00",
+        "7/6/2026,0001,DEBITO,4.25")
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> Línea 7. BigDecimal es inmutable, se debe guardar o reasignar el valor de la suma. total.add(monto) se pierde
+2. Qué devuelve este método, tal como está, con esa entrada. ---> total = 0
+3. A qué familia del catálogo pertenece. ---> Familia 1, No acumula
