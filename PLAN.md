@@ -57,14 +57,14 @@ Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. E
 
 Lo usan todas las sesiones desde la 14. Ningún chat de Tema lo cambia; un cambio se decide en Planeación.
 
-- **Archivo real:** `fundamentos/src/main/resources/transacciones.csv`. Lo crea Claude en la sesión 15, con unas 10 líneas válidas (al menos una con monto de 3 decimales) y una inválida de cada tipo.
+- **Archivo real:** `fundamentos/src/main/resources/transacciones.csv`. Lo crea Claude en la sesión 15, con unas 10 líneas válidas (al menos una con monto de 3 decimales) y una inválida de cada tipo, entre ellas una con columnas vacías al final.
 - **Encabezado:** la primera línea es `fecha,cuenta,tipo,monto` y se salta al cargar.
 - **Separador:** coma, sin comillas. El monto usa punto decimal. Puede haber espacios alrededor de cada campo (se quitan con `trim()`).
 - **fecha:** día/mes/año con `DateTimeFormatter.ofPattern("d/M/uuuu")` y `ResolverStyle.STRICT`, como en la kata-08 (acepta `5/6/2026` y `05/06/2026`; rechaza `31/6/2026`).
 - **cuenta:** texto, por ejemplo `0001`.
 - **tipo:** nombre exacto de una constante de `TipoTransaccion` (`DEBITO` o `CREDITO`), convertido con `valueOf`.
 - **monto:** se crea con `new BigDecimal(texto)`. Si tiene más de 2 decimales se redondea a 2 con `setScale(2, RoundingMode.HALF_EVEN)`; si tiene menos, `setScale(2)` completa con ceros (`10.5` → `10.50`).
-- **Línea inválida:** columnas de más o de menos (una línea vacía cuenta aquí), fecha inválida, tipo desconocido o monto no numérico. El método que convierte una línea lanza `IllegalArgumentException` en todos los casos, con un mensaje que dice qué campo falló; así la carga de la sesión 15 necesita un solo `catch`.
+- **Línea inválida:** columnas de más o de menos, incluidas las vacías al final como `5/6/2026,0001,DEBITO,10.00,,` (por eso se separa con `split(",", -1)`; una línea vacía cuenta aquí), fecha inválida, tipo desconocido o monto no numérico. El método que convierte una línea lanza `IllegalArgumentException` en todos los casos, con un mensaje que dice qué campo falló; así la carga de la sesión 15 necesita un solo `catch`.
 
 ### Semana 1: un chat por sesión
 
@@ -113,6 +113,7 @@ Título de cada chat: `Semana 3 - Tema: <tema>`. La sesión 11 reemplaza el recu
 - `divide` queda fuera de la Fase 0: se agrega en Planeación cuando una kata necesite dividir.
 
 **Sesión 15: contenido del tema.**
+- *Al inicio del tema, corrección de la kata-10 (T05, 5–10 min):* `split(",", -1)` conserva los vacíos del final (solo se enseña el `-1`, no la teoría completa del límite). Se cambia `LineaCsv.convertir` y se agrega un test con `"5/6/2026,0001,DEBITO,10.00,,"` que espera `IllegalArgumentException` (regla Error real → test). No cuenta como novedad de la kata.
 - *Nuevo:* `try`/`catch` dentro del bucle: el `catch` registra la línea inválida y la carga sigue (con el `catch` fuera del bucle, como en la s9, la carga se corta en la primera inválida); contador del número de línea (la 1 es el encabezado y se salta); un solo `catch (IllegalArgumentException)` atrapa todos los casos porque el método de la s14 lanza esa excepción (el padre atrapa a las hijas); devolver dos resultados con un `record` de dos listas.
 - *Repaso aplicado:* leer con `Path` y `BufferedReader` (s13), `getMessage()` (s10), `record` (s4) y el método de la s14.
 - En la kata, la única novedad es el `try`/`catch` dentro del bucle; el `record` de resultado viene con su esqueleto en el enunciado.
@@ -167,12 +168,14 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Recuerdo | 15 min | Reescribir de memoria lo de la sesión anterior (en un `.txt` en blanco dentro de `recuerdos/sesionNN/`, sin IDE y sin mirar; no aplica en la primera sesión). En la primera sesión de cada semana del plan, desde la Semana 2, lo reemplaza el ejercicio de cierre semanal (ver abajo) |
 | A | Tema nuevo | 60 min | Por qué existe → ejemplo guiado → pausa de comprensión → variación propia |
 | A | Cierre de tema | 30 min | Predicción de 6 a 8 líneas con salidas ejecutadas, y su registro en `seguimiento/fallos.md` |
-| A | Margen | 15 min | Dudas, pausas, trampa del 1Z0-830 (si aplica) y commit |
+| A | Margen | 15 min | Dudas, pausas, trampa del 1Z0-830 (si aplica) y mensaje de commit |
 | B | Busca el error | 5 min | Encontrar el error en un método dado (ver abajo) |
 | B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
 | B | Revisión + teach-back | 20 min | Revisión del código y teach-back: exactamente 3 preguntas, cada una con una sola pregunta (no varias en el mismo número) |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
-| B | Cierre | 15 min | Registro de fallos, `trampas.md` si hubo trampa, fila de Progreso, commit y mensaje de apertura de la sesión siguiente |
+| B | Cierre | 15 min | Registro de fallos, `trampas.md` si hubo trampa, fila de Progreso, mensaje de commit y mensaje de apertura de la sesión siguiente |
+
+**Commits:** los hace Doris desde IntelliJ con el mensaje que da el chat (Tema, Sprint o Planeación). Ningún chat hace commits desde su entorno.
 
 **Trampa del 1Z0-830 (opcional, solo informativa):** al final del Día A, después del cierre de tema, si existe una trampa de examen ligada al tema de la sesión, Claude la muestra: código corto, si compila o no, la salida, y por qué. Una sola, de 2 a 3 min, usando solo lo visto en la sesión y marcada como "código de examen, no de producción". No se pide predicción, no se evalúa y no entra a `seguimiento/fallos.md`. Si el tema no tiene una trampa clara, se omite. Se registra en `seguimiento/trampas.md`: una fila en el índice y su detalle (código, si compila, salida o error exacto ejecutado, por qué y corrección). Desde la sesión 14, Progreso ya no la anota.
 
@@ -407,3 +410,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.14 | 2026-11-02 | Criterio de evaluación del recuerdo y del ejercicio de cierre (lógica y API de Java; no cuentan nombres propios, digitación ni formato); Working directory `$MODULE_WORKING_DIR$` en la plantilla Application de IntelliJ; entorno actualizado a Temurin 21.0.13+9 |
 | v1.15 | 2026-11-02 | Formato del CSV fijo para las sesiones 14 a 20 (montos de 3 decimales se redondean con `HALF_EVEN`; toda línea inválida lanza `IllegalArgumentException`). Sesión 14 como un solo tema (CSV + `setScale`/`RoundingMode`, sin `divide`, que sale de la Fase 0). Sesión 15 sin `Files.write`: `try`/`catch` dentro del bucle, número de línea y `record` de resultado. `Files.writeString` pasa a la sesión 19. Actions on Save e imports en 99 en Configuración inicial |
 | v1.16 | 2026-11-02 | Las trampas del 1Z0-830 se registran en `seguimiento/trampas.md` (índice y detalle con código, error o salida ejecutados, por qué y corrección); Progreso deja de anotarlas desde la sesión 14. Se reconstruyen y verifican las trampas de las sesiones 10 a 13 |
+| v1.17 | 2026-11-02 | Columnas vacías al final del CSV: siguen siendo inválidas; se separa con `split(",", -1)`, que se enseña al inicio de la sesión 15 como corrección de la kata-10 (T05) con su test, y `transacciones.csv` incluye ese caso. Los commits los hace Doris desde IntelliJ con el mensaje que da el chat |
