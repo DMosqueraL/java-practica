@@ -1,0 +1,37 @@
+ 1  static List<String> reportar(Path ruta) throws IOException {
+ 2      List<String> errores = new ArrayList<>();
+ 3      try (BufferedReader lector = Files.newBufferedReader(ruta)) {
+ 4          lector.readLine();
+ 5          int numero = 0;
+ 6          String linea = lector.readLine();
+ 7          while (linea != null) {
+ 8              numero++;
+ 9              try {
+10                  convertirPago(linea);
+11              } catch (IllegalArgumentException error) {
+12                  errores.add("línea " + numero + ": " + error.getMessage());
+13              }
+14              linea = lector.readLine();
+15          }
+16      }
+17      return errores;
+18  }
+
+convertirPago es el de EjemploCargaPagos.
+
+Entrada: pagos.csv
+1  cuenta,monto
+2  0001,10.50
+3  0002,abc
+4  0003,7.125
+5  0004
+6  0005,20.00,
+7  0006,3
+
+El reporte debe decir el número de línea real del archivo (el encabezado es la línea 1).
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> línea 5 int numero = 0;
+2. Qué devuelve este método, tal como está, con esa entrada. ---> [línea 2: monto inválido: abc, línea 4: columnas: 1, línea 5: columnas: 3] corregido*
+3. A qué familia del catálogo pertenece. ---> Familia 2, Valor inicial equivocado

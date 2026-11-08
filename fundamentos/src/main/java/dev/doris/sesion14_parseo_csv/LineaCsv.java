@@ -9,7 +9,7 @@ import java.time.format.ResolverStyle;
 
 public class LineaCsv {
 
-    static Transaccion convertir(String linea) {
+    public static Transaccion convertir(String linea) {
         String[] partes = linea.split(",", -1);
         if (partes.length != 4) {
             throw new IllegalArgumentException("columnas: " + partes.length);
