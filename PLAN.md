@@ -273,7 +273,7 @@ Al inicio del Día B, antes de la kata:
 - Cada kata se cierra con tests en verde. **El verde que cuenta es el de IntelliJ**, confirmado por Doris ("N tests passed"); la verificación de Claude con Java simple es solo de apoyo, y el chat no da la kata por cerrada sin esa confirmación.
 - **Diseño de la kata (lo prepara Claude):** como máximo una pieza que no se haya practicado en la variación del tema. Cualquier otra novedad viene en el enunciado con su esqueleto (firma y estructura; por ejemplo, el `try`/`catch` vacío con el tipo de excepción) y Doris escribe el contenido.
 - Un commit por kata: `kata-NN: descripción`.
-- **App de la Fase 0 (sesiones 16 a 20):** vive en su propio package, `dev.doris.app_transacciones` (main y test). En la sesión 16, antes del tema (unos 5 min), se copian ahí con **Refactor → Copy Class** de IntelliJ `Transaccion`, `TipoTransaccion`, `LineaCsv`, `ResultadoCarga` y `CargaTransacciones`, con `LineaCsvTest` y `CargaTransaccionesTest`; los packages de las sesiones 14 y 15 no se tocan. Desde ahí, el código de la kata de cada sesión (16: `App` con `main` y argumentos; 17: cálculo; 18: reporte; 19: tests con `@TempDir`; 20: clase principal del jar) se agrega a ese package, y los ejemplos, la variación y el cierre de tema siguen en `sesionNN_tema_corto`. `app_transacciones` no importa nada de los packages `sesionNN_`, y la revisión lo verifica. En el índice del README, la columna Package de las sesiones 16 a 20 lleva los dos packages.
+- **App de la Fase 0 (sesiones 16 a 20):** vive en su propio package, `dev.doris.app_transacciones` (main y test). En la sesión 16, antes del tema (unos 5 min), se copian ahí con **Refactor → Copy Class** de IntelliJ `Transaccion`, `TipoTransaccion`, `LineaCsv`, `ResultadoCarga` y `CargaTransacciones`, con `LineaCsvTest` y `CargaTransaccionesTest`; los packages de las sesiones 14 y 15 no se tocan. Desde ahí, el código de la kata de cada sesión (16: `App` con `main` y argumentos; 17: cálculo; 18: reporte; 19: tests con `@TempDir`; 20: clase principal del jar) se agrega a ese package, y los ejemplos, la variación y el cierre de tema siguen en `sesionNN_tema_corto`. `app_transacciones` no importa nada de los packages `sesionNN_`, y la revisión lo verifica. En el índice del README, la columna Package de las sesiones 16 a 20 lleva los dos packages. Al cerrar la sesión 20 se crea el tag de git `fase-0`; en la Fase 1 la app se refactoriza en el mismo package y módulo, y el antes y el después se comparan contra ese tag.
 - **Package de cada sesión:** `sesionNN_tema_corto` (número con dos dígitos, minúsculas, palabras separadas con `_`; nunca guiones ni mayúsculas), por ejemplo `dev.doris.sesion10_excepciones_propias`, igual en `main` y en `test`. Las carpetas de recuerdos solo llevan el número: `recuerdos/sesionNN/`. Al cerrar la sesión, el chat de tema agrega su fila al índice de sesiones del `README.md` (Sesión, Tema, Package, Kata).
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
 - **Qué se evalúa en el recuerdo y en el ejercicio de cierre semanal:** la lógica y el uso correcto de la API de Java (tipos, métodos y excepciones de Java). No cuentan los nombres que elige Doris (variables, clases propias, textos de mensajes), los errores de digitación, el espaciado ni el formato. Un tipo o método de Java que no existe sí cuenta (por ejemplo, `DateTimeFormatterException`).
@@ -354,16 +354,18 @@ git push -u origin main
 ```
 java-practica/
 ├── pom.xml                  (padre: Java 21, JUnit 5, AssertJ)
-├── fundamentos/             (activo: Fase 0, semanas 1-4)
+├── fundamentos/             (activo: Fases 0 y 1, semanas 1-7; la app en dev.doris.app_transacciones)
 ├── funcional-katas/         (Fase 2, semanas 8-11; por ahora solo la prueba de humo Saludo)
-├── procesador-extractos/    (se agrega en su fase)
-├── reactor-fundamentos/     (se agrega en su fase)
-├── webflux-api/             (se agrega en su fase)
+├── procesador-extractos/    (Fase 3, semanas 12-13; se agrega en su fase)
+├── concurrencia/            (Fase 4, semanas 14-15; se agrega en su fase)
+├── reactor-fundamentos/     (Fase 5, semanas 16-18; se agrega en su fase)
+├── mvc-api/                 (Fase 6, semanas 19-21; se agrega en su fase)
+├── webflux-api/             (Fase 7, semanas 22-24; se agrega en su fase)
 ├── recuerdos/               (recuerdos y ejercicios semanales en .txt, por sesión)
 └── seguimiento/             (registro de fallos: fallos.md; trampas del 1Z0-830: trampas.md)
 ```
 
-El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesiones 0 a 5; `funcional-katas` queda para la Fase 2. Los `.txt` de recuerdo viven en `recuerdos/sesionNN/`, fuera de `src/`.
+El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesiones 0 a 5, y sigue activo en la Fase 1; `funcional-katas` queda para la Fase 2. Los nombres `concurrencia` y `mvc-api` son tentativos: se confirman en Planeación al abrir cada fase. El ledger de la Fase 8 se define con su primer sprint. Los `.txt` de recuerdo viven en `recuerdos/sesionNN/`, fuera de `src/`.
 
 ---
 
@@ -419,3 +421,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.17 | 2026-11-02 | Columnas vacías al final del CSV: siguen siendo inválidas; se separa con `split(",", -1)`, que se enseña al inicio de la sesión 15 como corrección de la kata-10 (T05) con su test, y `transacciones.csv` incluye ese caso. Los commits los hace Doris desde IntelliJ con el mensaje que da el chat |
 | v1.18 | 2026-11-08 | Familia 8 en el catálogo (la API corrige o descarta sin avisar). Hasta la Fase 1, el teach-back no pregunta qué error atrapa un test. La app de la Fase 0 vive en `dev.doris.app_transacciones`: en la sesión 16 se copian con Refactor → Copy Class las clases de las sesiones 14 y 15 (única excepción a "sin copiar y pegar") y no importa nada de los packages `sesionNN_`. Regla de presentación 4: una estructura pedida en el enunciado se muestra con esqueleto comentado |
 | v1.19 | 2026-11-08 | Retrospectiva de la Semana 3. Regla de pausas: con más de 2 días hábiles sin sesión, el chat de Tema pregunta el motivo (categoría, sin detalles) y lo anota en Progreso; el recálculo separa pausas de días de sesión. Regla de presentación 7: lo corregido en la variación con pista 3 o esqueleto se reescribe una vez sin mirar. El ejercicio de cierre de la Semana 3 incluye los pendientes del `try` y de asignar `setScale`/`add` |
+| v1.20 | 2026-11-08 | Estructura del repo con un módulo por fase: `fundamentos` cubre las Fases 0 y 1 (la app se refactoriza en su lugar, con tag `fase-0` al cerrar la sesión 20); se agregan `concurrencia` (Fase 4) y `mvc-api` (Fase 6), con nombres tentativos, y las semanas de cada módulo |
