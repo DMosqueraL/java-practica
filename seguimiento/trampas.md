@@ -15,6 +15,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T03 | 12 | `DateTimeFormatter` y `DateTimeParseException` | No | Un `catch` de la hija después del `catch` del padre no compila: el padre ya la atrapó |
 | T04 | 13 | `try` con recursos | No | La variable del `try` con recursos es implícitamente `final`: no se le puede asignar otro valor |
 | T05 | 14 | `split` y parseo de CSV | Sí (imprime `4`) | `split(",")` descarta los textos vacíos del final: `"a,b,c,d,,"` da 4 partes, no 6 |
+| T06 | 15 | `try`/`catch` dentro del bucle | No | Un `catch` de una excepción comprobada (`IOException`) cuyo `try` no puede lanzarla no compila |
 
 ## Detalle
 
@@ -104,3 +105,24 @@ System.out.println(partes[3]);
 - **Salida:** `4` y `10.00`
 - **Por qué:** `split(",")` corta en cada coma, pero quita los textos vacíos que quedan al final del arreglo. Las dos comas finales producirían dos partes vacías (`""`), y `split` las descarta. Por eso una línea con columnas vacías de más al final pasa la validación `partes.length != 4`. Casos extremos: `",,".split(",").length` da `0`, y `"".split(",").length` da `1` (el texto vacío completo).
 - **Corrección (informativa, no se ha visto en las sesiones):** `split(",", -1)` conserva los vacíos del final. Con la misma línea, `length` da `6`.
+
+### T06 · Sesión 15 · `catch (IOException)` con un `try` que no puede lanzarla
+
+```java
+import java.io.IOException;
+
+public class Trampa6 {
+    public static void main(String[] args) {
+        try {
+            System.out.println("cargando");
+        } catch (IOException error) {
+            System.out.println("no se pudo leer");
+        }
+    }
+}
+```
+
+- **¿Compila?** No.
+- **Error:** `exception IOException is never thrown in body of corresponding try statement`
+- **Por qué:** `IOException` es comprobada, así que el compilador sabe qué la puede lanzar. Como un `catch` solo atrapa lo que se lanza dentro de su `try`, y nada dentro de ese `try` la lanza, el `catch` nunca podría ejecutarse y el compilador lo rechaza. Con una no comprobada, como `IllegalArgumentException`, el mismo código compila e imprime `cargando`: el compilador no revisa quién lanza las no comprobadas.
+- **Corrección:** quitar el `try`/`catch`, o dejar dentro del `try` la llamada que sí puede lanzar `IOException` (por ejemplo, `Files.newBufferedReader(ruta)`).

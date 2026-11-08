@@ -110,4 +110,16 @@ public class LineaCsvTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Monto inválido: abc");
     }
+
+    // Entrada: La línea con más columnas "5/6/2026,0001,DEBITO,10.00,,"
+    // Esperado: columnas: 6
+    // Predicción: verde
+    @Test
+    public void convertirLineaConMasColumnas() {
+        String linea1 = "5/6/2026,0001,DEBITO,10.00,,";
+
+        assertThatThrownBy(() -> convertir(linea1))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("columnas: 6");
+    }
 }
