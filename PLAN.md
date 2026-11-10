@@ -226,6 +226,71 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 
 **Trampa del 1Z0-830 (opcional, solo informativa):** al final del Día A, después del cierre de tema, si existe una trampa de examen ligada al tema de la sesión, Claude la muestra: código corto, si compila o no, la salida, y por qué. Una sola, de 2 a 3 min, usando solo lo visto en la sesión y marcada como "código de examen, no de producción". No se pide predicción, no se evalúa y no entra a `seguimiento/fallos.md`. Si el tema no tiene una trampa clara, se omite. Se registra en `seguimiento/trampas.md`: una fila en el índice y su detalle (código, si compila, salida o error exacto ejecutado, por qué y corrección). Desde la sesión 14, Progreso ya no la anota.
 
+### Archivos de práctica
+
+Todo lo que Claude prepara para que Doris responda en un `.txt` lo crea Claude en la carpeta vinculada, en `recuerdos/sesionNN/`, con el formato de abajo. No se muestra solo en el chat. Doris responde en el archivo y avisa; Claude lee las respuestas desde la carpeta, no desde un pegado en el chat. Si la carpeta no está vinculada, el chat la pide antes de seguir.
+
+| Archivo | Lo que deja Claude listo |
+|---|---|
+| `RecuerdoSesionMM.txt` (MM = sesión anterior) | Un comentario arriba con lo que hay que reescribir; debajo, en blanco |
+| `BuscaElError.txt` | El método con número de línea a la izquierda, la entrada concreta y las tres preguntas, cada una con `--->` |
+| `CierreDeTema.txt` | El código completo con las marcas `[1]` a `[8]`; debajo, `// --- Predicciones ---` con una línea `[N] --->` por marca (un bloque por ejecución si hay varias). Después de la revisión, Claude agrega `// --- Salida real ---` |
+| `EjercicioSemanaK.txt` | El enunciado arriba, dentro de `/* ... */` y con las partes numeradas; debajo, `// --- Mi solución ---`. La solución de Claude va en `EjercicioSemanaK-solucion.txt` |
+
+Ejemplos:
+
+```
+// RecuerdoSesion13.txt
+// Reescribe sin mirar: LectorMovimientos.leerLineas de la kata-09 (BufferedReader, try con recursos y while).
+```
+
+```
+// BuscaElError.txt
+ 1  static BigDecimal totalDebitos(List<String> lineas) {
+ 2      BigDecimal total = BigDecimal.ZERO;
+ ...
+11  }
+
+Entrada:
+List.of("5/6/2026,0001,DEBITO,10.50", "6/6/2026,0002,CREDITO,80.00")
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. --->
+2. Qué devuelve (o imprime) este método, tal como está, con esa entrada. --->
+3. A qué familia del catálogo pertenece. --->
+```
+
+```
+// CierreDeTema.txt
+public class CierreDeTema {
+    public static void main(String[] args) {
+        System.out.println("[1] " + ...);
+        ...
+    }
+}
+
+// --- Predicciones ---
+[1] --->
+[2] --->
+...
+
+// --- Salida real ---   (la agrega Claude después de la revisión)
+```
+
+```
+// EjercicioSemanaK.txt
+/*
+Ejercicio de cierre de la Semana K (40–45 min, a ciegas, sin package ni import)
+Parte 1 (obligatoria): ...
+Parte 2 (obligatoria): ...
+Parte 3 (opcional): ...
+Parte 4 (opcional): ...
+*/
+
+// --- Mi solución ---
+```
+
 ### Ciclo de cada tema nuevo
 
 1. **Por qué:** qué problema resuelve y cómo sería sin él.
@@ -259,7 +324,7 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 
 - **Qué es:** un problema nuevo (no la kata repetida) con los mismos ingredientes de la semana anterior, en el dominio de transacciones. Lo prepara Claude y se resuelve sin pistas.
 - **Tamaño:** máximo 4 partes, numeradas por prioridad. Las partes 1 y 2 son obligatorias; la 3 y la 4, opcionales. Lo que no se alcance se anota, no se penaliza.
-- **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionNN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra). No se escriben `package` ni `import` y no se evalúan; el nombre correcto de cada tipo de Java se evalúa donde se usa en el código.
+- **Formato:** a ciegas, sin IDE y sin mirar código anterior, en el archivo que deja listo Claude con el enunciado arriba (ver "Archivos de práctica"). Se guarda como `recuerdos/sesionNN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra). No se escriben `package` ni `import` y no se evalúan; el nombre correcto de cada tipo de Java se evalúa donde se usa en el código.
 - **Duración:** 40–45 min con corte firme (desde la sesión 21; antes, 25–30 min). El Día A de esa sesión se extiende 45 min (2 h 45), que incluyen el repaso.
 - **Repaso (fijo, 10–15 min):** después de la revisión, Claude guarda la solución en `recuerdos/sesionNN/EjercicioSemanaK-solucion.txt` y Doris reescribe en IntelliJ solo las partes que falló o no alcanzó.
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo y el criterio de "Qué se evalúa en el recuerdo" (ver Reglas). No se adelantan temas que aún no se han visto.
@@ -297,7 +362,7 @@ Para el "Atrapa" de cada test se elige una familia y se aplica al método. Es pe
 
 Al inicio del Día B, antes de la kata:
 
-- Claude muestra un método corto con **un** error de una familia del catálogo, escrito solo con lo ya visto en las sesiones, sin decir dónde está.
+- Claude deja listo `recuerdos/sesionNN/BuscaElError.txt` (ver "Archivos de práctica") con un método corto con **un** error de una familia del catálogo, escrito solo con lo ya visto en las sesiones, sin decir dónde está.
 - Doris dice en qué línea está, qué devolvería con una entrada concreta y a qué familia pertenece. No se escribe test.
 - El resultado se anota en la tabla "Testing por kata" de `seguimiento/fallos.md`.
 
@@ -469,3 +534,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.20 | 2026-11-08 | Estructura del repo con un módulo por fase: `fundamentos` cubre las Fases 0 y 1 (la app se refactoriza en su lugar, con tag `fase-0` al cerrar la sesión 20); se agregan `concurrencia` (Fase 4) y `mvc-api` (Fase 6), con nombres tentativos, y las semanas de cada módulo |
 | v1.21 | 2026-11-09 | Borrador de la distribución de la Fase 1 (semanas 5 a 7, sesiones 21 a 35) guardado en el plan para no perderlo; se confirma al cerrar la Fase 0. Revisión de las semanas 1 a 4: sin reestructurar; se anotan los temas usados sin sesión propia y los pendientes de OO que la Fase 1 debe cubrir temprano |
 | v1.22 | 2026-11-10 | Ejercicio de cierre semanal: 40–45 min con corte firme y Día A de 2 h 45 (desde la sesión 21); en el `.txt` a ciegas no se escriben `package` ni `import` |
+| v1.23 | 2026-11-10 | Archivos de práctica: Claude crea en `recuerdos/sesionNN/` el Recuerdo, Busca el error, el Cierre de tema y el Ejercicio de cierre semanal (con el enunciado arriba) con formato fijo; no se muestran solo en el chat, y las respuestas se leen desde la carpeta |
