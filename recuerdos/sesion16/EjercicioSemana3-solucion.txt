@@ -1,0 +1,128 @@
+// Ejercicio de cierre de la Semana 3 · Solución (sesión 16, 2026-11-09)
+// Verificada con Java 21. Salida real del main al final.
+
+// --- record Retiro ---
+package dev.doris.sesion16_app_consola;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public record Retiro(LocalDate fecha, String cajero, BigDecimal monto) {
+}
+
+// --- record ResumenRetiros ---
+package dev.doris.sesion16_app_consola;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+public record ResumenRetiros(BigDecimal total, List<String> reporte) {
+}
+
+// --- clase Retiros ---
+package dev.doris.sesion16_app_consola;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Retiros {
+
+    // Parte 1
+    public static Retiro convertir(String linea) {
+        String[] partes = linea.split(",", -1);
+        if (partes.length != 3) {
+            throw new IllegalArgumentException("columnas: " + partes.length);
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/uuuu").withResolverStyle(ResolverStyle.STRICT);
+        LocalDate fecha;
+        try {
+            fecha = LocalDate.parse(partes[0].trim(), formatter);
+        } catch (DateTimeParseException error) {
+            throw new IllegalArgumentException("fecha inválida: " + partes[0].trim());
+        }
+
+        String cajero = partes[1].trim();
+
+        BigDecimal monto;
+        try {
+            monto = new BigDecimal(partes[2].trim()).setScale(2, RoundingMode.HALF_EVEN);
+        } catch (NumberFormatException error) {
+            throw new IllegalArgumentException("monto inválido: " + partes[2].trim());
+        }
+        // BigDecimal (y String) no admiten < ni <=: se compara con compareTo.
+        // monto.compareTo(cero) <= 0 significa monto <= 0.
+        if (monto.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("monto no positivo: " + partes[2].trim());
+        }
+
+        return new Retiro(fecha, cajero, monto);
+    }
+
+    // Parte 2
+    // throws IOException: el try con recursos no tiene catch, así que la IOException sube.
+    public static ResumenRetiros resumir(Path ruta) throws IOException {
+        // total se declara fuera del try: se usa en el return, después del try.
+        BigDecimal total = BigDecimal.ZERO;
+        List<String> reporte = new ArrayList<>();
+        try (BufferedReader lector = Files.newBufferedReader(ruta)) {
+            lector.readLine();                 // encabezado (línea 1), se descarta
+            String linea = lector.readLine();
+            int numero = 1;
+            while (linea != null) {
+                numero++;
+                try {
+                    // convertir devuelve un Retiro; al total se suma su monto().
+                    total = total.add(convertir(linea).monto());
+                } catch (IllegalArgumentException error) {
+                    reporte.add("línea " + numero + ": " + error.getMessage());
+                }
+                linea = lector.readLine();     // fuera del try: avanza el bucle
+            }
+        }
+        return new ResumenRetiros(total, reporte);
+    }
+
+    // Parte 4
+    public static List<Retiro> desde(List<Retiro> retiros, LocalDate fecha) {
+        List<Retiro> resultado = new ArrayList<>();
+        for (Retiro retiro : retiros) {
+            if (!retiro.fecha().isBefore(fecha)) {
+                resultado.add(retiro);
+            }
+        }
+        return resultado;
+    }
+
+    // Parte 3
+    public static void main(String[] args) throws IOException {
+        Path ruta = Path.of("src/main/resources/retiros.csv");
+        ResumenRetiros resultado = resumir(ruta);
+
+        // Salida: 80.62
+        System.out.println(resultado.total());
+        // Salida: [línea 3: monto inválido: abc, línea 4: fecha inválida: 31/11/2026, línea 5: monto no positivo: -10.00, línea 7: columnas: 4]
+        System.out.println(resultado.reporte());
+
+        List<Retiro> retiros = List.of(
+                new Retiro(LocalDate.of(2026, 11, 3), "C01", new BigDecimal("50.12")),
+                new Retiro(LocalDate.of(2026, 11, 6), "C02", new BigDecimal("30.50")));
+        // Salida: [Retiro[fecha=2026-11-06, cajero=C02, monto=30.50]]
+        System.out.println(desde(retiros, LocalDate.of(2026, 11, 6)));
+    }
+}
+
+// Por qué 80.62 y no 80.63:
+// 50.125 con HALF_EVEN: empate exacto en el 5, va al vecino par -> 50.12 (2 es par).
+// 30.5 -> 30.50. Total: 50.12 + 30.50 = 80.62.
+// Con HALF_UP sería 50.13 y el total 80.63.

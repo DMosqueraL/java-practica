@@ -16,6 +16,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T04 | 13 | `try` con recursos | No | La variable del `try` con recursos es implícitamente `final`: no se le puede asignar otro valor |
 | T05 | 14 | `split` y parseo de CSV | Sí (imprime `4`) | `split(",")` descarta los textos vacíos del final: `"a,b,c,d,,"` da 4 partes, no 6 |
 | T06 | 15 | `try`/`catch` dentro del bucle | No | Un `catch` de una excepción comprobada (`IOException`) cuyo `try` no puede lanzarla no compila |
+| T07 | 16 | Estructura de una app de consola | Sí, pero no arranca | `public static int main(String[] args)` es un método válido, pero no es el punto de entrada: el `main` que arranca el programa devuelve `void` |
 
 ## Detalle
 
@@ -126,3 +127,20 @@ public class Trampa6 {
 - **Error:** `exception IOException is never thrown in body of corresponding try statement`
 - **Por qué:** `IOException` es comprobada, así que el compilador sabe qué la puede lanzar. Como un `catch` solo atrapa lo que se lanza dentro de su `try`, y nada dentro de ese `try` la lanza, el `catch` nunca podría ejecutarse y el compilador lo rechaza. Con una no comprobada, como `IllegalArgumentException`, el mismo código compila e imprime `cargando`: el compilador no revisa quién lanza las no comprobadas.
 - **Corrección:** quitar el `try`/`catch`, o dejar dentro del `try` la llamada que sí puede lanzar `IOException` (por ejemplo, `Files.newBufferedReader(ruta)`).
+
+### T07 · Sesión 16 · `main` que devuelve `int`
+
+```java
+public class Trampa7 {
+    public static int main(String[] args) {
+        System.out.println("hola");
+        return 0;
+    }
+}
+```
+
+- **¿Compila?** Sí: es un método estático cualquiera que se llama `main` y devuelve un `int`.
+- **Al ejecutarlo:** no imprime `hola`. El lanzador de Java (Java 21) responde:
+  `Error: Main method must return a value of type void in class Trampa7, please define the main method as: public static void main(String[] args)`
+- **Por qué:** para arrancar el programa, Java busca un `main` con esa forma exacta: `public`, `static`, que devuelve `void` y recibe un `String[]`. Si el que encuentra devuelve otro tipo, no lo usa como punto de entrada. El compilador no lo marca, porque como método es válido.
+- **Corrección:** `public static void main(String[] args)` y, sin `return 0;`, un `return;` cuando haga falta terminar antes.
