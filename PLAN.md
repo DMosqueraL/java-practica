@@ -259,8 +259,8 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 
 - **Qué es:** un problema nuevo (no la kata repetida) con los mismos ingredientes de la semana anterior, en el dominio de transacciones. Lo prepara Claude y se resuelve sin pistas.
 - **Tamaño:** máximo 4 partes, numeradas por prioridad. Las partes 1 y 2 son obligatorias; la 3 y la 4, opcionales. Lo que no se alcance se anota, no se penaliza.
-- **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionNN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra).
-- **Duración:** 25–30 min con corte firme. El Día A de esa sesión se extiende 30 min (2 h 30), que incluyen el repaso.
+- **Formato:** a ciegas, en un `.txt` en blanco, sin IDE y sin mirar. Se guarda como `recuerdos/sesionNN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra). No se escriben `package` ni `import` y no se evalúan; el nombre correcto de cada tipo de Java se evalúa donde se usa en el código.
+- **Duración:** 40–45 min con corte firme (desde la sesión 21; antes, 25–30 min). El Día A de esa sesión se extiende 45 min (2 h 45), que incluyen el repaso.
 - **Repaso (fijo, 10–15 min):** después de la revisión, Claude guarda la solución en `recuerdos/sesionNN/EjercicioSemanaK-solucion.txt` y Doris reescribe en IntelliJ solo las partes que falló o no alcanzó.
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo y el criterio de "Qué se evalúa en el recuerdo" (ver Reglas). No se adelantan temas que aún no se han visto.
 - **Registro:** los fallos van al índice de `seguimiento/fallos.md`. El ejercicio incluye los conceptos que estén en `pendiente`.
@@ -468,3 +468,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.19 | 2026-11-08 | Retrospectiva de la Semana 3. Regla de pausas: con más de 2 días hábiles sin sesión, el chat de Tema pregunta el motivo (categoría, sin detalles) y lo anota en Progreso; el recálculo separa pausas de días de sesión. Regla de presentación 7: lo corregido en la variación con pista 3 o esqueleto se reescribe una vez sin mirar. El ejercicio de cierre de la Semana 3 incluye los pendientes del `try` y de asignar `setScale`/`add` |
 | v1.20 | 2026-11-08 | Estructura del repo con un módulo por fase: `fundamentos` cubre las Fases 0 y 1 (la app se refactoriza en su lugar, con tag `fase-0` al cerrar la sesión 20); se agregan `concurrencia` (Fase 4) y `mvc-api` (Fase 6), con nombres tentativos, y las semanas de cada módulo |
 | v1.21 | 2026-11-09 | Borrador de la distribución de la Fase 1 (semanas 5 a 7, sesiones 21 a 35) guardado en el plan para no perderlo; se confirma al cerrar la Fase 0. Revisión de las semanas 1 a 4: sin reestructurar; se anotan los temas usados sin sesión propia y los pendientes de OO que la Fase 1 debe cubrir temprano |
+| v1.22 | 2026-11-10 | Ejercicio de cierre semanal: 40–45 min con corte firme y Día A de 2 h 45 (desde la sesión 21); en el `.txt` a ciegas no se escriben `package` ni `import` |
