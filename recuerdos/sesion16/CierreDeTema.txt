@@ -34,3 +34,13 @@ public class CierreDeTema {
 [2] No se imprime. Se lanza la excepción de NoSuchFileException
 [3] src\main\resources\sesion16\no-existe.csv
 [4] fin
+// --- Salida real ---   (ejecutada con Java 21; en Windows la ruta de C sale con \)
+// Ejecución A (sin argumentos):
+[1] uso
+// Ejecución B (src/main/resources/sesion16/depositos.csv):
+[2] Depósitos: 3
+Total: 175.75
+[4] fin
+// Ejecución C (src/main/resources/sesion16/no-existe.csv):
+[3] src\main\resources\sesion16\no-existe.csv
+[4] fin

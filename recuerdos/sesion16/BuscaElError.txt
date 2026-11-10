@@ -1,0 +1,27 @@
+// BuscaElError.txt · Sesión 16 · Día B
+// El método debe contar los depósitos cuyo monto es MAYOR O IGUAL a minimo.
+// record Deposito(String cuenta, BigDecimal monto)
+
+ 1  public static int contarDesde(List<Deposito> depositos, BigDecimal minimo) {
+ 2      int cantidad = 0;
+ 3      for (Deposito deposito : depositos) {
+ 4          if (deposito.monto().compareTo(minimo) < 0) {
+ 5              cantidad++;
+ 6          }
+ 7      }
+ 8      return cantidad;
+ 9  }
+
+Entrada:
+depositos = List.of(
+        new Deposito("0001", new BigDecimal("100.00")),
+        new Deposito("0002", new BigDecimal("50.50")),
+        new Deposito("0001", new BigDecimal("25.25")))
+minimo = new BigDecimal("50.00")
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> línea 4, el enunciado pide contar los montos valores sean mayores o iguales a minimo
+    y el if está diciendo los montos cuyo valores sea menor a minimo
+2. Qué devuelve este método, tal como está, con esa entrada. ---> cantidad = 1
+3. A qué familia del catálogo pertenece. ---> Familia 3, Condición invertida o de más

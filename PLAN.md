@@ -347,16 +347,22 @@ Objetivo: ver de un vistazo dónde se falla y si ya se reforzó. No es un puntaj
 
 Para el "Atrapa" de cada test se elige una familia y se aplica al método. Es permanente: cuando aparece un fallo nuevo en `seguimiento/fallos.md` que no encaja, se agrega una familia.
 
-| # | Familia | Cómo se ve en el código | Datos que la atrapan |
-|---|---|---|---|
-| 1 | No acumula | `total.add(x)` sin reasignar; `total = x` en vez de sumar | Varios elementos con valores distintos |
-| 2 | Valor inicial equivocado | Arranca en `null`, en el primer elemento o en 1 | Lista vacía; un solo elemento |
-| 3 | Condición invertida o de más | `else` sobrante, `>` en vez de `>=`, `!` olvidado | Elementos que cumplen, que no cumplen y uno justo en el límite |
-| 4 | Comparación equivocada | `==` en vez de `equals`; `equals` en vez de `compareTo` | Iguales en valor pero distintos en referencia o escala (`1.0` y `1.00`) |
-| 5 | Tipo o precisión | `double` en vez de `BigDecimal` | Montos como `0.10 + 0.20` |
-| 6 | Reemplaza en vez de agregar | `put` sobre una clave existente; lista nueva en cada vuelta | Dos elementos con la misma clave |
-| 7 | Se salta un elemento | `i = 1`, `i < size() - 1` | Inactiva: se activa cuando se use el `for` con índice |
-| 8 | La API corrige o descarta sin avisar | `split(",")` sin `-1`; formatter sin `ResolverStyle.STRICT` | Entradas mal formadas que la API "arregla": columnas vacías al final, 31/02 |
+| # | Familia | Cómo se ve en el código | Ejemplos reales | Datos que la atrapan |
+|---|---|---|---|---|
+| 1 | No acumula | `total.add(x)` sin reasignar; `total = x` en vez de sumar | `monto.setScale(2, RoundingMode.HALF_EVEN);` sin asignar (kata-10, s14); `total.add(monto)` sin reasignar (Busca el error, s14); `totalesPorTipo` creaba la clave pero no sumaba el monto (kata-06, s10) | Varios elementos con valores distintos |
+| 2 | Valor inicial equivocado | Arranca en `null`, en el primer elemento o en 1 | `LocalDate.of(2026, 1, 1)` fijo como valor inicial (Busca el error, s11); `int numero = 0` en el contador de línea, que corre todos los números (Busca el error, s15); `total = null` (método equivocado del taller, s8) | Lista vacía; un solo elemento |
+| 3 | Condición invertida o de más | `else` sobrante, `>` en vez de `>=`, `!` olvidado | `>= 100` en vez de `> 100` (Busca el error, s9); `monto.compareTo(tope) < 0` cuando se pedía "supera el tope" (ejercicio de cierre de la Semana 2, s11) | Elementos que cumplen, que no cumplen y uno justo en el límite |
+| 4 | Comparación equivocada | `==` en vez de `equals`; `equals` en vez de `compareTo` | `==` en vez de `equals` con `String` (diagnóstico; ejercicio de cierre de la Semana 1, s6; Busca el error, s10); `equals` con `BigDecimal`, que también compara la escala (`1.0` frente a `1.00`) (tema, s8) | Iguales en valor pero distintos en referencia o escala (`1.0` y `1.00`) |
+| 5 | Tipo o precisión | `double` en vez de `BigDecimal` | Suma de montos con `double` (`0.10 + 0.20`) (Test 3 del taller, kata-04, s8) | Montos como `0.10 + 0.20` |
+| 6 | Reemplaza en vez de agregar | `put` sobre una clave existente; lista nueva en cada vuelta | `put(cuenta, List.of(mov))` (kata-03, s7); `new ArrayList<>()` dentro del `for` (Busca el error, s12 y s13) | Dos elementos con la misma clave |
+| 7 | Se salta un elemento | `i = 1`, `i < size() - 1` | — | Inactiva: se activa cuando se use el `for` con índice |
+| 8 | La API corrige o descarta sin avisar | `split(",")` sin `-1`; formatter sin `ResolverStyle.STRICT` | `split(",")` sin `-1` deja pasar `...,10.00,,` (T05, s14); formatter sin `STRICT`, que convierte 31/02 en 28/02 (tema, s12) | Entradas mal formadas que la API "arregla": columnas vacías al final, 31/02 |
+
+**Familia 3 o 4:** se decide por qué se compara, no por qué se cambia.
+- **Familia 4:** la comparación mira otra cosa. Por ejemplo, la referencia en vez del contenido (`==` frente a `equals`), o el valor junto con la escala (`equals` frente a `compareTo` en `BigDecimal`).
+- **Familia 3:** la comparación mira lo correcto, pero en la dirección o con el límite equivocado. Por ejemplo, `< 0` en vez de `> 0` en `compareTo`, `>=` en vez de `>`, `isBefore` en vez de `isAfter`, o un `!` de más.
+
+**Ejemplos reales:** los agrega el chat de Tema al cierre de la sesión, con un máximo de 3 por familia y la sesión de cada uno; es registro, igual que `fallos.md`. Los ejemplos que no fueron errores de Doris (métodos de Busca el error, del taller o del tema) llevan su origen. Las familias nuevas y los criterios los decide Planeación.
 
 ### Busca el error (5 min)
 
@@ -535,3 +541,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.21 | 2026-11-09 | Borrador de la distribución de la Fase 1 (semanas 5 a 7, sesiones 21 a 35) guardado en el plan para no perderlo; se confirma al cerrar la Fase 0. Revisión de las semanas 1 a 4: sin reestructurar; se anotan los temas usados sin sesión propia y los pendientes de OO que la Fase 1 debe cubrir temprano |
 | v1.22 | 2026-11-10 | Ejercicio de cierre semanal: 40–45 min con corte firme y Día A de 2 h 45 (desde la sesión 21); en el `.txt` a ciegas no se escriben `package` ni `import` |
 | v1.23 | 2026-11-10 | Archivos de práctica: Claude crea en `recuerdos/sesionNN/` el Recuerdo, Busca el error, el Cierre de tema y el Ejercicio de cierre semanal (con el enunciado arriba) con formato fijo; no se muestran solo en el chat, y las respuestas se leen desde la carpeta |
+| v1.24 | 2026-11-10 | Catálogo de familias de error: columna "Ejemplos reales" (de `fallos.md`, con su origen), criterio para distinguir la familia 3 de la 4 (qué se compara frente a la dirección o el límite), y el chat de Tema agrega ejemplos reales al cierre (máximo 3 por familia) |
