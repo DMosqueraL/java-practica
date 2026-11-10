@@ -134,6 +134,51 @@ Título de cada chat: `Semana 4 - Tema: <tema>`. La app se construye en `dev.dor
 
 ---
 
+## Distribución de la Fase 1 (borrador, se confirma al cerrar la Fase 0)
+
+Borrador hecho en Planeación el 2026-11-09, antes de terminar la Fase 0. No es el plan vigente de esas sesiones: al cerrar la sesión 20 se revisa con la app terminada y los pendientes de `seguimiento/fallos.md`, y se aprueba con su versión. Hasta entonces, ningún chat de Tema lo usa.
+
+**Lo que motiva el orden:**
+- Tres pendientes de `fallos.md` son de Diseño OO y van temprano: `equals` en clase normal, campos `final` en una clave de `HashSet`/`HashMap` y constructor `private`.
+- Cosas usadas en la Fase 0 sin sesión propia, que se cierran antes de interfaces y composición: `static`, visibilidad (`public`, `private` y el acceso por defecto de la sesión 15), `String[]` y `while`.
+- El `for` con índice nunca se vio (familia 7 inactiva); se ve una sola vez, corto, antes de que los streams lo reemplacen en la Fase 2.
+
+Todo se hace sobre la app en `app_transacciones`, con tests en verde después de cada paso y comparando contra el tag `fase-0`. El tema de cada sesión es "por qué existe y cómo se aplica a la app"; la kata es el refactor concreto.
+
+### Semana 5: clases bien hechas
+
+| Sesión | Tema | Kata (refactor en la app) |
+|---|---|---|
+| 21 | Ejercicio de cierre de la Semana 4 + visibilidad: `public`, `private`, acceso por defecto, `static` y cuándo no usarlo | Revisar la visibilidad de todo `app_transacciones` |
+| 22 | Clases con estado frente a `record`: campos `final`, constructor que valida, `private` | Pasar la validación de `LineaCsv` a un constructor o método de fábrica estático en `Transaccion` |
+| 23 | `equals`/`hashCode`/`toString` en clase normal y el contrato con `HashMap` | Clase `Cuenta` como clave de los saldos, con tests del contrato |
+| 24 | Inmutabilidad: `List.copyOf`, colecciones no modificables, defensa en el constructor | `ResultadoCarga` que no se puede alterar desde fuera, con test que lo prueba |
+| 25 | Arreglos y `for` con índice (una sesión; activa la familia 7) + kata de cierre | Reporte con índice de línea; cierre de la Semana 5 |
+
+### Semana 6: contratos y composición
+
+| Sesión | Tema | Kata |
+|---|---|---|
+| 26 | Ejercicio de cierre de la Semana 5 + interfaces: contrato, `implements`, programar contra la interfaz | `LectorTransacciones` como interfaz con la implementación CSV |
+| 27 | Composición frente a herencia: inyectar por constructor | `App` recibe el lector y el calculador en vez de crearlos |
+| 28 | Strategy: una regla que cambia (filtro por tipo, por cuenta, por rango) | Filtros intercambiables para el reporte, con tests por estrategia |
+| 29 | Excepciones comprobadas frente a no comprobadas; traducirlas en los bordes | `IOException` convertida en una excepción propia de la app |
+| 30 | Interfaces funcionales ya existentes (`Comparator`, `Predicate`) sin lambdas todavía + kata de cierre | Ordenar el reporte con un `Comparator`; cierre de la Semana 6 |
+
+### Semana 7: generics y creación de objetos
+
+| Sesión | Tema | Kata |
+|---|---|---|
+| 31 | Ejercicio de cierre de la Semana 6 + generics prácticos: leer `List<T>` y `Map<K, V>`, escribir un método genérico simple | `Resultado<T>` genérico para carga y cálculo |
+| 32 | Factory: centralizar el `new` según el tipo | `TransaccionFactory` a partir de la línea CSV |
+| 33 | Builder: objetos con muchos campos opcionales | Builder del reporte (título, filtros, orden) |
+| 34 | `Optional` como valor de retorno (solo lo básico; el resto en la Fase 2) | Buscar una cuenta que puede no existir |
+| 35 | Revisión del refactor completo frente al tag `fase-0` + kata de cierre de la Fase 1 | Criterio de salida de la fase |
+
+**Por decidir al cerrar la Fase 0:** si la sesión 30 (interfaces funcionales sin lambdas) se queda o pasa a la Fase 2; si el `Optional` de la 34 adelanta demasiado; qué pendientes de `fallos.md` entran en cada ejercicio de cierre.
+
+---
+
 ## Fase 8: Práctica continua por sprints (semana 25 en adelante)
 
 Objetivo: no perder la costumbre de escribir código. Un proyecto que crece semana a semana, como en un trabajo real: mantener y extender código existente, no solo empezar de cero.
@@ -422,3 +467,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.18 | 2026-11-08 | Familia 8 en el catálogo (la API corrige o descarta sin avisar). Hasta la Fase 1, el teach-back no pregunta qué error atrapa un test. La app de la Fase 0 vive en `dev.doris.app_transacciones`: en la sesión 16 se copian con Refactor → Copy Class las clases de las sesiones 14 y 15 (única excepción a "sin copiar y pegar") y no importa nada de los packages `sesionNN_`. Regla de presentación 4: una estructura pedida en el enunciado se muestra con esqueleto comentado |
 | v1.19 | 2026-11-08 | Retrospectiva de la Semana 3. Regla de pausas: con más de 2 días hábiles sin sesión, el chat de Tema pregunta el motivo (categoría, sin detalles) y lo anota en Progreso; el recálculo separa pausas de días de sesión. Regla de presentación 7: lo corregido en la variación con pista 3 o esqueleto se reescribe una vez sin mirar. El ejercicio de cierre de la Semana 3 incluye los pendientes del `try` y de asignar `setScale`/`add` |
 | v1.20 | 2026-11-08 | Estructura del repo con un módulo por fase: `fundamentos` cubre las Fases 0 y 1 (la app se refactoriza en su lugar, con tag `fase-0` al cerrar la sesión 20); se agregan `concurrencia` (Fase 4) y `mvc-api` (Fase 6), con nombres tentativos, y las semanas de cada módulo |
+| v1.21 | 2026-11-09 | Borrador de la distribución de la Fase 1 (semanas 5 a 7, sesiones 21 a 35) guardado en el plan para no perderlo; se confirma al cerrar la Fase 0. Revisión de las semanas 1 a 4: sin reestructurar; se anotan los temas usados sin sesión propia y los pendientes de OO que la Fase 1 debe cubrir temprano |
