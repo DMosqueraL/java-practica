@@ -313,10 +313,16 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 
 ### Pistas por niveles (cuando hay bloqueo en una kata)
 
-1. Pregunta socrática.
-2. Concepto o API relevante. Debe aportar algo nuevo frente al nivel 1, no repetirlo con otras palabras.
-3. Esqueleto parcial.
-4. Solución completa, solo si se pide.
+0. **Antes de dar pista:** Claude pregunta en una línea qué está viendo Doris o qué cree que pasa, para que la pista apunte al bloqueo real y no a uno supuesto. No cuenta como pista.
+1. **Pregunta socrática** sobre el bloqueo concreto que Doris describió.
+2. **Concepto o API** que falta. Debe aportar algo nuevo frente al nivel 1, no repetirlo con otras palabras.
+3. **Esqueleto parcial.**
+4. **Solución completa**, solo si se pide.
+
+- El nivel sube solo cuando Doris lo pide. Claude no sube de nivel por su cuenta.
+- Si una pista no atiende el bloqueo (lo dice Doris), se reformula en el mismo nivel. La pista fallida no cuenta en "Pista máxima"; sí cuenta la reformulada que sirvió.
+- Una duda causada por un enunciado o un catálogo ambiguo no es pista. Es ambigüedad cuando el texto admite dos lecturas y la aclaración es sobre qué se pide, no sobre cómo resolverlo; si después de aclarar sigue el bloqueo, lo que sigue ya es pista. Se anota en la fila de Progreso como `Ambigüedad: ...`, y si la causa está en PLAN.md, también como `Para planeación`.
+- Estas reglas valen igual para Busca el error y para la variación.
 
 ### Ejercicio de cierre semanal (desde la Semana 2)
 
@@ -542,3 +548,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.22 | 2026-11-10 | Ejercicio de cierre semanal: 40–45 min con corte firme y Día A de 2 h 45 (desde la sesión 21); en el `.txt` a ciegas no se escriben `package` ni `import` |
 | v1.23 | 2026-11-10 | Archivos de práctica: Claude crea en `recuerdos/sesionNN/` el Recuerdo, Busca el error, el Cierre de tema y el Ejercicio de cierre semanal (con el enunciado arriba) con formato fijo; no se muestran solo en el chat, y las respuestas se leen desde la carpeta |
 | v1.24 | 2026-11-10 | Catálogo de familias de error: columna "Ejemplos reales" (de `fallos.md`, con su origen), criterio para distinguir la familia 3 de la 4 (qué se compara frente a la dirección o el límite), y el chat de Tema agrega ejemplos reales al cierre (máximo 3 por familia) |
+| v1.25 | 2026-11-10 | Pistas por niveles: pregunta diagnóstica previa (nivel 0, no cuenta), contenido de cada nivel, el nivel solo sube cuando Doris lo pide, una pista que no atiende el bloqueo se reformula en el mismo nivel y no cuenta, y una duda por ambigüedad no es pista (se anota como `Ambigüedad`) |
