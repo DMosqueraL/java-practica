@@ -141,7 +141,6 @@ Borrador hecho en Planeación el 2026-11-09, antes de terminar la Fase 0. No es 
 **Lo que motiva el orden:**
 - Tres pendientes de `fallos.md` son de Diseño OO y van temprano: `equals` en clase normal, campos `final` en una clave de `HashSet`/`HashMap` y constructor `private`.
 - Cosas usadas en la Fase 0 sin sesión propia, que se cierran antes de interfaces y composición: `static`, visibilidad (`public`, `private` y el acceso por defecto de la sesión 15), `String[]` y `while`.
-- El `for` con índice nunca se vio (familia 7 inactiva); se ve una sola vez, corto, antes de que los streams lo reemplacen en la Fase 2.
 
 Todo se hace sobre la app en `app_transacciones`, con tests en verde después de cada paso y comparando contra el tag `fase-0`. El tema de cada sesión es "por qué existe y cómo se aplica a la app"; la kata es el refactor concreto.
 
@@ -153,7 +152,7 @@ Todo se hace sobre la app en `app_transacciones`, con tests en verde después de
 | 22 | Clases con estado frente a `record`: campos `final`, constructor que valida, `private` | Pasar la validación de `LineaCsv` a un constructor o método de fábrica estático en `Transaccion` |
 | 23 | `equals`/`hashCode`/`toString` en clase normal y el contrato con `HashMap` | Clase `Cuenta` como clave de los saldos, con tests del contrato |
 | 24 | Inmutabilidad: `List.copyOf`, colecciones no modificables, defensa en el constructor | `ResultadoCarga` que no se puede alterar desde fuera, con test que lo prueba |
-| 25 | Arreglos y `for` con índice (una sesión; activa la familia 7) + kata de cierre | Reporte con índice de línea; cierre de la Semana 5 |
+| 25 | Arreglos (el `for` clásico ya se vio en la sesión 3) + kata de cierre | Reporte con índice de línea; cierre de la Semana 5 |
 
 ### Semana 6: contratos y composición
 
@@ -303,10 +302,10 @@ A medida que un tema se domina, los pasos 1–3 se acortan y crece el 4.
 
 #### Reglas de presentación de cada tema (aprobadas el 2026-10-09)
 
-1. **Un solo mensaje por tema**, con código nuevo, completo y a la vista. No depende de código de sesiones anteriores.
+1. **El tema se presenta por partes** (máximo 3; un tema pequeño puede ir en una sola). Cada parte trae su código completo y a la vista, sin depender de código de sesiones anteriores, y sigue el orden de la regla 2. Claude deja el código de cada parte en el package de la sesión; Doris lo ejecuta en IntelliJ y compara la salida con la mostrada. Cada parte cierra con su pausa de comprensión (regla 3), y no se pasa a la siguiente hasta que esa quede clara.
 2. **Orden fijo:** el problema que resuelve → ejemplo completo con las salidas reales (ejecutadas, no supuestas) → explicación línea por línea → el mecanismo.
 3. **Pausa de comprensión:** una pregunta sin código nuevo. Solo se avanza cuando esa parte quedó clara.
-4. **La variación usa únicamente lo ya mostrado.** No introduce una API o un concepto nuevo dentro del ejercicio. Si el enunciado pide una estructura (qué va dentro o fuera de un `try` o de un bucle, en qué orden), la muestra con un esqueleto comentado, no solo con palabras.
+4. **La variación usa únicamente lo ya mostrado.** No introduce una API o un concepto nuevo dentro del ejercicio. Si el enunciado pide una estructura (qué va dentro o fuera de un `try` o de un bucle, en qué orden), la muestra con un esqueleto comentado, no solo con palabras. Antes de dar la variación, Claude revisa que todo lo que pide haya salido en alguna de las partes.
 5. **Las predicciones se piden solo sobre lo ya visto.** Si falla, se explica con el mismo ejemplo; si vuelve a fallar, se usa un ejemplo nuevo.
 6. **Cierre del tema:** un ejercicio de predicción de 6 a 8 líneas que abarca todo el tema de la sesión. Si lo acierta, el tema quedó interiorizado. El resultado línea por línea se registra en `seguimiento/fallos.md`.
 7. **Reescritura de la corrección:** si algo de la variación se corrige con pista de nivel 3 o con un esqueleto, Doris reescribe esa parte una vez, sin mirar, antes de cerrar la variación (1–2 min).
@@ -361,7 +360,7 @@ Para el "Atrapa" de cada test se elige una familia y se aplica al método. Es pe
 | 4 | Comparación equivocada | `==` en vez de `equals`; `equals` en vez de `compareTo` | `==` en vez de `equals` con `String` (diagnóstico; ejercicio de cierre de la Semana 1, s6; Busca el error, s10); `equals` con `BigDecimal`, que también compara la escala (`1.0` frente a `1.00`) (tema, s8) | Iguales en valor pero distintos en referencia o escala (`1.0` y `1.00`) |
 | 5 | Tipo o precisión | `double` en vez de `BigDecimal` | Suma de montos con `double` (`0.10 + 0.20`) (Test 3 del taller, kata-04, s8) | Montos como `0.10 + 0.20` |
 | 6 | Reemplaza en vez de agregar | `put` sobre una clave existente; lista nueva en cada vuelta | `put(cuenta, List.of(mov))` (kata-03, s7); `new ArrayList<>()` dentro del `for` (Busca el error, s12 y s13) | Dos elementos con la misma clave |
-| 7 | Se salta un elemento | `i = 1`, `i < size() - 1` | — | Inactiva: se activa cuando se use el `for` con índice |
+| 7 | Se salta un elemento | `i = 1`, `i < size() - 1` | — | Un solo elemento; el primero y el último distintos del resto. Activa desde la v1.26 (el `for` clásico se vio en la sesión 3 y se usó en la kata-12, s16) |
 | 8 | La API corrige o descarta sin avisar | `split(",")` sin `-1`; formatter sin `ResolverStyle.STRICT` | `split(",")` sin `-1` deja pasar `...,10.00,,` (T05, s14); formatter sin `STRICT`, que convierte 31/02 en 28/02 (tema, s12) | Entradas mal formadas que la API "arregla": columnas vacías al final, 31/02 |
 
 **Familia 3 o 4:** se decide por qué se compara, no por qué se cambia.
@@ -550,3 +549,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.23 | 2026-11-10 | Archivos de práctica: Claude crea en `recuerdos/sesionNN/` el Recuerdo, Busca el error, el Cierre de tema y el Ejercicio de cierre semanal (con el enunciado arriba) con formato fijo; no se muestran solo en el chat, y las respuestas se leen desde la carpeta |
 | v1.24 | 2026-11-10 | Catálogo de familias de error: columna "Ejemplos reales" (de `fallos.md`, con su origen), criterio para distinguir la familia 3 de la 4 (qué se compara frente a la dirección o el límite), y el chat de Tema agrega ejemplos reales al cierre (máximo 3 por familia) |
 | v1.25 | 2026-11-10 | Pistas por niveles: pregunta diagnóstica previa (nivel 0, no cuenta), contenido de cada nivel, el nivel solo sube cuando Doris lo pide, una pista que no atiende el bloqueo se reformula en el mismo nivel y no cuenta, y una duda por ambigüedad no es pista (se anota como `Ambigüedad`) |
+| v1.26 | 2026-11-10 | Regla de presentación 1: el tema se presenta por partes (máximo 3), cada una con su código completo, ejecutada por Doris en IntelliJ y con su pausa de comprensión; regla 4: Claude verifica que la variación solo pida lo mostrado. Familia 7 activa (el `for` clásico se vio en la sesión 3). Borrador de la Fase 1 corregido: la sesión 25 queda solo con arreglos |
