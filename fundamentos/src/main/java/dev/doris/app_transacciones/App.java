@@ -1,7 +1,9 @@
 package dev.doris.app_transacciones;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.util.Map;
 
 import static dev.doris.app_transacciones.CargaTransacciones.cargar;
 
@@ -24,9 +26,23 @@ public class App {
 
         try {
             ResultadoCarga resultado = cargar(ruta);
-            // 2. cálculo: llega en la sesión 17
+            Map<TipoTransaccion, BigDecimal> totales = CalculoTransacciones.totalesPorTipo(resultado.validas());
+            Map<String, BigDecimal> saldos = CalculoTransacciones.saldoPorCuenta(resultado.validas());
             String reporte = Reporte.armar(resultado);
             System.out.println(reporte);
+            //Predicción: DEBITO = 337.70 y CREDITO = 2920.74
+            for (TipoTransaccion tipo : TipoTransaccion.values()) {
+                BigDecimal total = totales.get(tipo);
+                System.out.println(tipo + " = " + total);
+            }
+            //Predicción:
+            //Cuenta 0001: 1343.99
+            //Cuenta 0002: 764.20
+            //Cuenta 0003: 474.85
+            for (String cuenta : saldos.keySet()) {
+                BigDecimal saldo = saldos.get(cuenta);
+                System.out.println("Cuenta " + cuenta + ": " + saldo);
+            }
         } catch (IOException error) {
             System.out.println("No se pudo leer el archivo: " + error.getMessage());
         }

@@ -1,0 +1,63 @@
+// CierreDeTema.txt · Sesión 17 · Cálculos del reporte
+// Usa CalculoBolsillos, Movimiento y TipoMovimiento del package dev.doris.sesion17_calculos (Partes 1 y 2).
+// Escribe la salida exacta de cada marca. Sin ejecutar.
+
+public class CierreDeTema {
+
+    static Map<TipoMovimiento, BigDecimal> totalesSinIniciar(List<Movimiento> movimientos) {
+        Map<TipoMovimiento, BigDecimal> totales = new HashMap<>();
+        for (Movimiento movimiento : movimientos) {
+            BigDecimal actual = totales.getOrDefault(movimiento.tipo(), BigDecimal.ZERO);
+            totales.put(movimiento.tipo(), actual.add(movimiento.monto()));
+        }
+        return totales;
+    }
+
+    public static void main(String[] args) {
+        List<Movimiento> movimientos = List.of(
+                new Movimiento("Ahorro", TipoMovimiento.GASTO, new BigDecimal("40.00")),
+                new Movimiento("Viajes", TipoMovimiento.INGRESO, new BigDecimal("25.50")),
+                new Movimiento("Ahorro", TipoMovimiento.INGRESO, new BigDecimal("10.25")),
+                new Movimiento("Viajes", TipoMovimiento.GASTO, new BigDecimal("5.50")));
+
+        List<Movimiento> soloGastos = List.of(
+                new Movimiento("Mercado", TipoMovimiento.GASTO, new BigDecimal("12.00")));
+
+        Map<TipoMovimiento, BigDecimal> totales = CalculoBolsillos.totalesPorTipo(movimientos);
+        System.out.println("[1] " + totales.get(TipoMovimiento.INGRESO));
+        System.out.println("[2] " + totales.get(TipoMovimiento.GASTO));
+
+        Map<TipoMovimiento, BigDecimal> sinIniciar = totalesSinIniciar(soloGastos);
+        System.out.println("[3] " + sinIniciar.size());
+        System.out.println("[4] " + sinIniciar.get(TipoMovimiento.INGRESO));
+
+        Map<TipoMovimiento, BigDecimal> iniciados = CalculoBolsillos.totalesPorTipo(soloGastos);
+        System.out.println("[5] " + iniciados.get(TipoMovimiento.INGRESO));
+
+        Map<String, BigDecimal> saldos = CalculoBolsillos.saldoPorBolsillo(movimientos);
+        System.out.println("[6] " + saldos.get("Ahorro"));
+        System.out.println("[7] " + saldos.size());
+
+        System.out.println("[8] " + iniciados.get(TipoMovimiento.INGRESO).equals(new BigDecimal("0.00")));
+    }
+}
+
+// --- Predicciones ---
+[1] ---> 35.75
+[2] ---> 45.50
+[3] ---> 1
+[4] ---> null
+[5] ---> 0
+[6] ---> -29.75
+[7] ---> 2
+[8] ---> false
+
+// --- Salida real ---   (ejecutada con Java 21)
+[1] 35.75
+[2] 45.50
+[3] 1
+[4] null
+[5] 0
+[6] -29.75
+[7] 2
+[8] false

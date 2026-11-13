@@ -1,0 +1,31 @@
+// BuscaElError.txt · Sesión 17 · Día B
+// El método debe devolver el saldo de cada bolsillo: un INGRESO suma y un GASTO resta.
+// record Movimiento(String bolsillo, TipoMovimiento tipo, BigDecimal monto)
+// enum TipoMovimiento { INGRESO, GASTO }
+
+ 1  public static Map<String, BigDecimal> saldoPorBolsillo(List<Movimiento> movimientos) {
+ 2      Map<String, BigDecimal> saldos = new HashMap<>();
+ 3      for (int i = 1; i < movimientos.size(); i++) {
+ 4          Movimiento movimiento = movimientos.get(i);
+ 5          BigDecimal saldo = saldos.getOrDefault(movimiento.bolsillo(), BigDecimal.ZERO);
+ 6          if (movimiento.tipo() == TipoMovimiento.INGRESO) {
+ 7              saldo = saldo.add(movimiento.monto());
+ 8          } else {
+ 9              saldo = saldo.subtract(movimiento.monto());
+10          }
+11          saldos.put(movimiento.bolsillo(), saldo);
+12      }
+13      return saldos;
+14  }
+
+Entrada:
+movimientos = List.of(
+        new Movimiento("Ahorro", TipoMovimiento.INGRESO, new BigDecimal("100.00")),
+        new Movimiento("Viajes", TipoMovimiento.INGRESO, new BigDecimal("40.00")),
+        new Movimiento("Ahorro", TipoMovimiento.GASTO, new BigDecimal("30.50")))
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> línea 3, el índice i inicia en 1, está ignorando el valor 0
+2. Qué devuelve este método, tal como está, con esa entrada: cuántas claves tiene el Map y el saldo de cada una. ---> 2 claves. Viajes = 40.00 y Ahorros = -30.50
+3. A qué familia del catálogo pertenece. ---> Familia 7, Se salta un elemento (el de la posición 0)

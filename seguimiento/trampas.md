@@ -17,6 +17,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T05 | 14 | `split` y parseo de CSV | Sí (imprime `4`) | `split(",")` descarta los textos vacíos del final: `"a,b,c,d,,"` da 4 partes, no 6 |
 | T06 | 15 | `try`/`catch` dentro del bucle | No | Un `catch` de una excepción comprobada (`IOException`) cuyo `try` no puede lanzarla no compila |
 | T07 | 16 | Estructura de una app de consola | Sí, pero no arranca | `public static int main(String[] args)` es un método válido, pero no es el punto de entrada: el `main` que arranca el programa devuelve `void` |
+| T08 | 17 | Cálculos con `Map` y `BigDecimal` | No | `values()` de un `enum` devuelve un arreglo: se usa `length`, no `size()` |
 
 ## Detalle
 
@@ -144,3 +145,26 @@ public class Trampa7 {
   `Error: Main method must return a value of type void in class Trampa7, please define the main method as: public static void main(String[] args)`
 - **Por qué:** para arrancar el programa, Java busca un `main` con esa forma exacta: `public`, `static`, que devuelve `void` y recibe un `String[]`. Si el que encuentra devuelve otro tipo, no lo usa como punto de entrada. El compilador no lo marca, porque como método es válido.
 - **Corrección:** `public static void main(String[] args)` y, sin `return 0;`, un `return;` cuando haga falta terminar antes.
+
+### T08 · Sesión 17 · `values()` devuelve un arreglo
+
+```java
+public class Trampa8 {
+    enum TipoMovimiento { INGRESO, GASTO }
+
+    public static void main(String[] args) {
+        System.out.println(TipoMovimiento.values().size());
+    }
+}
+```
+
+- **¿Compila?** No. `javac` 21 responde:
+  ```
+  Trampa8.java:5: error: cannot find symbol
+          System.out.println(TipoMovimiento.values().size());
+                                                    ^
+    symbol:   method size()
+    location: class TipoMovimiento[]
+  ```
+- **Por qué:** `values()` devuelve un arreglo (`TipoMovimiento[]`), no una `List`. Un arreglo no tiene métodos como `size()`; su tamaño es el campo `length`, sin paréntesis (sesión 14, `split`). El `location: class TipoMovimiento[]` lo dice: los corchetes indican arreglo.
+- **Corrección:** `TipoMovimiento.values().length`, que imprime `2`.

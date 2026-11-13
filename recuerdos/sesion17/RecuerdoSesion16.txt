@@ -1,0 +1,50 @@
+// RecuerdoSesion16.txt · Sesión 17 · Día A
+// Reescribe sin mirar (kata-12, package app_transacciones):
+// 1. Reporte.armar(ResultadoCarga resultado): devuelve un String con "Válidas: N", "Inválidas: M" y una línea por cada texto del reporte de inválidas (acumular un String en un for).
+// 2. El main de App: validar args, cargar el CSV, el comentario del cálculo, armar el reporte, imprimirlo y el catch (IOException).
+// Sin package ni import.
+
+// --- clase Reporte ---
+package dev.doris.app_transacciones;
+
+public class Reporte {
+    public static String armar(ResultadoCarga resultado) {
+        String linea = "";
+        for (int i = 0; i < resultado.reporte().size(); i ++) {
+            linea = linea + "\n" + resultado.reporte().get(i);
+        }
+        return "Válidas: " + resultado.validas().size() + "\n" + "Inválidas: " + resultado.reporte().size() + linea;
+    }
+
+    // con foreach ---> Para validar si sería correcto
+    public static String armar(ResultadoCarga resultado) {
+            String linea = "";
+            for (String dato : resultado.reporte()) {
+                linea = linea + "\n" + dato;
+            }
+            return "Válidas: " + resultado.validas().size() + "\n" + "Inválidas: " + resultado.reporte().size() + linea;
+        }
+}
+
+// --- clase App ---
+package dev.doris.app_transacciones;
+
+public class App {
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Uso: App <ruta del CSV>");
+            return;
+        }
+        Path ruta = Path.of(args[0]);
+
+        try {
+            ResultadoCarga resultado = cargar(ruta);
+            // 2. Aqui es el calculo por parte de la sesión 17
+            String reporte = Reporte.armar(resultado);
+            System.out.println(reporte);
+        } catch (IOException error) {
+            System.out.println("No se pudo leer el archivo: " + error.getMessage());
+        }
+    }
+}
+
