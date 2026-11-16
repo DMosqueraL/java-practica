@@ -18,6 +18,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T06 | 15 | `try`/`catch` dentro del bucle | No | Un `catch` de una excepción comprobada (`IOException`) cuyo `try` no puede lanzarla no compila |
 | T07 | 16 | Estructura de una app de consola | Sí, pero no arranca | `public static int main(String[] args)` es un método válido, pero no es el punto de entrada: el `main` que arranca el programa devuelve `void` |
 | T08 | 17 | Cálculos con `Map` y `BigDecimal` | No | `values()` de un `enum` devuelve un arreglo: se usa `length`, no `size()` |
+| T09 | 18 | `String.format` | Sí (imprime `Agua` y luego falla) | Si sobran valores para el molde, se ignoran; si faltan, `MissingFormatArgumentException` al ejecutar |
 
 ## Detalle
 
@@ -168,3 +169,22 @@ public class Trampa8 {
   ```
 - **Por qué:** `values()` devuelve un arreglo (`TipoMovimiento[]`), no una `List`. Un arreglo no tiene métodos como `size()`; su tamaño es el campo `length`, sin paréntesis (sesión 14, `split`). El `location: class TipoMovimiento[]` lo dice: los corchetes indican arreglo.
 - **Corrección:** `TipoMovimiento.values().length`, que imprime `2`.
+
+### T09 · Sesión 18 · Valores de más y de menos en `String.format`
+
+```java
+public class Trampa9 {
+    public static void main(String[] args) {
+        System.out.println(String.format("%s", "Agua", "Luz"));
+        System.out.println(String.format("%s y %s", "Agua"));
+    }
+}
+```
+
+- **¿Compila?** Sí. Al ejecutar con Java 21:
+  ```
+  Agua
+  Exception in thread "main" java.util.MissingFormatArgumentException: Format specifier '%s'
+  ```
+- **Por qué:** el compilador no revisa si el molde y los valores cuadran. Si sobran valores, Java los ignora sin avisar (`"Luz"` se pierde). Si faltan, lanza `MissingFormatArgumentException` al llegar al hueco que no tiene valor.
+- **Corrección:** un valor por cada hueco: `String.format("%s y %s", "Agua", "Luz")`, que devuelve `Agua y Luz`.

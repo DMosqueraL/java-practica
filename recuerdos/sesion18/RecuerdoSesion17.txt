@@ -1,0 +1,40 @@
+// RecuerdoSesion17.txt · Sesión 18 · Día A
+// Reescribe sin mirar (kata-13, package app_transacciones), los dos métodos de la clase CalculoTransacciones:
+// 1. totalesPorTipo(List<Transaccion> transacciones): devuelve un Map<TipoTransaccion, BigDecimal> que trae siempre DEBITO y CREDITO, en cero si no hay transacciones de ese tipo.
+// 2. saldoPorCuenta(List<Transaccion> transacciones): devuelve un Map<String, BigDecimal> con el saldo de cada cuenta; un CREDITO suma y un DEBITO resta.
+// Ya existen: record Transaccion(LocalDate fecha, String cuenta, TipoTransaccion tipo, BigDecimal monto) y enum TipoTransaccion { DEBITO, CREDITO }
+// Sin package ni import.
+
+// --- clase CalculoTransacciones
+package dev.doris.app_transacciones;
+
+public class CalculoTransacciones {
+    public static Map<TipoTransaccion, BigDecimal> totalesPorTipo(List<Transaccion> transacciones) {
+        Map<TipoTransaccion, BigDecimal> totalPorTipo = new HashMap<>();
+
+        for (TipoTransacción tipo : TipoTransaccion.values()) {
+            totalPorTipo.put(tipo, BigDecimal.ZERO);
+        }
+
+        for (Transaccion transaccion : transacciones) {
+            BigDecimal actual = totalPorTipo.get(transaccion.tipo());
+            totalPorTipo.put(transaccion.tipo(), actual.add(transaccion.monto()));
+        }
+        return totalPorTipo;
+    }
+
+    public static Map<String, BigDecimal> saldoPorCuenta(List<Transaccion> transacciones) {
+        Map<String, BigDecimal> saldoPorCuenta = new HashMap<>();
+
+        for (Transaccion transaccion : transacciones) {
+            BigDecimal saldo = saldoPorcuenta.getOrDefault(transaccion.cuenta(), BigDecimal.ZERO);
+            if (transaccion.tipo() == TipoTransaccion.CREDITO) {
+                saldo = saldo.add(transaccion.monto());
+            } else {
+                saldo = saldo.subtract(transaccion.monto());
+            }
+            saldoPorCuenta.put(transaccion.cuenta(), saldo);
+        }
+        return saldoPorCuenta;
+    }
+}

@@ -23,7 +23,7 @@ public class CalculoTransaccionesTest {
     }
 
     // Entrada: CREDITO = 100.00 (Cuenta 0001), DEBITO = 20.50 (Cuenta 0002), DEBITO = 10.25 (Cuenta 0001) y CREDITO = 50.00 (Cuenta 0003)
-    // Esperado: 2 claves; DEBITOo = 30.75 y CREDITO = 150.00
+    // Esperado: 2 claves; DEBITO = 30.75 y CREDITO = 150.00
     // Predicción: verde
     @Test
     public void totalPorTipoConDebitosYCreditos() {
@@ -56,5 +56,21 @@ public class CalculoTransaccionesTest {
         assertThat(saldoPorCuenta.get("0001")).isEqualByComparingTo(new BigDecimal("89.75"));
         assertThat(saldoPorCuenta.get("0002")).isEqualByComparingTo(new BigDecimal("-20.50"));
         assertThat(saldoPorCuenta.get("0003")).isEqualByComparingTo(new BigDecimal("50.00"));
+    }
+
+    // Entrada: CREDITO = 100.00 (Cuenta 0003), DEBITO = 20.50 (Cuenta 0001) y DEBITO = 10.25 (Cuenta 0002) ---> Entrada de cuentas en desorden
+    // Esperado: 3 claves. 0001, 0002, 0003
+    // Predicción: verde
+    @Test
+    public void saldoPorCuentaConCuentasQueEntranEnDesorden() {
+        List<Transaccion> transacciones = List.of(
+                new Transaccion(LocalDate.of(2026, 6, 1), "0003", TipoTransaccion.CREDITO, new BigDecimal("100.00")),
+                new Transaccion(LocalDate.of(2026, 6, 2), "0001", TipoTransaccion.DEBITO, new BigDecimal("20.50")),
+                new Transaccion(LocalDate.of(2026, 6, 3), "0002", TipoTransaccion.DEBITO, new BigDecimal("10.25")));
+
+        Map<String, BigDecimal> saldoPorCuenta = CalculoTransacciones.saldoPorCuenta(transacciones);
+
+        assertThat(saldoPorCuenta).hasSize(3);
+        assertThat(saldoPorCuenta.keySet()).containsExactly("0001", "0002", "0003");
     }
 }

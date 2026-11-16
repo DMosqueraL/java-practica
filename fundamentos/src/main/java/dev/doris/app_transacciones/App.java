@@ -17,6 +17,13 @@ public class App {
     //                                                 Línea 10: tipo inválido: RETIRO
     //                                                 Línea 12: Columnas: 3
     //                                                 Línea 14: Columnas: 6
+    //                                                 Totales por tipo:
+    //                                                 DEBITO        337.70
+    //                                                 CREDITO      2920.74
+    //                                                 Saldos por cuenta:
+    //                                                 0001         1343.99
+    //                                                 0002          764.20
+    //                                                 0003          474.85
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Uso: App <ruta del CSV>");
@@ -28,21 +35,8 @@ public class App {
             ResultadoCarga resultado = cargar(ruta);
             Map<TipoTransaccion, BigDecimal> totales = CalculoTransacciones.totalesPorTipo(resultado.validas());
             Map<String, BigDecimal> saldos = CalculoTransacciones.saldoPorCuenta(resultado.validas());
-            String reporte = Reporte.armar(resultado);
+            String reporte = Reporte.armar(resultado, totales, saldos);
             System.out.println(reporte);
-            //Predicción: DEBITO = 337.70 y CREDITO = 2920.74
-            for (TipoTransaccion tipo : TipoTransaccion.values()) {
-                BigDecimal total = totales.get(tipo);
-                System.out.println(tipo + " = " + total);
-            }
-            //Predicción:
-            //Cuenta 0001: 1343.99
-            //Cuenta 0002: 764.20
-            //Cuenta 0003: 474.85
-            for (String cuenta : saldos.keySet()) {
-                BigDecimal saldo = saldos.get(cuenta);
-                System.out.println("Cuenta " + cuenta + ": " + saldo);
-            }
         } catch (IOException error) {
             System.out.println("No se pudo leer el archivo: " + error.getMessage());
         }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class CalculoTransacciones {
     public static Map<TipoTransaccion, BigDecimal> totalesPorTipo(List<Transaccion> transacciones) {
@@ -22,7 +23,7 @@ public class CalculoTransacciones {
     }
 
     public static Map<String, BigDecimal> saldoPorCuenta(List<Transaccion> transacciones) {
-        Map<String, BigDecimal> saldoPorCuenta = new HashMap<>();
+        Map<String, BigDecimal> saldoPorCuenta = new TreeMap<>();
 
         for (Transaccion transaccion : transacciones) {
             BigDecimal saldo = saldoPorCuenta.getOrDefault(transaccion.cuenta(), BigDecimal.ZERO);

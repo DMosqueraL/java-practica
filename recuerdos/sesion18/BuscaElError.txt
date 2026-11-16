@@ -1,0 +1,25 @@
+// BuscaElError.txt · Sesión 18 · Día B
+// El método debe devolver cuántas cuentas tienen el saldo en cero.
+
+ 1  static int cuentasEnCero(Map<String, BigDecimal> saldos) {
+ 2      int cantidad = 0;
+ 3      for (String cuenta : saldos.keySet()) {
+ 4          BigDecimal saldo = saldos.get(cuenta);
+ 5          if (saldo.equals(BigDecimal.ZERO)) {
+ 6              cantidad = cantidad + 1;
+ 7          }
+ 8      }
+ 9      return cantidad;
+10  }
+
+Entrada:
+Map<String, BigDecimal> saldos = new TreeMap<>();
+saldos.put("0001", new BigDecimal("0.00"));
+saldos.put("0002", new BigDecimal("50.00"));
+saldos.put("0003", BigDecimal.ZERO);
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> Línea 5, se usa equals en un BigDecimal, que compara valor y escala y BigDecimal.ZERO la escala es cero, por lo que si los saldos vienen con decimales, por ejemplo 0.00 ---> Da falso
+2. Qué devuelve este método, tal como está, con esa entrada. ---> saldos=[0.00, 50.00, 0] La primera vuelta da falso, apesar que el valor numérico son iguales, y cantidad permanece en cero, segunda vuelta falso y tercera vuelta true, cantidad = 1 y debe ser 2
+3. A qué familia del catálogo pertenece. ---> familia 4, Comparación equivocada
