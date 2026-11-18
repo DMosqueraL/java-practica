@@ -1,0 +1,44 @@
+// RecuerdoSesion18.txt · Sesión 19 · Día A
+// Reescribe sin mirar (kata-14, package app_transacciones) el método de la clase Reporte:
+//   public static String armar(ResultadoCarga resultado,
+//                              Map<TipoTransaccion, BigDecimal> totales,
+//                              Map<String, BigDecimal> saldos)
+// Devuelve un solo String con tres secciones, en este orden:
+//   1. "Válidas: N", "Inválidas: M" y debajo una línea por cada texto del reporte de inválidas.
+//   2. "Totales por tipo:" y una fila por cada tipo, recorriendo los tipos con values().
+//   3. "Saldos por cuenta:" y una fila por cada cuenta.
+// Cada fila de las secciones 2 y 3 usa el molde %-8s%12s, con el monto en 2 decimales (setScale(2)) antes de formatear.
+// Ya existen: record ResultadoCarga(List<Transaccion> validas, List<String> reporte) y enum TipoTransaccion { DEBITO, CREDITO }.
+// Sin package ni import.
+// Al terminar el código, responde la pregunta de control que está al final del archivo.
+
+// --- clase Reporte ---
+
+package dev.doris.app_transacciones
+
+public class Reporte {
+    public static String armar (ResultadoCarga resultado, Map<TipoTransaccion, BigDecimal> totales, Map<String, BigDecimal> saldos) {
+        String linea = "";
+        for (String dato : resultado.reporte()) {
+            linea = linea + "\n" + dato;
+        }
+
+        String total = "";
+        for (TipoTransaccion tipo : TipoTransaccion.values()) {
+            total = total + "\n" + String.format("%-8s%12s", tipo, totales.get(tipo).setScale(2));
+        }
+
+        String saldo = "";
+        for (String cuenta : saldos.keySet()) {
+            saldo = saldo + "\n" + String.format("%-8s%12s", cuenta, saldos.get(cuenta).setScale(2));
+        }
+        return "Válidas: " + resultado.validas().size() + "\n" +
+                "Inválidas: " + resultado.reporte().size() + linea + "\n" +
+                "Totales por tipo:" + total + "\n" + "Saldos por cuenta:" + saldo;
+    }
+
+}
+
+// --- Pregunta de control ---
+// Si transacciones.csv no tuviera ningún CREDITO y armar NO hiciera setScale(2), ¿qué monto saldría en la fila de CREDITO y por qué? (No hace falta contar los espacios.)
+---> 0.00 dado que el setScale(2) está controlando que los valores de totales.get(tipo) que tendran o no la escala y en especial el BigDecimal, tengan dos decimales

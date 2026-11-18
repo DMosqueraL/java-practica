@@ -19,6 +19,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T07 | 16 | Estructura de una app de consola | Sí, pero no arranca | `public static int main(String[] args)` es un método válido, pero no es el punto de entrada: el `main` que arranca el programa devuelve `void` |
 | T08 | 17 | Cálculos con `Map` y `BigDecimal` | No | `values()` de un `enum` devuelve un arreglo: se usa `length`, no `size()` |
 | T09 | 18 | `String.format` | Sí (imprime `Agua` y luego falla) | Si sobran valores para el molde, se ignoran; si faltan, `MissingFormatArgumentException` al ejecutar |
+| T10 | 19 | Tests con archivos (`Path`, `resolve`) | Sí (imprime `datos`) | `Path` es inmutable: `resolve` devuelve una ruta nueva y no cambia la original; hay que asignar el resultado |
 
 ## Detalle
 
@@ -188,3 +189,21 @@ public class Trampa9 {
   ```
 - **Por qué:** el compilador no revisa si el molde y los valores cuadran. Si sobran valores, Java los ignora sin avisar (`"Luz"` se pierde). Si faltan, lanza `MissingFormatArgumentException` al llegar al hueco que no tiene valor.
 - **Corrección:** un valor por cada hueco: `String.format("%s y %s", "Agua", "Luz")`, que devuelve `Agua y Luz`.
+
+### T10 · Sesión 19 · `resolve` sin asignar
+
+```java
+import java.nio.file.Path;
+
+public class Trampa10 {
+    public static void main(String[] args) {
+        Path carpeta = Path.of("datos");
+        carpeta.resolve("pagos.csv");
+        System.out.println(carpeta);
+    }
+}
+```
+
+- **¿Compila?** Sí. Al ejecutar con Java 21 imprime `datos`.
+- **Por qué:** `Path` es inmutable, como `String` y `BigDecimal`. `resolve` no modifica `carpeta`: devuelve una ruta nueva, y aquí ese resultado se descarta. La respuesta trampa es `datos\pagos.csv`.
+- **Corrección:** asignar el resultado: `Path archivo = carpeta.resolve("pagos.csv");`. `archivo` es `datos\pagos.csv` en Windows (`datos/pagos.csv` en Linux, verificado con Java 21) y `carpeta` sigue siendo `datos`.
