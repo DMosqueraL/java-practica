@@ -1,0 +1,27 @@
+// BuscaElError.txt · Sesión 19 · Día B
+// El método debe contar las líneas inválidas de un CSV (sin contar el encabezado).
+// Una línea es válida solo si tiene exactamente 2 columnas: cuenta,monto.
+// Tiene un error. No lo ejecutes.
+
+ 1  static int contarInvalidas(List<String> lineas) {
+ 2      int invalidas = 0;
+ 3      for (int i = 1; i < lineas.size(); i++) {
+ 4          String[] partes = lineas.get(i).split(",");
+ 5          if (partes.length != 2) {
+ 6              invalidas++;
+ 7          }
+ 8      }
+ 9      return invalidas;
+10  }
+
+Entrada:
+List.of("cuenta,monto", "0001,10.00", "0002,5.00,", "0003")
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> linea 4. El split(",") no hace control de exactamente 2 columnas, ignora las vacías,
+    así esa línea sea inválida por cantidad de columnas.
+2. Qué devuelve este método, tal como está, con esa entrada. ---> Cómo i inicia en 1, se tiene que:
+    Primera vuelta 1<4, true: toma la línea 1 que es válida y no entra al if, invalidas = 0. Segunda vuelta 2<4, true: toma la linea 2 que no cumple pq el split() ignora la columna vacía, no entra al if e invalidas = 0. Tercera vuelta 3<4: true: toma la línea 3, como
+    solo tiene una columna, entra al if e incrementa invalidas y pasa a ser invalidas = 1. Cuarta vuelta: 4<4, false: sale del for y retorna el valor que tenga invalidas = 1
+3. A qué familia del catálogo pertenece. ---> Familia 8, La API corrige o descarta sin avisar
