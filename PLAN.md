@@ -2,7 +2,7 @@
 
 Pista para aprender a **escribir** Java desde cero hasta funcional y reactivo. Es independiente de la teoría de la certificación 1Z0-830: esa entrena a leer código; esta, a producirlo.
 
-- **Dedicación:** 2 h diarias, lunes a viernes (10 h/semana).
+- **Dedicación:** franja de 6:00 a 10:00 p. m., lunes a viernes, sin hora fija de inicio ni de fin. Una noche puede cubrir una sesión completa (Día A y Día B) o solo una parte; un Día puede pasar de 3 h.
 - **Duración estimada:** 24 semanas del plan. Una "semana del plan" son 5 sesiones, y cada sesión se planea en 2 días de 2 h (ver Formato de sesión), así que en calendario, por ahora, una semana del plan toma unas 2 semanas reales. Se recalcula con datos reales al cerrar la Fase 0.
 - **Dominio común:** transacciones bancarias. El mismo problema evoluciona de imperativo a OO, luego a funcional y luego a reactivo.
 
@@ -189,7 +189,7 @@ Todo se hace sobre la app en `app_transacciones`, con tests en verde después de
 
 Objetivo: no perder la costumbre de escribir código. Un proyecto que crece semana a semana, como en un trabajo real: mantener y extender código existente, no solo empezar de cero.
 
-- **Dedicación:** la misma, 10 h/semana (lunes a viernes, 2 h).
+- **Dedicación:** la misma franja de las Fases 0 a 7 (lunes a viernes, de 6:00 a 10:00 p. m.).
 - **Proyecto:** **ledger de doble partida** en Java, núcleo de pagos inspirado en PasaLu (no un port de PasaLu). Cada movimiento genera un débito y un crédito que siempre cuadran; los saldos se derivan de los asientos y no se editan; las transferencias son idempotentes y resisten concurrencia.
 - **Sprint = 1 semana**, con su propio chat `Sprint N - <incremento>`. El sprint se define en el chat de Planeación al cierre del anterior: enunciado, criterios de aceptación y tests mínimos.
 - **Mezcla de fases:** cada sprint combina temas de fases distintas para mantener vivo todo lo aprendido.
@@ -212,7 +212,7 @@ Objetivo: no perder la costumbre de escribir código. Un proyecto que crece sema
 
 ## Formato de sesión
 
-Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 h**. Si el Día A termina antes, el Día B empieza ese mismo día. En Progreso va la fecha real de cada parte.
+Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 h** (el Día B, 2 h 10). Si el Día A termina antes, el Día B empieza ese mismo día. En Progreso va la fecha real de cada parte.
 
 **Pausas:** si entre el final de la sesión anterior y el inicio de la nueva, o entre el Día A y el Día B, pasan más de 2 días hábiles (lunes a viernes), el chat de Tema pregunta el motivo al inicio, en una sola línea, y lo anota en Progreso como `Pausa: N días hábiles (motivo)`, con una categoría: laboral, cansancio, personal, salud, conectividad u otro. No se piden detalles. Al recalcular la duración del plan se separan los días de pausa de los días de sesión.
 
@@ -224,7 +224,7 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Tema nuevo | 60 min | Por qué existe → ejemplo guiado → pausa de comprensión → variación propia |
 | A | Cierre de tema | 30 min | Predicción de 6 a 8 líneas con salidas ejecutadas, y su registro en `seguimiento/fallos.md` |
 | A | Margen | 15 min | Dudas, pausas, trampa del 1Z0-830 (si aplica) y mensaje de commit |
-| B | Busca el error | 5 min | Encontrar el error en un método dado (ver abajo) |
+| B | Busca el error | 15 min | Encontrar el error en un método dado (ver abajo) |
 | B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
 | B | Revisión + teach-back | 20 min | Revisión del código y teach-back: exactamente 3 preguntas, cada una con una sola pregunta (no varias en el mismo número). Hasta la Fase 1, el teach-back no pregunta qué error atrapa un test |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
@@ -240,7 +240,7 @@ Todo lo que Claude prepara para que Doris responda en un `.txt` lo crea Claude e
 
 | Archivo | Lo que deja Claude listo |
 |---|---|
-| `RecuerdoSesionMM.txt` (MM = sesión anterior) | Un comentario arriba con lo que hay que reescribir; debajo, en blanco |
+| `RecuerdoSesionMM.txt` (MM = sesión anterior) | Un comentario arriba con lo que hay que reescribir; debajo, en blanco. Opcional: al final, `// --- Pregunta de control (fuera de los 15 min) ---` con **una** pregunta y su `--->`, solo para un concepto en `pendiente` de `fallos.md` que la reescritura no ejercita. Se responde al terminar los 15 min y se registra en `fallos.md` como las demás |
 | `BuscaElError.txt` | El método con número de línea a la izquierda, la entrada concreta y las tres preguntas, cada una con `--->` |
 | `CierreDeTema.txt` | El código completo con las marcas `[1]` a `[8]`; debajo, `// --- Predicciones ---` con una línea `[N] --->` por marca (un bloque por ejecución si hay varias). Después de la revisión, Claude agrega `// --- Salida real ---` |
 | `EjercicioSemanaK.txt` | El enunciado arriba, dentro de `/* ... */` y con las partes numeradas; debajo, `// --- Mi solución ---`. La solución de Claude va en `EjercicioSemanaK-solucion.txt` |
@@ -378,11 +378,11 @@ Para el "Atrapa" de cada test se elige una familia y se aplica al método. Es pe
 
 **Ejemplos reales:** los agrega el chat de Tema al cierre de la sesión, con un máximo de 3 por familia y la sesión de cada uno; es registro, igual que `fallos.md`. Los ejemplos que no fueron errores de Doris (métodos de Busca el error, del taller o del tema) llevan su origen. Las familias nuevas y los criterios los decide Planeación.
 
-### Busca el error (5 min)
+### Busca el error (15 min)
 
 Al inicio del Día B, antes de la kata:
 
-- Claude deja listo `recuerdos/sesionNN/BuscaElError.txt` (ver "Archivos de práctica") con un método corto con **un** error de una familia del catálogo, escrito solo con lo ya visto en las sesiones, sin decir dónde está.
+- Claude deja listo `recuerdos/sesionNN/BuscaElError.txt` (ver "Archivos de práctica") con un método corto con **un** error de una familia del catálogo, escrito solo con lo ya visto en las sesiones, sin decir dónde está. El método tiene como máximo 12 líneas y la entrada, como máximo 3 elementos, para que la prueba de escritorio sea corta.
 - Doris dice en qué línea está, qué devolvería con una entrada concreta y a qué familia pertenece. No se escribe test.
 - El resultado se anota en la tabla "Testing por kata" de `seguimiento/fallos.md`.
 
@@ -568,3 +568,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.27 | 2026-11-11 | Aclaración: el código de cada parte del tema va en el mensaje del chat, además de en el package de la sesión (regla de presentación 1); los archivos de práctica se crean siempre en la carpeta y mostrarlos en el chat es opcional |
 | v1.28 | 2026-11-16 | Sesión 18: al inicio del tema, corrección de la kata-13 (`saldoPorCuenta` con `TreeMap` para que las cuentas salgan ordenadas, con su test); el reporte se formatea con `%s`/`%d`, ancho y alineación, sin `%f` (depende del idioma del sistema) y con `setScale(2)` antes de formatear. Cada enunciado de kata termina con la lista de entregables |
 | v1.29 | 2026-11-16 | Revisión: un Riesgo se sostiene con un caso concreto verificado (entrada o método equivocado que pasa los tests), nunca con cambios futuros; hallazgos en una lista y correcciones de una en una. No se pide predecir una salida que el enunciado ya da. Al cerrar una kata de la app se ejecuta el package completo (motivo escrito). Sesiones 19 y 20: horas de inicio y fin en Progreso; los tiempos de la sesión 18 no se usan en el recálculo (festivo con interrupciones no registradas) |
+| v1.30 | 2026-11-19 | Busca el error pasa de 5 a 15 min (Día B de 2 h 10), con un método de máximo 12 líneas y una entrada de máximo 3 elementos. Pregunta de control opcional al final del recuerdo, fuera de los 15 min, solo para un `pendiente` que la reescritura no ejercita. Dedicación: franja flexible de 6:00 a 10:00 p. m., lunes a viernes; la duración se sigue recalculando al cerrar la Fase 0 |
