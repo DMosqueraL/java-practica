@@ -399,7 +399,7 @@ En el Día B, entre la kata (ya en verde) y la revisión. Objetivo: ver un test 
 3. Deshace el cambio (Ctrl+Z) y confirma que vuelve a verde.
 4. Después de verlo, Claude dice la familia del catálogo. Si ningún test se puso en rojo, ese es el hallazgo (falta un caso); el test que falta se escribe solo si Doris quiere.
 
-No se pide predicción, familia ni tabla, y no se evalúa. Se anota en "Testing por kata" de `fallos.md`: la línea rota, qué tests se pusieron en rojo y la familia. Con 5 o 6 katas, Planeación decide con esos datos si se agrega la pregunta "¿cuál crees que se pondrá en rojo?" o si se queda solo en observar.
+No se pide predicción, familia ni tabla, y no se evalúa. Se anota en `seguimiento/rompe-uno.md` (no en `fallos.md`: no es un fallo de Doris), con el formato de ese archivo: la línea rota (antes → después), qué tests se pusieron en rojo (o ninguno), la familia y el test agregado, si lo hubo. Lo actualiza el chat de Tema al cierre de la sesión, en el mismo commit que Progreso. Con 5 o 6 katas, Planeación decide con esos datos si se agrega la pregunta "¿cuál crees que se pondrá en rojo?" o si se queda solo en observar.
 
 ## Rol de Claude y revisión
 
@@ -509,7 +509,7 @@ java-practica/
 ├── mvc-api/                 (Fase 6, semanas 19-21; se agrega en su fase)
 ├── webflux-api/             (Fase 7, semanas 22-24; se agrega en su fase)
 ├── recuerdos/               (recuerdos y ejercicios semanales en .txt, por sesión)
-└── seguimiento/             (registro de fallos: fallos.md; trampas del 1Z0-830: trampas.md)
+└── seguimiento/             (registro de fallos: fallos.md; trampas del 1Z0-830: trampas.md; tests en rojo de Rompe uno: rompe-uno.md)
 ```
 
 El módulo `fundamentos` (Fase 0) se creó el 2026-10-09 con todo lo de las sesiones 0 a 5, y sigue activo en la Fase 1; `funcional-katas` queda para la Fase 2. Los nombres `concurrencia` y `mvc-api` son tentativos: se confirman en Planeación al abrir cada fase. El ledger de la Fase 8 se define con su primer sprint. Los `.txt` de recuerdo viven en `recuerdos/sesionNN/`, fuera de `src/`.
@@ -588,3 +588,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.32 | 2026-11-22 | Distribución de la Fase 1 aprobada (sesiones 21 a 35), con cambios frente al borrador: `Cuenta` entra a `Transaccion` después de tener `equals`/`hashCode` (s23) y a la clave del `TreeMap` con `Comparable` (s29); Factory del filtro a partir de los argumentos de `App`; excepciones comprobadas en la s25; subpackages en la s33; s34 "Tests de la app después del refactor" (se define en la retrospectiva de la Semana 6); salen los arreglos (quedan en el 1Z0-830), y `Predicate` y `Optional` pasan a la Fase 2. Testing: el "Atrapa" sigue opcional y el taller con mutantes no vuelve; nuevo bloque "Rompe uno" (5 min, Día B de 2 h 15): romper una línea dada, ver qué tests se ponen en rojo, deshacer, y después Claude dice la familia |
 | v1.33 | 2026-11-22 | Se quitan las duraciones totales de los Días ("2 días de 2 h", Día B de 2 h 15, Día A de 2 h 45 con el ejercicio de cierre): una sesión se hace en Día A y Día B dentro de la franja de 6:00 a 10:00 p. m., en una o varias noches; los minutos de los bloques son referencia de proporción, salvo el corte firme del ejercicio de cierre semanal, y ningún chat anuncia la duración total de un Día |
 | v1.34 | 2026-11-22 | Un chat de Planeación por semana del plan (`Planeación - Semana N`): se abre con el primer `Para planeación` de la semana, o al final si no hay ninguno, y se cierra después de su retrospectiva; lo pendiente queda en `PLAN.md`, no en el chat |
+| v1.35 | 2026-11-22 | "Rompe uno" se registra en un archivo nuevo, `seguimiento/rompe-uno.md` (no en `fallos.md`, que es de fallos de Doris): una fila por kata con la línea rota antes → después, los tests en rojo de N (o ninguno), la familia y el test agregado; las katas 04 a 16 quedan como N/A |
