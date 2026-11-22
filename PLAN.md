@@ -141,47 +141,47 @@ Título de cada chat: `Semana 4 - Tema: <tema>`. La app se construye en `dev.dor
 
 ---
 
-## Distribución de la Fase 1 (borrador, se confirma al cerrar la Fase 0)
+## Distribución de la Fase 1 (aprobada el 2026-11-22, v1.32)
 
-Borrador hecho en Planeación el 2026-11-09, antes de terminar la Fase 0. No es el plan vigente de esas sesiones: al cerrar la sesión 20 se revisa con la app terminada y los pendientes de `seguimiento/fallos.md`, y se aprueba con su versión. Hasta entonces, ningún chat de Tema lo usa.
+Se hace todo sobre la app en `app_transacciones`, con tests en verde después de cada paso y comparando contra el tag `fase-0`. La Fase 1 es de diseño: la misma app reescrita con orientación a objetos. El tema de cada sesión es "por qué existe y cómo se aplica a la app"; la kata es el refactor concreto. Los títulos nombran cosas de la Fase 0, pero lo que se hace con ellas es nuevo; lo único que se vuelve a ver a propósito es `equals`/`hashCode` en clase normal, que sigue en `pendiente` desde la sesión 7.
 
-**Lo que motiva el orden:**
-- Tres pendientes de `fallos.md` son de Diseño OO y van temprano: `equals` en clase normal, campos `final` en una clave de `HashSet`/`HashMap` y constructor `private`.
-- Cosas usadas en la Fase 0 sin sesión propia, que se cierran antes de interfaces y composición: `static`, visibilidad (`public`, `private` y el acceso por defecto de la sesión 15), `String[]` y `while`.
-
-Todo se hace sobre la app en `app_transacciones`, con tests en verde después de cada paso y comparando contra el tag `fase-0`. El tema de cada sesión es "por qué existe y cómo se aplica a la app"; la kata es el refactor concreto.
+**Decisiones al aprobarla:**
+- `Cuenta` entra a `Transaccion` en la sesión 23, después de tener `equals`/`hashCode`: el `equals` del `record` usa el de sus campos, y sin el de `Cuenta` fallan los `containsExactly` de `CargaTransaccionesTest`.
+- `saldoPorCuenta` sigue con clave `String` hasta la sesión 29: un `TreeMap` con una clave que no implementa `Comparable` lanza `ClassCastException` en el primer `put` (verificado con Java 21).
+- El Factory crea el filtro a partir de los argumentos de `App`, no la `Transaccion` (`LineaCsv.convertir` ya es una fábrica estática desde texto).
+- Salen de la Fase 1: los arreglos (solo se usan en `split` y `args`, ya practicados; siguen en la pista de teoría del 1Z0-830), y `Predicate` y `Optional`, que pasan a la Fase 2 (los filtros de la sesión 28 se reescriben con lambdas).
 
 ### Semana 5: clases bien hechas
 
 | Sesión | Tema | Kata (refactor en la app) |
 |---|---|---|
-| 21 | Ejercicio de cierre de la Semana 4 + visibilidad: `public`, `private`, acceso por defecto, `static` y cuándo no usarlo | Revisar la visibilidad de todo `app_transacciones` |
-| 22 | Clases con estado frente a `record`: campos `final`, constructor que valida, `private` | Pasar la validación de `LineaCsv` a un constructor o método de fábrica estático en `Transaccion` |
-| 23 | `equals`/`hashCode`/`toString` en clase normal y el contrato con `HashMap` | Clase `Cuenta` como clave de los saldos, con tests del contrato |
-| 24 | Inmutabilidad: `List.copyOf`, colecciones no modificables, defensa en el constructor | `ResultadoCarga` que no se puede alterar desde fuera, con test que lo prueba |
-| 25 | Arreglos (el `for` clásico ya se vio en la sesión 3) + kata de cierre | Reporte con índice de línea; cierre de la Semana 5 |
+| 21 | Ejercicio de cierre de la Semana 4 + visibilidad (`public`, `private`, acceso por defecto), `static` y cuándo no, constructor `private` en clases de utilidad | Visibilidad de `app_transacciones` y constructor `private` en las clases que solo tienen métodos `static` |
+| 22 | Clase con estado frente a `record`: campo `final`, constructor que valida; constructor compacto del `record` | `Cuenta` como clase (valida 4 dígitos), con tests; constructor compacto de `Transaccion` que rechaza nulos |
+| 23 | `equals`/`hashCode`/`toString` en clase normal y el contrato con `HashSet`/`HashMap` | `Transaccion` pasa a usar `Cuenta`; tests del contrato. `saldoPorCuenta` sigue con clave `String` |
+| 24 | Inmutabilidad: `List.of`, `List.copyOf`, `Arrays.asList`, copia defensiva en el constructor | `ResultadoCarga` que no se puede alterar desde fuera, con test que lo prueba |
+| 25 | Excepciones comprobadas frente a no comprobadas; traducirlas en los bordes + kata de cierre de la Semana 5 | La `IOException` de `cargar` se convierte en una excepción propia y `App` la atrapa; `package` + `java -jar` |
 
 ### Semana 6: contratos y composición
 
 | Sesión | Tema | Kata |
 |---|---|---|
 | 26 | Ejercicio de cierre de la Semana 5 + interfaces: contrato, `implements`, programar contra la interfaz | `LectorTransacciones` como interfaz con la implementación CSV |
-| 27 | Composición frente a herencia: inyectar por constructor | `App` recibe el lector y el calculador en vez de crearlos |
+| 27 | Composición frente a herencia: inyectar por constructor | `App` recibe el lector y el cálculo en vez de crearlos |
 | 28 | Strategy: una regla que cambia (filtro por tipo, por cuenta, por rango) | Filtros intercambiables para el reporte, con tests por estrategia |
-| 29 | Excepciones comprobadas frente a no comprobadas; traducirlas en los bordes | `IOException` convertida en una excepción propia de la app |
-| 30 | Interfaces funcionales ya existentes (`Comparator`, `Predicate`) sin lambdas todavía + kata de cierre | Ordenar el reporte con un `Comparator`; cierre de la Semana 6 |
+| 29 | `Comparable` y `Comparator` (con una clase, sin lambdas) | `Cuenta implements Comparable<Cuenta>`; `saldoPorCuenta` pasa a `TreeMap<Cuenta, BigDecimal>` (la `ClassCastException` sin `Comparable`, como trampa) |
+| 30 | Factory: centralizar el `new` según la entrada + kata de cierre de la Semana 6 | `FiltroFactory` a partir de los argumentos de `App`; `package` + `java -jar` |
 
-### Semana 7: generics y creación de objetos
+### Semana 7: generics, creación de objetos y organización
 
 | Sesión | Tema | Kata |
 |---|---|---|
-| 31 | Ejercicio de cierre de la Semana 6 + generics prácticos: leer `List<T>` y `Map<K, V>`, escribir un método genérico simple | `Resultado<T>` genérico para carga y cálculo |
-| 32 | Factory: centralizar el `new` según el tipo | `TransaccionFactory` a partir de la línea CSV |
-| 33 | Builder: objetos con muchos campos opcionales | Builder del reporte (título, filtros, orden) |
-| 34 | `Optional` como valor de retorno (solo lo básico; el resto en la Fase 2) | Buscar una cuenta que puede no existir |
-| 35 | Revisión del refactor completo frente al tag `fase-0` + kata de cierre de la Fase 1 | Criterio de salida de la fase |
+| 31 | Ejercicio de cierre de la Semana 6 + generics prácticos: leer `List<T>` y `Map<K, V>`, escribir una clase y un método genérico simple | `Resultado<T>` genérico para la carga |
+| 32 | Builder: objetos con muchos campos opcionales | Builder del reporte (título, filtro, orden) |
+| 33 | Paquetes: separar la app en subpackages y la visibilidad entre ellos | `dominio`, `lectura`, `calculo` y `reporte`; actualizar el `mainClass` del `pom.xml` |
+| 34 | Tests de la app después del refactor (contenido exacto en la retrospectiva de la Semana 6, con lo que haya salido de "Rompe uno") | Por definir |
+| 35 | Revisión del refactor completo frente al tag `fase-0` + kata de cierre de la Fase 1 | Criterio de salida de la fase; `package` + `java -jar` |
 
-**Por decidir al cerrar la Fase 0:** si la sesión 30 (interfaces funcionales sin lambdas) se queda o pasa a la Fase 2; si el `Optional` de la 34 adelanta demasiado; qué pendientes de `fallos.md` entran en cada ejercicio de cierre.
+**Pendientes de `fallos.md` que se cierran de paso:** constructor `private` (s21); constructor de clase frente al compacto (s22); `equals` en clase normal, campos `final` en una clave y `contains` después de `add` (s23); `Arrays.asList` (s24); `try` con recursos y `throws` (s25); dirección de `compareTo` (s29). Los demás entran en los ejercicios de cierre semanales, como siempre.
 
 ---
 
@@ -212,7 +212,7 @@ Objetivo: no perder la costumbre de escribir código. Un proyecto que crece sema
 
 ## Formato de sesión
 
-Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 h** (el Día B, 2 h 10). Si el Día A termina antes, el Día B empieza ese mismo día. En Progreso va la fecha real de cada parte.
+Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 h** (el Día B, 2 h 15). Si el Día A termina antes, el Día B empieza ese mismo día. En Progreso va la fecha real de cada parte.
 
 **Pausas:** si entre el final de la sesión anterior y el inicio de la nueva, o entre el Día A y el Día B, pasan más de 2 días hábiles (lunes a viernes), el chat de Tema pregunta el motivo al inicio, en una sola línea, y lo anota en Progreso como `Pausa: N días hábiles (motivo)`, con una categoría: laboral, cansancio, personal, salud, conectividad u otro. No se piden detalles. Al recalcular la duración del plan se separan los días de pausa de los días de sesión.
 
@@ -226,7 +226,8 @@ Una sesión es una unidad de contenido, no un día: se planea en **2 días de 2 
 | A | Margen | 15 min | Dudas, pausas, trampa del 1Z0-830 (si aplica) y mensaje de commit |
 | B | Busca el error | 15 min | Encontrar el error en un método dado (ver abajo) |
 | B | Kata | 75 min | Escribir desde cero, con pistas por niveles. Mínimo 3 tests |
-| B | Revisión + teach-back | 20 min | Revisión del código y teach-back: exactamente 3 preguntas, cada una con una sola pregunta (no varias en el mismo número). Hasta la Fase 1, el teach-back no pregunta qué error atrapa un test |
+| B | Rompe uno | 5 min | Desde la sesión 21: romper una línea dada y ver qué tests se ponen en rojo (ver abajo) |
+| B | Revisión + teach-back | 20 min | Revisión del código y teach-back: exactamente 3 preguntas, cada una con una sola pregunta (no varias en el mismo número). El teach-back no pregunta qué error atrapa un test |
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
 | B | Cierre | 15 min | Registro de fallos, `trampas.md` si hubo trampa, fila de Progreso, mensaje de commit y mensaje de apertura de la sesión siguiente |
 
@@ -386,7 +387,18 @@ Al inicio del Día B, antes de la kata:
 - Doris dice en qué línea está, qué devolvería con una entrada concreta y a qué familia pertenece. No se escribe test.
 - El resultado se anota en la tabla "Testing por kata" de `seguimiento/fallos.md`.
 
-**Suspendido hasta el inicio de la Fase 1** (se decide en Planeación con los datos de "Testing por kata"): el taller con mutantes y rojo verificado, y el "Atrapa" obligatorio. Las reglas de testing no se vuelven a cambiar antes del cierre de la Fase 0, salvo un bloqueo real.
+**Decidido al cerrar la Fase 0 (v1.32):** el "Atrapa" sigue opcional y el taller con mutantes no vuelve como bloque. En su lugar está "Rompe uno".
+
+### Rompe uno (5 min, desde la sesión 21)
+
+En el Día B, entre la kata (ya en verde) y la revisión. Objetivo: ver un test en rojo a propósito, para que la relación "este error → este test" salga de verla y no de imaginarla.
+
+1. Claude da **una** línea del código de la kata de Doris, cambiada con un error del catálogo (por ejemplo, `total = total.add(x)` pasa a `total.add(x)`). Doris no inventa el error.
+2. Doris hace el cambio, ejecuta los tests de la kata y mira cuáles se ponen en rojo: uno, varios o ninguno.
+3. Deshace el cambio (Ctrl+Z) y confirma que vuelve a verde.
+4. Después de verlo, Claude dice la familia del catálogo. Si ningún test se puso en rojo, ese es el hallazgo (falta un caso); el test que falta se escribe solo si Doris quiere.
+
+No se pide predicción, familia ni tabla, y no se evalúa. Se anota en "Testing por kata" de `fallos.md`: la línea rota, qué tests se pusieron en rojo y la familia. Con 5 o 6 katas, Planeación decide con esos datos si se agrega la pregunta "¿cuál crees que se pondrá en rojo?" o si se queda solo en observar.
 
 ## Rol de Claude y revisión
 
@@ -412,7 +424,7 @@ Al inicio del Día B, antes de la kata:
 - Si hay bloqueo, se deja un comentario con la intención (`// aquí quería...`) en lugar de borrar.
 - **Qué se evalúa en el recuerdo y en el ejercicio de cierre semanal:** la lógica y el uso correcto de la API de Java (tipos, métodos y excepciones de Java). No cuentan los nombres que elige Doris (variables, clases propias, textos de mensajes), los errores de digitación, el espaciado ni el formato. Un tipo o método de Java que no existe sí cuenta (por ejemplo, `DateTimeFormatterException`).
 - Antes de ejecutar, se escribe en un comentario `//` la salida literal esperada, línea por línea. Si el enunciado ya trae la salida exacta (por ejemplo, el texto esperado de un reporte), no se pide ese comentario: un enunciado no pide predecir lo que muestra.
-- Antes de escribir un test, se escribe en un comentario `//` su planteamiento con valores concretos: **Entrada** (los datos exactos) y **Esperado** (el valor que devuelve el método correcto). El caso lo dice el nombre del test. **Atrapa** (familia del catálogo y qué daría el método con ese error) es opcional hasta la Fase 1: se anota si se ve, no se fuerza. Debajo va la predicción de siempre. Ejemplos con la kata-04:
+- Antes de escribir un test, se escribe en un comentario `//` su planteamiento con valores concretos: **Entrada** (los datos exactos) y **Esperado** (el valor que devuelve el método correcto). El caso lo dice el nombre del test. **Atrapa** (familia del catálogo y qué daría el método con ese error) es opcional: se anota si se ve, no se fuerza. Debajo va la predicción de siempre. Ejemplos con la kata-04:
 
 ```java
 // Entrada: abonos de 10.50, 0.10 y 0.20 de la cuenta "0001".
@@ -572,3 +584,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.29 | 2026-11-16 | Revisión: un Riesgo se sostiene con un caso concreto verificado (entrada o método equivocado que pasa los tests), nunca con cambios futuros; hallazgos en una lista y correcciones de una en una. No se pide predecir una salida que el enunciado ya da. Al cerrar una kata de la app se ejecuta el package completo (motivo escrito). Sesiones 19 y 20: horas de inicio y fin en Progreso; los tiempos de la sesión 18 no se usan en el recálculo (festivo con interrupciones no registradas) |
 | v1.30 | 2026-11-19 | Busca el error pasa de 5 a 15 min (Día B de 2 h 10), con un método de máximo 12 líneas y una entrada de máximo 3 elementos. Pregunta de control opcional al final del recuerdo, fuera de los 15 min, solo para un `pendiente` que la reescritura no ejercita. Dedicación: franja flexible de 6:00 a 10:00 p. m., lunes a viernes; la duración se sigue recalculando al cerrar la Fase 0 |
 | v1.31 | 2026-11-22 | Cierre de la Fase 0. Retrospectiva de la Semana 4: katas con pista máxima 0–1 y cierres de tema 7/8 u 8/8 con el tema por partes; 9 ambigüedades de enunciado en la semana, tiempos del tema y del recuerdo por encima de lo planeado y teach-back en 1/3–2/3 (a vigilar en la Fase 1). Cambios: el recuerdo de la app reescribe un solo método (máximo unas 15 líneas); la lista de entregables dice qué comprueba cada test que los demás no, con qué datos y si no hay código de producción nuevo; `package` + `java -jar` en las katas de cierre de cada semana, con el `mainClass` al día; las horas se siguen anotando en Progreso. Duración recalculada con los datos de las sesiones 8 a 20 |
+| v1.32 | 2026-11-22 | Distribución de la Fase 1 aprobada (sesiones 21 a 35), con cambios frente al borrador: `Cuenta` entra a `Transaccion` después de tener `equals`/`hashCode` (s23) y a la clave del `TreeMap` con `Comparable` (s29); Factory del filtro a partir de los argumentos de `App`; excepciones comprobadas en la s25; subpackages en la s33; s34 "Tests de la app después del refactor" (se define en la retrospectiva de la Semana 6); salen los arreglos (quedan en el 1Z0-830), y `Predicate` y `Optional` pasan a la Fase 2. Testing: el "Atrapa" sigue opcional y el taller con mutantes no vuelve; nuevo bloque "Rompe uno" (5 min, Día B de 2 h 15): romper una línea dada, ver qué tests se ponen en rojo, deshacer, y después Claude dice la familia |
