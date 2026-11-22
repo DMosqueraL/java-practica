@@ -1,0 +1,28 @@
+// BuscaElError.txt · Sesión 20 · Día B
+// El método debe devolver, por cada cuenta, la lista de TODOS sus montos, en el orden en que aparecen.
+// Tiene un error. Haz la prueba de escritorio con la entrada de abajo y responde las tres preguntas.
+// Transaccion es el record de app_transacciones: (LocalDate fecha, String cuenta, TipoTransaccion tipo, BigDecimal monto).
+
+ 1  static Map<String, List<BigDecimal>> montosPorCuenta(List<Transaccion> transacciones) {
+ 2      Map<String, List<BigDecimal>> resultado = new TreeMap<>();
+ 3      for (Transaccion t : transacciones) {
+ 4          List<BigDecimal> montos = new ArrayList<>();
+ 5          montos.add(t.monto());
+ 6          resultado.put(t.cuenta(), montos);
+ 7      }
+ 8      return resultado;
+ 9  }
+
+Entrada:
+List.of(
+    new Transaccion(LocalDate.of(2026, 6, 1), "0001", TipoTransaccion.CREDITO, new BigDecimal("10.00")),
+    new Transaccion(LocalDate.of(2026, 6, 2), "0002", TipoTransaccion.DEBITO, new BigDecimal("5.00")),
+    new Transaccion(LocalDate.of(2026, 6, 3), "0001", TipoTransaccion.DEBITO, new BigDecimal("7.50"))
+)
+
+Responde aquí con tres cosas:
+
+1. En qué línea está el error. ---> linea 4 => List<BigDecimal> montos = new ArrayList<>(); En cada vuelta es una lista nueva (vacía)
+2. Qué devuelve este método, tal como está, con esa entrada (escríbelo como lo imprimiría System.out.println). ---> como ya dentro del map existe la cuenta 0001, el valor que tenia primero 10.00 se reemplaza por el nuevo 7.50
+    Salida: Montos por Cuenta: {0001=[7.50], 0002=[5.00]}
+3. A qué familia del catálogo pertenece. ---> Familia 6, Reemplaza en vez de agregar

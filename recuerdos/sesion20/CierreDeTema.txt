@@ -1,0 +1,70 @@
+// CierreDeTema.txt · Sesión 20 · Día A
+// Escribe en cada [N] ---> la salida literal que imprime ese comando, sin ejecutar.
+// Si un comando imprime dos líneas, escribe las dos.
+//
+// Situación de partida (igual para [1] a [7]):
+//   - Esta clase está en fundamentos/src/main/java/dev/doris/sesion20_maven_jar/CierreDeTema.java.
+//   - En fundamentos/pom.xml, <mainClass>dev.doris.sesion20_maven_jar.CierreDeTema</mainClass>.
+//   - Se corrió clean y package: BUILD SUCCESS.
+//   - Archivos que existen:
+//       D:\dev\java-practica\fundamentos\src\main\resources\transacciones.csv   (16 líneas)
+//       D:\dev\java-practica\fundamentos\src\test\resources\sesion13\vacio.txt  (archivo vacío)
+
+package dev.doris.sesion20_maven_jar;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+public class CierreDeTema {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Sin argumentos");
+            return;
+        }
+        Path ruta = Path.of(args[0]);
+
+        try {
+            List<String> lineas = Files.readAllLines(ruta);
+            System.out.println(args.length + " argumentos, " + lineas.size() + " lineas");
+        } catch (IOException error) {
+            System.out.println("Falla: " + error.getMessage());
+        }
+    }
+}
+
+// Comandos:
+// [1] PS D:\dev\java-practica> java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar
+// [2] PS D:\dev\java-practica> java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar fundamentos\src\main\resources\transacciones.csv
+// [3] PS D:\dev\java-practica> java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar fundamentos\src\main\resources\transacciones.csv extra
+// [4] PS D:\dev\java-practica> java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar src\main\resources\transacciones.csv
+// [5] PS D:\dev\java-practica\fundamentos> java -jar target\fundamentos-1.0.0-SNAPSHOT.jar src\test\resources\sesion13\vacio.txt
+// [6] PS D:\dev\java-practica\fundamentos> java -jar target\fundamentos-1.0.0-SNAPSHOT.jar transacciones.csv
+// [7] En CierreDeTema.java se cambia "Sin argumentos" por "Nada que leer" y se guarda, SIN volver a correr package. Luego:
+//     PS D:\dev\java-practica> java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar
+// [8] Ahora, en el pom, la mainClass se cambia a dev.doris.sesion20_maven_jar.HolaJar, se recarga Maven y se corre clean y package (BUILD SUCCESS). Luego:
+//     PS D:\dev\java-practica> java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar uno dos
+
+// --- Predicciones ---
+[1] ---> Sin argumentos
+[2] ---> 1 argumentos, 16 lineas
+[3] ---> 2 argumentos, 16 lineas
+[4] ---> Falla: src\main\resources\transacciones.csv
+[5] ---> 1 argumentos, 0 lineas
+[6] ---> Falla: transacciones.csv
+[7] ---> Sin argumentos
+[8] ---> Hola desde HolaJar
+[8] ---> Argumentos recibidos: 2
+
+// --- Salida real ---   (ejecutada con Java 21 con la misma estructura de carpetas; en Windows las rutas salen con \)
+[1] Sin argumentos                                  ✅
+[2] 1 argumentos, 16 lineas                         ✅
+[3] 2 argumentos, 16 lineas                         ✅  (lo que va después del jar llega a args separado por espacios)
+[4] Falla: src\main\resources\transacciones.csv     ✅  (se resuelve desde D:\dev\java-practica, que no tiene src)
+[5] 1 argumentos, 0 lineas                          ✅  (archivo vacío: lista vacía, no null)
+[6] Falla: transacciones.csv                        ✅  (el CSV está en src\main\resources, no suelto en fundamentos)
+[7] Sin argumentos                                  ✅  (el jar es una copia del último package)
+[8] Hola desde HolaJar                              ✅
+    Argumentos recibidos: 2
+// Resultado: 8/8

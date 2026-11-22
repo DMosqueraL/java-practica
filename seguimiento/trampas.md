@@ -20,6 +20,7 @@ Repaso de las trampas de examen que salen al final del Día A. Son **solo inform
 | T08 | 17 | Cálculos con `Map` y `BigDecimal` | No | `values()` de un `enum` devuelve un arreglo: se usa `length`, no `size()` |
 | T09 | 18 | `String.format` | Sí (imprime `Agua` y luego falla) | Si sobran valores para el molde, se ignoran; si faltan, `MissingFormatArgumentException` al ejecutar |
 | T10 | 19 | Tests con archivos (`Path`, `resolve`) | Sí (imprime `datos`) | `Path` es inmutable: `resolve` devuelve una ruta nueva y no cambia la original; hay que asignar el resultado |
+| T11 | 20 | Empaquetar y ejecutar con Maven (`java -jar`) | Sí (imprime `Argumentos recibidos: 1`) | Todo lo que va después del nombre del jar es un argumento del programa, aunque parezca una opción de `java`: `-version` llega a `args[0]` |
 
 ## Detalle
 
@@ -207,3 +208,24 @@ public class Trampa10 {
 - **¿Compila?** Sí. Al ejecutar con Java 21 imprime `datos`.
 - **Por qué:** `Path` es inmutable, como `String` y `BigDecimal`. `resolve` no modifica `carpeta`: devuelve una ruta nueva, y aquí ese resultado se descarta. La respuesta trampa es `datos\pagos.csv`.
 - **Corrección:** asignar el resultado: `Path archivo = carpeta.resolve("pagos.csv");`. `archivo` es `datos\pagos.csv` en Windows (`datos/pagos.csv` en Linux, verificado con Java 21) y `carpeta` sigue siendo `datos`.
+
+### T11 · Sesión 20 · Una opción después del jar es un argumento
+
+Con `HolaJar` como `Main-Class` del jar:
+
+```java
+public class HolaJar {
+    public static void main(String[] args) {
+        System.out.println("Hola desde HolaJar");
+        System.out.println("Argumentos recibidos: " + args.length);
+    }
+}
+```
+
+```
+java -jar fundamentos\target\fundamentos-1.0.0-SNAPSHOT.jar -version
+```
+
+- **¿Compila?** Sí. Al ejecutar con Java 21 imprime `Hola desde HolaJar` y `Argumentos recibidos: 1`.
+- **Por qué:** lo que va después del nombre del jar (o de la clase) llega a `args`, aunque empiece con `-`. Aquí `-version` es `args[0]` y la JVM no imprime su versión. La respuesta trampa es la versión de Java.
+- **Corrección:** las opciones de la JVM van antes de `-jar` o del nombre de la clase. `java -version` sola imprime la versión de Java.

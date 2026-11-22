@@ -1,0 +1,54 @@
+// RecuerdoSesion19.txt · Sesión 20 · Día A
+// Reescribe sin mirar (kata-15, package app_transacciones) un test de ReporteCompletoTest:
+//   @Test public void reporteSinDebitos(@TempDir Path carpeta) throws IOException
+// El test hace, en este orden:
+//   1. Arma la ruta de un archivo "trx.csv" dentro de la carpeta temporal.
+//   2. Escribe en ese archivo este CSV (4 líneas, la primera es el encabezado):
+//        fecha,cuenta,tipo,monto
+//        2/8/2026,0002,CREDITO,25.5
+//        3/8/2026,0001,CREDITO,100.00
+//        5/8/2026,0002,CREDITO
+//   3. Encadena las llamadas como App: CargaTransacciones.cargar, CalculoTransacciones.totalesPorTipo,
+//      CalculoTransacciones.saldoPorCuenta y Reporte.armar(resultado, totales, saldos).
+//   4. Compara con isEqualTo el reporte completo.
+// Arriba del test, el planteamiento en comentarios: Entrada y Esperado (el texto exacto del reporte, línea por línea).
+// Datos de la app que ya existen:
+//   - Cada línea inválida entra al reporte como "Línea N: " + mensaje; con columnas de más o de menos, el mensaje es "columnas: " + partes.length.
+//   - Reporte.armar: "Válidas: N", "Inválidas: M", una línea por inválida, "Totales por tipo:" con DEBITO y luego CREDITO,
+//     "Saldos por cuenta:" con las cuentas ordenadas; cada fila con el molde %-8s%12s y el monto con setScale(2). Sin "\n" al final.
+// Sin package ni import.
+// Al terminar el código, responde la pregunta de control que está al final del archivo.
+
+// --- test reporteSinDebitos ---
+@Test
+public void reporteSinDebitos(@TempDir Path carpeta) throws IOException {
+    Path archivo = carpeta.resolve("trx.csv");
+    Files.writeString(archivo, "fecha,cuenta,tipo,monto\n" +
+                                "2/8/2026,0002,CREDITO,25.5\n" +
+                                "3/8/2026,0001,CREDITO,100.00\n" +
+                                "5/8/2026,0002,CREDITO");
+    ResultadoCarga resultado = CargaTransacciones.cargar(archivo);
+    Map<TipoTransaccion, BigDecimal> totales = CalculoTransacciones.totalesPorTipo(resultado.validas());
+    Map<String, BigDecimal> saldos = CalculoTransacciones.saldoPorCuenta(resultado.validas());
+    String reporte = Reporte.armar(resultado, totales, saldos);
+    System.out.println(reporte);
+
+    asserThat(reporte).isEqualTo("Válidas: 2\n" +
+              "Inválidas: 1\n" +
+              "Línea 4: columnas: 3\n" +
+              "Totales por tipo:\n" +
+              "DEBITO          0.00\n" +
+              "CREDITO       125.50\n" +
+              "Saldos por cuenta:\n" +
+              "0001          100.00\n" +
+              "0002           25.50");
+}
+
+
+
+// --- Pregunta de control (fuera de los 15 min) ---
+// ReporteTest y ReporteCompletoTest terminan comparando el mismo tipo de texto con isEqualTo.
+// ¿Qué parte de la app ejecuta ReporteCompletoTest que ReporteTest nunca ejecuta?
+---> La parte de las transacciones, es decir, de dónde salen. En ReporteTest se crean manualmente dentro del test,
+     mientras que en ReporteCompletoTest las transacciones salen del archivo que se crea o carga desde el método
+     cargar. También se prueban, saltar el encabezado, enumerar las líneas, rechazar inválidas y redondear.
