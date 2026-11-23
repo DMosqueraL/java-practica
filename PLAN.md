@@ -301,7 +301,7 @@ public class CierreDeTema {
 ```
 // EjercicioSemanaK.txt
 /*
-Ejercicio de cierre de la Semana K (40–45 min, a ciegas, sin package ni import)
+Ejercicio de cierre de la Semana K (lectura de hasta 15 min + 45 min con corte firme, a ciegas, sin package ni import)
 Parte 1 (obligatoria): ...
 Parte 2 (obligatoria): ...
 Parte 3 (opcional): ...
@@ -351,7 +351,8 @@ La primera sesión de cada semana del plan, a partir de la Semana 2, reemplaza e
 - **Qué es:** un problema nuevo (no la kata repetida) con los mismos ingredientes de la semana anterior, en el dominio de transacciones. Lo prepara Claude y se resuelve sin pistas.
 - **Tamaño:** máximo 4 partes, numeradas por prioridad. Las partes 1 y 2 son obligatorias; la 3 y la 4, opcionales. Lo que no se alcance se anota, no se penaliza.
 - **Formato:** a ciegas, sin IDE y sin mirar código anterior, en el archivo que deja listo Claude con el enunciado arriba (ver "Archivos de práctica"). Se guarda como `recuerdos/sesionNN/EjercicioSemanaK.txt` (N = sesión actual, K = semana que se cierra). No se escriben `package` ni `import` y no se evalúan; el nombre correcto de cada tipo de Java se evalúa donde se usa en el código.
-- **Duración:** 40–45 min con corte firme (desde la sesión 21; antes, 25–30 min). El repaso va después, fuera de ese corte.
+- **Lectura (hasta 15 min, fuera del corte):** Doris lee el enunciado y pregunta lo que no quede claro sobre qué se pide. Esas dudas son ambigüedad, no pista, y se anotan en Progreso como `Ambigüedad`. Durante la lectura no se escribe código ni notas de solución en el archivo.
+- **Corte firme (45 min, desde la sesión 21; antes, 25–30 min):** empieza a la hora de arranque que dice Doris. Lo que no se alcance se anota sin penalizar. El repaso va después, fuera del corte.
 - **Repaso (fijo, 10–15 min):** después de la revisión, Claude guarda la solución en `recuerdos/sesionNN/EjercicioSemanaK-solucion.txt` y Doris reescribe en IntelliJ solo las partes que falló o no alcanzó.
 - **Revisión:** solo sobre lo visto hasta esa semana, con las etiquetas Error / Riesgo / Estilo y el criterio de "Qué se evalúa en el recuerdo" (ver Reglas). No se adelantan temas que aún no se han visto.
 - **Registro:** los fallos van al índice de `seguimiento/fallos.md`. El ejercicio incluye los conceptos que estén en `pendiente`.
@@ -600,3 +601,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.34 | 2026-11-22 | Un chat de Planeación por semana del plan (`Planeación - Semana N`): se abre con el primer `Para planeación` de la semana, o al final si no hay ninguno, y se cierra después de su retrospectiva; lo pendiente queda en `PLAN.md`, no en el chat |
 | v1.35 | 2026-11-22 | "Rompe uno" se registra en un archivo nuevo, `seguimiento/rompe-uno.md` (no en `fallos.md`, que es de fallos de Doris): una fila por kata con la línea rota antes → después, los tests en rojo de N (o ninguno), la familia y el test agregado; las katas 04 a 16 quedan como N/A |
 | v1.36 | 2026-11-22 | Formato fijo de los commits: un bloque de terminal completo por commit (`git add` y `git commit -m` con `--` y los mismos archivos, y `git push`), nunca un mensaje suelto; sin `git add .` ni `-a`; tag en su propio bloque; mensaje sin tildes ni comillas invertidas |
+| v1.37 | 2026-11-22 | Ejercicio de cierre semanal: lectura del enunciado de hasta 15 min fuera del corte (las dudas sobre qué se pide son Ambigüedad, sin escribir código ni notas de solución) y corte firme de 45 min desde la hora de arranque que dice Doris |
