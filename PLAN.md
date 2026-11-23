@@ -232,7 +232,17 @@ Una sesión es una unidad de contenido, no un día: se hace en dos partes (**Dí
 | B | Inglés | 5 min | Práctica "¿Qué dice en...?" con una o dos frases en inglés que hayan salido en la sesión (IDE, terminal, mensajes de error). Solo aquí: no se intercala en el tema ni en la kata |
 | B | Cierre | 15 min | Registro de fallos, `trampas.md` si hubo trampa, fila de Progreso, mensaje de commit y mensaje de apertura de la sesión siguiente |
 
-**Commits:** los hace Doris desde IntelliJ con el mensaje que da el chat (Tema, Sprint o Planeación). Ningún chat hace commits desde su entorno.
+**Commits:** los hace Doris desde la terminal de IntelliJ, en la raíz del repo, con el bloque que da el chat (Tema, Sprint o Planeación). Ningún chat hace commits desde su entorno. Cada commit se entrega siempre completo, nunca como un mensaje suelto ni como una lista de archivos para marcar: un bloque de código por commit, listo para copiar, con un comando por línea:
+
+```
+git add <archivos>
+git commit -m "<mensaje>" -- <archivos>
+git push
+```
+
+- `git add` y `git commit` nombran los mismos archivos, con la ruta desde la raíz del repo. El `--` con los archivos hace que el commit lleve solo esos, aunque haya otros en el índice. Nunca se usan `git add .`, `git add -A` ni `git commit -a`.
+- Un tag va en su propio bloque: `git tag <nombre>` y `git push origin <nombre>`.
+- El mensaje va sin tildes ni comillas invertidas, porque en PowerShell la comilla invertida es un carácter de escape. Formato del mensaje: Planeación, `plan: vX.Y <cambio>`; Tema, `kata-NN: <descripción>` (ver Reglas).
 
 **Trampa del 1Z0-830 (opcional, solo informativa):** al final del Día A, después del cierre de tema, si existe una trampa de examen ligada al tema de la sesión, Claude la muestra: código corto, si compila o no, la salida, y por qué. Una sola, de 2 a 3 min, usando solo lo visto en la sesión y marcada como "código de examen, no de producción". No se pide predicción, no se evalúa y no entra a `seguimiento/fallos.md`. Si el tema no tiene una trampa clara, se omite. Se registra en `seguimiento/trampas.md`: una fila en el índice y su detalle (código, si compila, salida o error exacto ejecutado, por qué y corrección). Desde la sesión 14, Progreso ya no la anota.
 
@@ -589,3 +599,4 @@ Versiones anteriores a v1.0: ver el historial de git.
 | v1.33 | 2026-11-22 | Se quitan las duraciones totales de los Días ("2 días de 2 h", Día B de 2 h 15, Día A de 2 h 45 con el ejercicio de cierre): una sesión se hace en Día A y Día B dentro de la franja de 6:00 a 10:00 p. m., en una o varias noches; los minutos de los bloques son referencia de proporción, salvo el corte firme del ejercicio de cierre semanal, y ningún chat anuncia la duración total de un Día |
 | v1.34 | 2026-11-22 | Un chat de Planeación por semana del plan (`Planeación - Semana N`): se abre con el primer `Para planeación` de la semana, o al final si no hay ninguno, y se cierra después de su retrospectiva; lo pendiente queda en `PLAN.md`, no en el chat |
 | v1.35 | 2026-11-22 | "Rompe uno" se registra en un archivo nuevo, `seguimiento/rompe-uno.md` (no en `fallos.md`, que es de fallos de Doris): una fila por kata con la línea rota antes → después, los tests en rojo de N (o ninguno), la familia y el test agregado; las katas 04 a 16 quedan como N/A |
+| v1.36 | 2026-11-22 | Formato fijo de los commits: un bloque de terminal completo por commit (`git add` y `git commit -m` con `--` y los mismos archivos, y `git push`), nunca un mensaje suelto; sin `git add .` ni `-a`; tag en su propio bloque; mensaje sin tildes ni comillas invertidas |
